@@ -43,7 +43,7 @@ Three modes are currently availabe:
 <img width="2157" height="1334" alt="reader" src="https://github.com/user-attachments/assets/24f62a79-20a9-4927-ae66-3b2a54256b5a" />
 
 - **Progress.** A statistics view tracks how your vocabulary is coming along.
-- **A say-so.** Between night mode and settings sits a small form to report a bug or propose a new feature. Please use it — whether you've hit something broken or had a genius idea for making Otsar better.
+- **A say-so.** Between night mode and settings sits a small form to report a bug or propose a new feature. Please use it — whether you've hit something broken or had a genius idea for making Otsar better. You'll see notifications for new versions when you open Otsar.
 
 This brief introduction barely covers all the potential the app has. I invite you to explore it on your own!
 
