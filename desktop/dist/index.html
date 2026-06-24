@@ -1,0 +1,1657 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Otsar — Biblical Hebrew vocabulary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1F2EC; --paper-2:#E9EAE2; --ink:#1B1E1C; --ink-soft:#5E625B; --hair:#D8DAD0;
+    --tekhelet:#34448A; --tekhelet-soft:#5d6bb0; --madder:#9A3A38; --green:#3f6b4d; --card:#FBFBF7;
+    --shadow:0 1px 0 rgba(27,30,28,.04), 0 18px 40px -28px rgba(27,30,28,.45);
+    --he-font:"Frank Ruhl Libre","Taamey Frank CLM","Ezra SIL","SBL Hebrew","Times New Roman",serif;
+    --serif:"Spectral",Georgia,"Times New Roman",serif;
+    --sans:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  [data-theme="dark"]{
+    --paper:#17191B; --paper-2:#1f2225; --ink:#ECEAE1; --ink-soft:#9aa09a; --hair:#2c3033;
+    --tekhelet:#8b95dd; --tekhelet-soft:#6f7ac0; --madder:#cf8482; --green:#7fb08e; --card:#1d2023;
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 24px 50px -30px rgba(0,0,0,.7);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--serif); font-size:17px; line-height:1.5;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; display:flex; flex-direction:column; min-height:100vh;}
+  button{font-family:inherit; cursor:pointer; color:inherit}
+  input{font-family:inherit}
+
+  header{display:flex; align-items:center; gap:18px; padding:16px clamp(18px,5vw,40px); border-bottom:1px solid var(--hair)}
+  .brand{display:flex; align-items:baseline; gap:12px; margin-right:auto}
+  .brand .mark{font-family:var(--he-font); font-size:30px; line-height:1; color:var(--tekhelet)}
+  .brand h1{font-family:var(--serif); font-weight:500; font-size:19px; letter-spacing:.01em; margin:0}
+  .brand .sub{font-family:var(--sans); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft)}
+  nav{display:flex; gap:4px; font-family:var(--sans)}
+  .navbtn{background:none; border:none; padding:8px 14px; font-size:13px; border-radius:999px; color:var(--ink-soft)}
+  .navbtn.active{color:var(--ink); background:var(--paper-2)}
+  .iconbtn{background:none; border:1px solid var(--hair); width:38px; height:38px; border-radius:10px; display:grid; place-items:center; color:var(--ink-soft)}
+  .iconbtn:hover{color:var(--ink); border-color:var(--ink-soft)}
+  .iconbtn svg{width:18px;height:18px}
+
+  main{flex:1; display:flex; flex-direction:column; align-items:center; padding:clamp(20px,5vw,52px) 20px 40px}
+  .view{width:100%; max-width:680px; display:none}
+  .view.active{display:block}
+  #update-bar{display:none; align-items:center; gap:10px; padding:8px 14px; background:var(--tekhelet); color:#fff; font:14px/1.45 var(--sans);}
+  #update-bar.show{display:flex}
+  #update-bar a{color:#fff; font-weight:600; text-decoration:underline; cursor:pointer}
+  #update-bar button{margin-left:auto; background:transparent; border:0; color:#fff; font-size:20px; line-height:1; cursor:pointer; padding:0 4px}
+  #view-read{max-width:none; width:100%}
+  #rd-frame{width:100%; height:calc(100vh - 92px); border:0; display:block; background:var(--paper)}
+
+  .session-line{display:flex; align-items:center; gap:14px; font-family:var(--sans); font-size:12px; color:var(--ink-soft); margin-bottom:24px}
+  .track{flex:1; height:2px; background:var(--hair); border-radius:2px; overflow:hidden}
+  .track > i{display:block; height:100%; background:var(--tekhelet); width:0; transition:width .4s ease}
+
+  .card{background:var(--card); border:1px solid var(--hair); border-radius:18px; box-shadow:var(--shadow);
+    padding:clamp(26px,4vw,40px) clamp(20px,4vw,40px); display:flex; flex-direction:column}
+  .prompt-label{font-family:var(--sans); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-soft); text-align:center}
+  .prompt{display:flex; align-items:center; justify-content:center; padding:22px 0 8px; min-height:120px}
+  .he{font-family:var(--he-font); direction:rtl; line-height:1.45; font-weight:500}
+  .prompt .he{font-size:clamp(3rem,10vw,5rem)}
+  .prompt .en{font-family:var(--serif); font-size:clamp(1.7rem,6vw,2.6rem); font-style:italic}
+
+  .activation{display:flex; align-items:center; gap:10px; justify-content:center; margin:2px 0 18px; font-family:var(--sans); font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-soft)}
+  .meter{width:110px; height:3px; background:var(--hair); border-radius:3px; overflow:hidden}
+  .meter > i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--tekhelet-soft),var(--tekhelet)); transition:width .5s ease}
+
+  /* answer area (rendered from spec) */
+  #answer-area{display:flex; flex-direction:column; gap:18px; max-width:440px; width:100%; margin:0 auto}
+  .comp{display:flex; flex-direction:column; gap:9px}
+  .comp > .clabel{font-family:var(--sans); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft)}
+  .ans-input{width:100%; padding:12px 14px; font-size:1.25rem; background:var(--paper); border:1px solid var(--hair); border-radius:11px; color:var(--ink); outline:none}
+  .ans-input:focus{border-color:var(--tekhelet)}
+  .ans-input.he-input{font-family:var(--he-font); direction:rtl; text-align:right; font-size:1.7rem}
+  .ans-input.ok{border-color:var(--green); box-shadow:0 0 0 2px color-mix(in srgb,var(--green) 55%,transparent); background:color-mix(in srgb,var(--green) 8%,transparent)}
+  .ans-input.bad{border-color:var(--madder); box-shadow:0 0 0 2px color-mix(in srgb,var(--madder) 55%,transparent); background:color-mix(in srgb,var(--madder) 8%,transparent)}
+  .selopts{display:flex; flex-wrap:wrap; gap:8px}
+  .selopt{font-family:var(--sans); font-size:13px; padding:8px 14px; border-radius:9px; border:1px solid var(--hair); background:var(--paper)}
+  .selopt.sel{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+  .selopt.ok{border-color:var(--green); box-shadow:0 0 0 1.5px color-mix(in srgb,var(--green) 50%,transparent)} .selopt.bad{border-color:var(--madder); box-shadow:0 0 0 1.5px color-mix(in srgb,var(--madder) 50%,transparent)}
+  .selopts.graded .selopt:not(.sel){opacity:.5}
+  .reveal-line{font-family:var(--sans); font-size:12.5px; color:var(--ink-soft); margin-top:-2px; display:flex; align-items:baseline; gap:5px; flex-wrap:wrap}
+  .reveal-line b{color:var(--ink); font-weight:600}
+  .reveal-line .he{font-family:var(--he-font); font-size:1.05rem}
+
+  .controls{margin-top:26px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; align-items:center}
+  .btn-primary{font-family:var(--sans); font-size:14px; padding:13px 30px; border-radius:12px; background:var(--ink); color:var(--paper); border:none}
+  .btn-primary:hover{background:var(--tekhelet)}
+  .btn-ghost{font-family:var(--sans); font-size:13px; padding:11px 18px; border-radius:11px; border:1px solid var(--hair); background:none}
+  .btn-ghost:hover{border-color:var(--ink-soft)}
+  .verdict{font-family:var(--sans); font-size:13px; text-align:center; margin-top:16px; min-height:18px}
+  .verdict.pass{color:var(--green)} .verdict.fail{color:var(--madder)}
+  .hint{font-family:var(--sans); font-size:11px; color:var(--ink-soft); text-align:center; margin-top:14px}
+
+  /* hebrew keyboard */
+  #keyboard{max-width:520px; width:100%; margin:18px auto 0; display:none; background:var(--card); border:1px solid var(--hair); border-radius:14px; padding:12px}
+  #keyboard.show{display:block}
+  .kbd-grid{display:grid; grid-template-columns:repeat(11,1fr); gap:6px}
+  .key{font-family:var(--he-font); font-size:1.35rem; padding:10px 0; border:1px solid var(--hair); border-radius:8px; background:var(--paper); color:var(--ink)}
+  .key:hover{border-color:var(--tekhelet); color:var(--tekhelet)}
+  .key.util{font-family:var(--sans); font-size:12px; color:var(--ink-soft)}
+  .key.space{grid-column:span 6}
+
+  /* panels (empty / done) */
+  .panel{background:var(--card); border:1px solid var(--hair); border-radius:18px; box-shadow:var(--shadow); padding:clamp(26px,5vw,42px); text-align:center}
+  .panel h2{font-family:var(--serif); font-weight:500; font-size:1.4rem; margin:0 0 10px}
+  .panel p{color:var(--ink-soft); margin:0 auto 6px; max-width:44ch}
+  .panel .row{margin-top:20px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+  .summary-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:24px 0 4px}
+  .summary-grid .n{font-family:var(--serif); font-size:2.1rem}
+  .summary-grid .l{font-family:var(--sans); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft)}
+
+  /* progress view */
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px}
+  .stat{background:var(--card); border:1px solid var(--hair); border-radius:14px; padding:20px}
+  .stat .n{font-family:var(--serif); font-size:2rem; line-height:1.1}
+  .stat .l{font-family:var(--sans); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:6px}
+  .data-actions{margin-top:24px; display:flex; gap:12px; flex-wrap:wrap}
+
+  /* drawer */
+  .scrim{position:fixed; inset:0; background:rgba(20,22,20,.36); opacity:0; pointer-events:none; transition:opacity .3s; z-index:20}
+  .scrim.show{opacity:1; pointer-events:auto}
+  .drawer{position:fixed; top:0; right:0; height:100%; width:min(400px,94vw); background:var(--paper); z-index:30; border-left:1px solid var(--hair);
+    transform:translateX(100%); transition:transform .32s cubic-bezier(.22,.61,.36,1); display:flex; flex-direction:column; overflow:auto}
+  .drawer.show{transform:none}
+  .drawer header{border-bottom:1px solid var(--hair)}
+  .drawer h2{font-family:var(--serif); font-weight:500; font-size:1.1rem; margin:0 auto 0 0}
+  .drawer .body{padding:6px clamp(18px,5vw,26px) 36px}
+  .field{padding:18px 0; border-bottom:1px solid var(--hair)}
+  .field:last-child{border-bottom:none}
+  .field .name{font-family:var(--sans); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:6px}
+  .field .desc{font-family:var(--sans); font-size:11.5px; color:var(--ink-soft); margin:0 0 12px; line-height:1.5}
+
+  /* pool widget (the "windows") */
+  .pool-window{min-height:56px; border:1.5px dashed var(--tekhelet-soft); border-radius:12px; padding:10px; display:flex; flex-wrap:wrap; gap:8px; align-content:flex-start; background:color-mix(in srgb,var(--tekhelet) 5%,transparent)}
+  .pool-window.empty::before{content:attr(data-empty); font-family:var(--sans); font-size:12px; color:var(--ink-soft); align-self:center; opacity:.8}
+  .pool-tray{margin-top:10px; display:flex; flex-wrap:wrap; gap:8px}
+  .pool-tray-label{font-family:var(--sans); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); width:100%; margin-bottom:-2px}
+  .chip{font-family:var(--sans); font-size:13px; padding:8px 14px; border-radius:999px; border:1px solid var(--hair); background:var(--card); cursor:grab; user-select:none; display:flex; align-items:center; gap:7px}
+  .chip:hover{border-color:var(--ink-soft)}
+  .pool-window .chip{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+  .chip .he{font-family:var(--he-font); font-size:1rem}
+  .chip.drag{opacity:.4}
+
+  .seg{display:flex; gap:6px; flex-wrap:wrap}
+  .seg button{font-family:var(--sans); font-size:13px; padding:9px 14px; border-radius:9px; border:1px solid var(--hair); background:none}
+  .seg button.on{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+  .switch{display:flex; align-items:center; gap:10px; font-family:var(--sans); font-size:14px}
+  .toggle{width:42px; height:24px; border-radius:999px; background:var(--hair); border:none; position:relative; transition:background .2s; flex:none}
+  .toggle.on{background:var(--tekhelet)}
+  .toggle::after{content:""; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:left .2s}
+  .toggle.on::after{left:21px}
+  .range{display:flex; align-items:center; gap:12px}
+  .range input[type=range]{flex:1; accent-color:var(--tekhelet)}
+  .range .val{font-family:var(--sans); font-size:13px; min-width:46px; text-align:right}
+  .preset-row{display:flex; gap:8px; flex-wrap:wrap}
+  .preset{font-family:var(--sans); font-size:13px; padding:10px 16px; border-radius:10px; border:1px solid var(--tekhelet-soft); color:var(--tekhelet); background:none}
+  .preset:hover{background:color-mix(in srgb,var(--tekhelet) 8%,transparent)}
+  .grade{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+  .gbtn{font-family:var(--sans); font-size:14px; padding:13px 22px; border-radius:12px; border:1px solid var(--hair); background:var(--card); min-width:120px; cursor:pointer; transition:border-color .15s, background .15s}
+  .gbtn:hover{border-color:var(--ink-soft)}
+  .gbtn.miss{color:var(--madder)} .gbtn.almost{color:var(--tekhelet)} .gbtn.knew{color:#2f7d5b}
+  #self-reveal{display:flex; flex-direction:column; gap:16px; align-items:center; margin:6px 0 4px}
+  .self-ans{font-size:1.55rem; text-align:center; padding:4px 0}
+  .self-ans.he{font-family:var(--he-font); direction:rtl}
+  .sel-book{width:100%; font-family:var(--sans); font-size:14px; padding:11px 12px; border-radius:10px; border:1px solid var(--hair); background:var(--card); color:var(--ink)}
+  .context{font-family:var(--he-font); direction:rtl; text-align:right; font-size:1.02rem; line-height:1.6; background:var(--paper-2); border:1px solid var(--hair); border-radius:10px; padding:9px 12px; margin-top:10px}
+  .context .ref{display:block; direction:ltr; text-align:left; font-family:var(--sans); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:5px}
+  .ctx-wrap{margin-top:12px; text-align:center}
+  .ctx-toggle{font-family:var(--sans); font-size:12px; color:var(--tekhelet); background:none; border:1px solid var(--hair); border-radius:999px; padding:4px 14px; cursor:pointer; transition:all .15s}
+  .ctx-toggle:hover{border-color:var(--tekhelet-soft); background:color-mix(in srgb,var(--tekhelet) 6%,transparent)}
+  .pos-note{font-family:var(--sans); font-size:11px; color:var(--ink-soft); text-align:center; margin-top:4px; font-style:italic}
+  .match-cols{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:6px}
+  .match-col{display:flex; flex-direction:column; gap:10px}
+  .match-tile{font-family:var(--serif); font-size:1.02rem; color:var(--ink); text-align:center; padding:10px 12px; min-height:58px; box-sizing:border-box; display:flex; align-items:center; justify-content:center; background:var(--card); border:1.5px solid var(--hair); border-radius:12px; cursor:pointer; transition:border-color .12s, box-shadow .12s, opacity .2s; user-select:none}
+  .match-tile.he{font-family:var(--he-font); direction:rtl; font-size:1.5rem}
+  .match-tile:hover{border-color:var(--tekhelet-soft)}
+  .match-tile.sel{border-color:var(--tekhelet); box-shadow:0 0 0 2px color-mix(in srgb,var(--tekhelet) 40%,transparent)}
+  .match-tile.matched{opacity:.32; border-color:var(--green); cursor:default}
+  .match-tile.wrong{border-color:var(--madder); box-shadow:0 0 0 2px color-mix(in srgb,var(--madder) 45%,transparent); animation:mshake .3s}
+  .match-tile.drop{border-color:var(--tekhelet); border-style:dashed}
+  @keyframes mshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+  .match-done{font-family:var(--sans); text-align:center; margin-top:20px; color:var(--ink-soft)}
+  .numin{-moz-appearance:textfield; width:5ch; font-family:var(--sans); font-size:13px; color:var(--ink); background:transparent; border:none; border-bottom:1px dashed var(--hair); text-align:center; padding:1px 2px}
+  .numin:focus{outline:none; border-bottom-color:var(--tekhelet)}
+  .numin::-webkit-outer-spin-button,.numin::-webkit-inner-spin-button{-webkit-appearance:none; margin:0}
+  #worksheet{max-width:640px; margin:0 auto}
+  .ws-row{background:var(--card); border:1.5px solid var(--hair); border-radius:14px; padding:16px 18px; margin-bottom:14px}
+  .ws-row.ws-ok{border-color:var(--green)} .ws-row.ws-bad{border-color:var(--madder)}
+  .ws-q{display:flex; align-items:baseline; gap:12px; margin-bottom:10px}
+  .ws-num{font-family:var(--sans); font-size:12px; color:var(--ink-soft); min-width:18px}
+  .ws-prompt{font-size:1.5rem; color:var(--ink)}
+  .ws-prompt.he{font-family:var(--he-font); direction:rtl; font-size:1.7rem}
+  .ws-prompt.en{font-family:var(--serif); font-style:italic}
+  #ws-foot{text-align:center; margin-top:6px}
+  .ws-summary{font-family:var(--sans)}
+  .context .hit{color:var(--tekhelet); font-weight:600; background:color-mix(in srgb,var(--tekhelet) 13%,transparent); border-radius:5px; padding:0 3px}
+  .report{position:fixed; inset:0; background:color-mix(in srgb,var(--ink) 40%,transparent); backdrop-filter:blur(2px); display:none; align-items:center; justify-content:center; z-index:60; padding:20px}
+  .report.show{display:flex}
+  .report-card{background:var(--paper); border:1px solid var(--hair); border-radius:18px; width:100%; max-width:440px; max-height:90vh; overflow:auto; padding:26px 26px 22px; position:relative; box-shadow:var(--shadow)}
+  .report-card h2{font-family:var(--he-font); font-size:1.5rem; margin:0 0 4px; color:var(--ink)}
+  .report-intro{color:var(--ink-soft); font-size:13.5px; margin:0 0 18px; line-height:1.5}
+  .report-x{position:absolute; top:14px; right:16px; background:none; border:none; font-size:24px; line-height:1; color:var(--ink-soft); cursor:pointer}
+  .report-x:hover{color:var(--ink)}
+  .report-seg{display:flex; gap:8px; margin-bottom:18px}
+  .report-seg button{flex:1; font-family:var(--sans); font-size:13px; padding:10px; border-radius:10px; border:1px solid var(--hair); background:var(--card); color:var(--ink-soft); cursor:pointer}
+  .report-seg button.on{border-color:var(--tekhelet); color:var(--tekhelet); background:color-mix(in srgb,var(--tekhelet) 8%,transparent)}
+  .report-l{display:block; font-family:var(--sans); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 6px}
+  .report-l .opt{text-transform:none; letter-spacing:0; opacity:.85}
+  .report-in, .report-ta{width:100%; font-family:var(--sans); font-size:15px; padding:11px 13px; border-radius:10px; border:1px solid var(--hair); background:var(--card); color:var(--ink); margin-bottom:14px; box-sizing:border-box}
+  .report-ta{resize:vertical; line-height:1.5}
+  .report-in:focus, .report-ta:focus{outline:none; border-color:var(--tekhelet)}
+  .report-ctx{font-size:11.5px; color:var(--ink-soft); background:var(--paper-2); border:1px solid var(--hair); border-radius:9px; padding:9px 11px; margin-bottom:16px; line-height:1.45}
+  .report-actions{display:flex; gap:10px; justify-content:flex-end}
+  .report-status{min-height:18px; margin-top:12px; font-size:13px; text-align:right; color:var(--ink-soft)}
+  .report-status.ok{color:var(--green)} .report-status.err{color:var(--madder)}
+  .stat.clickable{cursor:pointer; transition:border-color .15s} .stat.clickable:hover{border-color:var(--tekhelet)}
+  .key{position:relative}
+  .khint{position:absolute; bottom:2px; right:4px; font-size:11px; line-height:1; color:var(--tekhelet-soft); font-family:var(--sans); font-weight:600; opacity:.92; pointer-events:none}
+  .credit{font-family:var(--sans); font-size:11.5px; color:var(--ink-soft); line-height:1.6}
+  .savebar{font-family:var(--sans); font-size:12px; text-align:center; color:var(--ink-soft); padding:10px 20px; border-top:1px solid var(--hair); background:var(--paper-2); display:none}
+  .savebar.show{display:block}
+  footer{font-family:var(--sans); font-size:11px; color:var(--ink-soft); text-align:center; padding:18px}
+
+  .remembered{margin-top:24px; background:var(--card); border:1px solid var(--hair); border-radius:14px; padding:22px}
+  .remembered h3{font-family:var(--sans); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 14px; font-weight:600}
+  .rem-row{display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px solid var(--hair); flex-wrap:wrap}
+  .rem-row:first-of-type{border-top:none}
+  .rem-word{font-family:var(--he-font); font-size:1.2rem; min-width:64px; direction:rtl}
+  .rem-gloss{font-family:var(--sans); font-size:12px; color:var(--ink-soft); margin-right:auto}
+  .rem-syn{font-family:var(--sans); font-size:12.5px; padding:5px 10px; border-radius:999px; border:1px solid var(--hair); background:var(--paper); display:inline-flex; align-items:center; gap:7px}
+  .rem-syn button{border:none; background:none; color:var(--madder); font-size:15px; line-height:1; padding:0; cursor:pointer}
+  #egg-a{cursor:default}
+  .secret{position:fixed; inset:0; background:var(--paper); z-index:50; display:none; align-items:center; justify-content:center; overflow:auto; padding:40px; cursor:pointer}
+  .secret.show{display:flex}
+  #fractal-root{position:absolute; inset:0}
+  .frac{position:absolute; font-family:var(--he-font); direction:rtl; color:var(--tekhelet); cursor:pointer; line-height:1; user-select:none; white-space:nowrap; will-change:left,top,opacity}
+  .frac:hover{filter:brightness(1.3)}
+  .secret-hint{position:fixed; bottom:20px; left:50%; transform:translateX(-50%); font-family:var(--he-font); font-size:13px; color:var(--ink-soft); opacity:.5}
+  .dist{margin-top:24px;background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:22px}
+  .dist h3{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 14px;font-weight:600}
+  .bar{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--paper-2);cursor:pointer}
+  .bar>span{height:100%;transition:opacity .2s}
+  .bar>span:hover{opacity:.78}
+  .bar-key{display:flex;gap:18px;margin-top:12px;font-family:var(--sans);font-size:12px;color:var(--ink-soft);flex-wrap:wrap}
+  .bar-key i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+  .band-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--hair);font-family:var(--sans);font-size:13px;flex-wrap:wrap}
+  .band-row .bw{font-family:var(--he-font);font-size:1.25rem;direction:rtl;min-width:60px}
+  .band-row .bg{color:var(--ink);margin-right:auto}
+  .band-row .bm{color:var(--ink-soft);font-size:12px}
+  .kbd-niqqud{display:none;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}
+  #keyboard.show-niqqud .kbd-niqqud{display:grid}
+  .key.nq{font-size:1.2rem}
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+  @media (max-width:560px){ .kbd-grid{grid-template-columns:repeat(8,1fr)} .key.space{grid-column:span 4} }
+</style>
+</head>
+<body data-theme="light">
+<div id="update-bar"><span id="update-text"></span> <a id="update-link" href="#" target="_blank" rel="noopener">Download</a> <button id="update-close" aria-label="Dismiss" title="Dismiss">×</button></div>
+
+<header>
+  <div class="brand">
+    <span class="mark">א</span>
+    <div><h1>Ots<span id="egg-a">a</span>r</h1><span class="sub">word-hoard · biblical hebrew</span></div>
+  </div>
+  <nav>
+    <button class="navbtn active" data-view="practice">Practice</button>
+    <button class="navbtn" data-view="progress">Progress</button>
+    <button class="navbtn" data-view="read">Read</button>
+  </nav>
+  <button class="iconbtn" id="theme-toggle" title="Light / dark" aria-label="Toggle theme">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+  </button>
+  <button class="iconbtn" id="open-report" title="Report or suggest" aria-label="Report or suggest">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+  </button>
+  <button class="iconbtn" id="open-settings" title="Settings" aria-label="Settings">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 2.6 14H2.5a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4 7.4l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9 4.6 1.6 1.6 0 0 0 10 3.1V3a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 17 4.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 21.4 10H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg>
+  </button>
+</header>
+
+<main>
+  <section class="view active" id="view-practice">
+    <div class="session-line">
+      <span id="session-count">0 / 0</span><span class="track"><i id="session-track"></i></span><span id="session-acc"></span>
+    </div>
+
+    <div class="card" id="card">
+      <div class="prompt-label" id="prompt-label">Hebrew</div>
+      <div class="prompt"><div id="prompt-text" class="he"></div></div>
+      <div class="pos-note" id="pos-note" style="display:none"></div>
+      <div class="activation"><span>dormant</span><span class="meter"><i id="meter"></i></span><span>active</span></div>
+      <div class="ctx-wrap"><button class="ctx-toggle" id="ctx-btn" style="display:none">Show context</button><div class="context" id="context" style="display:none"></div></div>
+
+      <div id="answer-area"></div>
+
+      <div class="verdict" id="verdict"></div>
+      <div class="controls">
+        <button class="btn-primary" id="check-btn">Check</button>
+        <button class="btn-primary" id="reveal-btn" style="display:none">Reveal answer</button>
+        <button class="btn-ghost" id="override-btn" style="display:none">I was right — remember</button>
+        <button class="btn-primary" id="next-btn" style="display:none">Next</button>
+        <div class="grade" id="grade" style="display:none">
+          <button class="gbtn miss" data-q="0">Missed</button>
+          <button class="gbtn almost" data-q="0.5">Almost</button>
+          <button class="gbtn knew" data-q="1">Knew it</button>
+        </div>
+      </div>
+      <div class="hint" id="hint">Fill the answer, then press <b>Enter</b></div>
+
+      <div id="keyboard">
+        <div class="kbd-grid" id="kbd-grid"></div>
+        <div class="kbd-niqqud" id="kbd-niqqud"></div>
+      </div>
+    </div>
+
+    <div id="worksheet" style="display:none"></div>
+    <div id="match-board" style="display:none">
+      <div class="match-cols"><div class="match-col" id="match-he"></div><div class="match-col" id="match-gl"></div></div>
+      <div class="match-done" id="match-done" style="display:none"></div>
+    </div>
+    <div class="panel" id="empty-state" style="display:none">
+      <h2 id="empty-title">Nothing to drill</h2>
+      <p id="empty-msg">Adjust the language window or filters in settings.</p>
+      <div class="row"><button class="btn-ghost" onclick="openDrawer()">Open settings</button></div>
+    </div>
+
+    <div class="panel" id="done-state" style="display:none">
+      <h2>Round complete</h2>
+      <div class="summary-grid">
+        <div><div class="n" id="done-reviewed">0</div><div class="l">reviewed</div></div>
+        <div><div class="n" id="done-acc">0%</div><div class="l">correct</div></div>
+        <div><div class="n" id="done-time">0.0s</div><div class="l">avg time</div></div>
+      </div>
+      <div class="row"><button class="btn-primary" onclick="buildSession()">New round</button></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-read"><iframe id="rd-frame" title="Otsar Reader"></iframe></section>
+  <section class="view" id="view-progress">
+    <div class="seg seg-scope" id="seg-scope" style="max-width:320px;margin:0 auto 18px">
+      <button data-scope="personal" class="on">Personal</button>
+      <button data-scope="all">All in scope</button>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="dist" id="dist-wrap">
+      <h3>Activation — click a band</h3>
+      <div class="bar" id="dist-bar"></div>
+      <div class="bar-key"><span><i style="background:var(--tekhelet)"></i>Active</span><span><i style="background:var(--tekhelet-soft)"></i>Learning</span><span><i style="background:var(--paper-2);border:1px solid var(--hair)"></i>Dormant / new</span></div>
+      <div id="band-list"></div>
+    </div>
+    <div class="remembered" id="remembered-wrap" style="display:none">
+      <h3>Remembered answers</h3>
+      <div id="accept-list"></div>
+    </div>
+    <div class="data-actions">
+      <button class="btn-ghost" id="export-progress">Export progress</button>
+      <button class="btn-ghost" id="import-progress">Import progress</button>
+      <button class="btn-ghost" id="reset-progress" style="color:var(--madder)">Reset progress</button>
+    </div>
+  </section>
+</main>
+
+<footer>Hebrew text &amp; morphology from the <a class="ext" href="https://github.com/ETCBC/bhsa">ETCBC BHSA</a> dataset, via <a class="ext" href="https://github.com/annotation/text-fabric">Text-Fabric</a>.</footer>
+
+<div class="scrim" id="scrim" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" aria-label="Settings">
+  <header>
+    <h2>Settings</h2>
+    <button class="iconbtn" onclick="closeDrawer()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </header>
+  <div class="body">
+    <div class="field">
+      <div class="name">Presets</div>
+      <div class="preset-row">
+        <button class="preset" data-preset="vocab">Vocabulary</button>
+        <button class="preset" data-preset="parse">Parsing</button>
+        <button class="preset" data-preset="both">Read &amp; parse</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="name">Saved setups</div>
+      <div id="setups-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
+      <button class="btn-ghost" id="save-setup" style="width:100%">Save current settings as…</button>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn-ghost" id="setups-export" style="flex:1">Export setups</button>
+        <button class="btn-ghost" id="setups-import" style="flex:1">Import setups</button>
+      </div>
+      <input type="file" id="setups-file" accept="application/json,.json" style="display:none">
+    </div>
+
+    <div class="field">
+      <div class="name">Learning modes</div>
+      <div class="seg seg-multi" id="seg-grading">
+        <button data-mode="typed">Typed answer</button>
+        <button data-mode="selfrate">Self-rate</button>
+        <button data-mode="match">Match</button>
+      </div>
+      <div class="switch" style="margin-top:12px"><button class="toggle" id="ws-toggle" aria-label="Show all at once"></button><span>Show all cards at once (typed worksheet)</span></div>
+      <div class="desc">Pick one or more — rounds shuffle between them. Typed checks what you write; Self-rate reveals the answer and you grade yourself (space, then 1·2·3); Match is a drag-or-tap pairing game.</div>
+    </div>
+
+    <div class="field">
+      <div class="name">Study unit</div>
+      <div class="seg" id="seg-unit">
+        <button data-unit="lexeme" class="on">Lexemes</button>
+        <button data-unit="form">Forms</button>
+      </div>
+      <div id="unit-note" style="display:none; font-size:11.5px; color:var(--ink-soft); margin-top:6px">Parsing needs word forms — clear the grammar categories to drill lexemes.</div>
+      <div class="desc">Forms shows attested inflections (מַלְכֵי, אָרֶץ…); choosing any parse category forces forms.</div>
+    </div>
+
+    <div class="field">
+      <div class="name">Hebrew keyboard layout</div>
+      <div class="switch" style="margin-bottom:12px"><button class="toggle" id="kbd-toggle" aria-label="Show on-screen keyboard"></button><span>Show the on-screen keyboard</span></div>
+      <div class="seg" id="seg-kbd">
+        <button data-kbd="phonetic" class="on">Phonetic</button>
+        <button data-kbd="israeli">Israeli</button>
+      </div>
+      <div class="desc">Type on your physical keyboard; the on-screen board is a fallback. Phonetic is approximate, Israeli is the standard layout.</div>
+    </div>
+
+    <div class="field">
+      <div class="name">Vocalisation</div>
+      <div class="switch" style="margin-bottom:10px"><button class="toggle" id="vowel-check" aria-label="Check vowels"></button><span>Check vowel-points in answers</span></div>
+      <div class="switch"><button class="toggle" id="vowel-show" aria-label="Show vowels"></button><span>Show vowel-points on the prompt</span></div>
+    </div>
+
+    <div class="field">
+      <div class="name">Languages in play</div>
+      <div class="desc">Drag or tap a label into the frame. A source word asks for its gloss; the gloss asks for the word(s).</div>
+      <div id="lang-pool"></div>
+    </div>
+
+    <div class="field">
+      <div class="name">Ask for gloss</div>
+      <div class="switch"><button class="toggle" id="gloss-toggle" aria-label="Ask for gloss"></button><span id="gloss-state">On</span></div>
+    </div>
+
+    <div class="field">
+      <div class="name">Parse — grammatical categories</div>
+      <div class="desc">Drag in the categories to be quizzed. Each is asked only when it applies to the form shown.</div>
+      <div id="gram-pool"></div>
+    </div>
+
+    <div class="field">
+      <div class="name">Word classes</div>
+      <div class="seg" id="seg-pos">
+        <button data-pos="verb" class="on">Verbs</button>
+        <button data-pos="noun" class="on">Nouns</button>
+        <button data-pos="particle" class="on">Particles</button>
+      </div>
+      <div class="switch" style="margin-top:12px"><button class="toggle" id="names-toggle" aria-label="Include proper names"></button><span>Include proper names (יהוה, place &amp; personal names)</span></div>
+    </div>
+
+    <div class="field">
+      <div class="name">Book</div>
+      <select id="book-select" class="sel-book"><option value="">All books</option></select>
+      <div class="desc">Limit the drill to forms attested in one book (e.g. read your way through Jonah).</div>
+      <select id="chapter-select" class="sel-book" style="margin-top:10px"><option value="">All chapters</option></select>
+    </div>
+
+    <div class="field">
+      <div class="name">Frequency band</div>
+      <div class="range"><input type="range" id="freq-min" min="0" max="6000" step="10" value="0"><input type="number" class="val numin" id="freqmin-val" min="0" max="6000" step="10" value="0"></div>
+      <div class="range" style="margin-top:8px"><input type="range" id="freq-max" min="0" max="6000" step="10" value="6000"><input type="number" class="val numin" id="freqmax-val" min="0" max="6000" step="10" value="6000"></div>
+      <div class="desc">Drill only words whose count falls in this band — set a low ceiling to skip the words you already know.</div>
+    </div>
+    <div class="field">
+      <div class="name">Words per round</div>
+      <div class="range"><input type="range" id="size-range" min="5" max="50" step="5" value="20"><input type="number" class="val numin" id="size-val" min="1" max="200" step="1" value="20"></div>
+    </div>
+
+    <div class="field">
+      <div class="name">Vocabulary</div>
+      <button class="btn-ghost" id="load-vocab" style="width:100%">Load vocabulary file (.json)</button>
+      <button class="btn-ghost" id="import-deck" style="width:100%;margin-top:8px">Import deck from Reader (.json)</button>
+      <div class="seg" id="seg-source" style="margin-top:12px"><button data-src="full" class="on">Vocabulary</button><button data-src="deck">Deck</button></div>
+      <button class="btn-ghost" id="clear-deck" style="width:100%;margin-top:8px;color:var(--madder);display:none">Clear deck</button>
+      <div class="credit" id="vocab-status" style="margin-top:10px"></div>
+    </div>
+
+    <div class="field">
+      <div class="name">About</div>
+      <p class="credit">Type Hebrew on your physical keyboard (or the on-screen board). Answers check on consonants unless you turn on vowel-points. Forms mode surfaces attested inflections — construct, pausal, and the rest. Grammar is read from the data, so only categories a form actually carries are asked. Marking an unrecognised gloss as right remembers it; manage those under Progress.</p>
+      <p class="credit">Influenced by <a class="ext" href="https://github.com/ch-jensen/Vocab">ch-jensen/Vocab</a> — Vocabulary training for Biblical Hebrew and Aramaic (Højgaard), and <a class="ext" href="https://github.com/codykingham/Mahir">codykingham/Mahir</a> — Contextual Vocabulary Acquisition for Readers of Literature (Cody Kingham).</p>
+    </div>
+  </div>
+  <div class="savebar" id="savebar">Progress isn't saved in this preview — open the downloaded file on your computer to keep it.</div>
+</aside>
+
+<input type="file" id="file-vocab" accept=".json,application/json" hidden>
+<input type="file" id="file-progress" accept=".json,application/json" hidden>
+<input type="file" id="file-deck" accept=".json,application/json" hidden>
+
+<div id="secret" class="secret"><div id="fractal-root"></div><div class="secret-hint">נֶפֶשׁ — esc</div></div>
+
+<div id="report" class="report" aria-label="Report or suggest">
+  <div class="report-card">
+    <button class="report-x" id="report-close" aria-label="Close">×</button>
+    <h2>Report or suggest</h2>
+    <p class="report-intro">Found a wrong gloss or parse, hit a bug, or want a feature? Send it straight to me.</p>
+    <div class="report-seg" id="report-type">
+      <button data-type="Bug" class="on">Something's wrong</button>
+      <button data-type="Suggestion">Suggestion</button>
+    </div>
+    <label class="report-l" for="report-name">Your name</label>
+    <input id="report-name" class="report-in" type="text" placeholder="So I know who flagged it" autocomplete="name">
+    <label class="report-l" for="report-email">Email <span class="opt">— optional, so I can reply</span></label>
+    <input id="report-email" class="report-in" type="email" placeholder="you@example.com" autocomplete="email">
+    <label class="report-l" for="report-msg">Message</label>
+    <textarea id="report-msg" class="report-ta" rows="5" placeholder="What happened, or what you'd like to see…"></textarea>
+    <div class="report-ctx" id="report-ctx"></div>
+    <input type="checkbox" name="botcheck" id="report-bot" style="display:none" tabindex="-1" autocomplete="off">
+    <div class="report-actions">
+      <button class="btn-ghost" id="report-cancel">Cancel</button>
+      <button class="btn-primary" id="report-send">Send</button>
+    </div>
+    <div class="report-status" id="report-status"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   Otsar v2 — word-drilling demo
+   Features: language "window", typed answers + lenient gloss grading +
+   remember-synonym override, consonants-only Hebrew keyboard, grammar mode
+   with data-driven applicability. Answer area is rendered from a spec.
+   ========================================================================= */
+const SCHEMA = 2;
+
+/* ---- storage ---- */
+const mem = {}; let storageOK = true;
+try { localStorage.setItem("__t","1"); localStorage.removeItem("__t"); } catch(e){ storageOK=false; }
+const store = {
+  get(k){ try{ const v = storageOK?localStorage.getItem(k):mem[k]; return v?JSON.parse(v):null; }catch(e){ return null; } },
+  set(k,v){ const s=JSON.stringify(v); if(storageOK){ try{ localStorage.setItem(k,s);}catch(e){ storageOK=false; mem[k]=s; reflectStorage(); } } else mem[k]=s; }
+};
+function reflectStorage(){ document.getElementById("savebar").classList.toggle("show",!storageOK); }
+
+/* ---- enriched sample (labelled placeholder; ETCBC-style codes) ----
+   Forms are mostly the citation form, tagged with its parse. Real BHSA
+   export supplies varied attested forms with their own parses.            */
+const V = (id,form,lemma,gloss,sp,freq,p={},ref="")=>Object.assign({id,form,lemma,gloss,sp,freq,ref,lang:"Hebrew"},p);
+const verb=(vt="perf",ps="p3",gn="m",nu="sg",vs="qal")=>({vs,vt,ps,gn,nu});
+const noun=(gn,nu="sg",st="a")=>({gn,nu,st});
+const SAMPLE = [
+  V("YHWH","יְהוָה","יְהוָה","YHWH (the LORD)","nmpr",6800),
+  V("BN","בֵּן","בֵּן","son","subs",4900,noun("m")),
+  V("ELOHIM","אֱלֹהִים","אֱלֹהִים","God, gods","subs",2600,noun("m","pl"),"Genesis 1:1"),
+  V("AL2","עַל","עַל","upon, over","prep",5700),
+  V("ASHER","אֲשֶׁר","אֲשֶׁר","who, which, that","conj",5500),
+  V("EL","אֶל","אֶל","to, toward","prep",5500),
+  V("KOL","כֹּל","כֹּל","all, every","subs",5400,noun("m")),
+  V("AMAR","אָמַר","אָמַר","to say","verb",5300,verb()),
+  V("KI","כִּי","כִּי","that, because, for","conj",4400),
+  V("HAYA","הָיָה","הָיָה","to be, become","verb",3500,verb()),
+  V("ASA","עָשָׂה","עָשָׂה","to do, make","verb",2600,verb()),
+  V("BO","בָּא","בּוֹא","to come, go in","verb",2570,verb()),
+  V("ERETS","אֶרֶץ","אֶרֶץ","earth, land","subs",2500,noun("f")),
+  V("MELEKH","מֶלֶךְ","מֶלֶךְ","king","subs",2500,noun("m")),
+  V("YOM","יוֹם","יוֹם","day","subs",2300,noun("m")),
+  V("AISH","אִישׁ","אִישׁ","man","subs",2180,noun("m")),
+  V("BAYIT","בַּיִת","בַּיִת","house","subs",2000,noun("m")),
+  V("NATAN","נָתַן","נָתַן","to give","verb",2010,verb()),
+  V("AM","עַם","עַם","people","subs",1860,noun("m")),
+  V("YAD","יָד","יָד","hand","subs",1620,noun("f")),
+  V("HALAKH","הָלַךְ","הָלַךְ","to walk, go","verb",1550,verb()),
+  V("DAVAR","דָּבָר","דָּבָר","word, thing","subs",1450,noun("m")),
+  V("RAA","רָאָה","רָאָה","to see","verb",1300,verb()),
+  V("AV","אָב","אָב","father","subs",1210,noun("m")),
+  V("SHAMA","שָׁמַע","שָׁמַע","to hear","verb",1160,verb()),
+  V("DIBER","דִּבֶּר","דָּבַר","to speak","verb",1140,verb("perf","p3","m","sg","piel")),
+  V("IR","עִיר","עִיר","city","subs",1090,noun("f")),
+  V("YASHAV","יָשַׁב","יָשַׁב","to sit, dwell","verb",1080,verb()),
+  V("YATSA","יָצָא","יָצָא","to go out","verb",1070,verb()),
+  V("LAQAKH","לָקַח","לָקַח","to take","verb",970,verb()),
+  V("YADA","יָדַע","יָדַע","to know","verb",950,verb()),
+  V("AYIN","עַיִן","עַיִן","eye, spring","subs",900,noun("f")),
+  V("SHANA","שָׁנָה","שָׁנָה","year","subs",870,noun("f")),
+  V("SHALAKH","שָׁלַח","שָׁלַח","to send","verb",840,verb()),
+  V("AKHAL","אָכַל","אָכַל","to eat","verb",810,verb()),
+  V("ISHA","אִשָּׁה","אִשָּׁה","woman, wife","subs",780,noun("f")),
+  V("NEFESH","נֶפֶשׁ","נֶפֶשׁ","soul, life, person","subs",750,noun("f")),
+  V("QARA","קָרָא","קָרָא","to call, read","verb",730,verb()),
+  V("DEREKH","דֶּרֶךְ","דֶּרֶךְ","way, road","subs",700,noun("f")),
+  V("LEV","לֵב","לֵב","heart","subs",600,noun("m")),
+  V("MAYIM","מַיִם","מַיִם","water","subs",580,noun("m","pl")),
+  V("QOL","קוֹל","קוֹל","voice, sound","subs",510,noun("m")),
+  V("SHAMAYIM","שָׁמַיִם","שָׁמַיִם","heavens","subs",420,noun("m","pl")),
+  V("MALAKH","מָלַךְ","מָלַךְ","to reign, be king","verb",350,verb()),
+  V("AMAR_WAYQ","וַיֹּאמֶר","אָמַר","to say","verb",5300,verb("wayq")),
+  V("AMAR_PTC","אֹמֵר","אָמַר","to say","verb",5300,{vs:"qal",vt:"ptca",gn:"m",nu:"sg",st:"a"}),
+  V("SHAMA_IMPF","יִשְׁמַע","שָׁמַע","to hear","verb",1160,verb("impf")),
+  V("HALAKH_PTC","הֹלֵךְ","הָלַךְ","to walk, go","verb",1550,{vs:"qal",vt:"ptca",gn:"m",nu:"sg",st:"a"}),
+  V("BARA","בָּרָא","בָּרָא","to create","verb",48,verb(),"Genesis 1:1"),
+  V("ARC_DI","דִּי","דִּי","that, which, of","conj",350,{lang:"Aramaic"}),
+  V("ARC_MALKA","מַלְכָּא","מֶלֶךְ","king","subs",180,{gn:"m",nu:"sg",st:"e",lang:"Aramaic"}),
+  V("ARC_ELAHA","אֱלָהָא","אֱלָהּ","God, god","subs",95,{gn:"m",nu:"sg",st:"e",lang:"Aramaic"}),
+  V("ARC_AMAR","אֲמַר","אֲמַר","to say","verb",71,{vs:"peal",vt:"perf",ps:"p3",gn:"m",nu:"sg",lang:"Aramaic"}),
+  V("ARC_HAVA","הֲוָה","הֲוָה","to be, become","verb",70,{vs:"peal",vt:"perf",ps:"p3",gn:"m",nu:"sg",lang:"Aramaic"}),
+  V("ARC_SHEMAYA","שְׁמַיָּא","שְׁמַיָּא","heaven(s)","subs",38,{gn:"m",nu:"pl",st:"e",lang:"Aramaic"}),
+  V("ARC_ABAD","עֲבַד","עֲבַד","to do, make","verb",28,{vs:"peal",vt:"perf",ps:"p3",gn:"m",nu:"sg",lang:"Aramaic"}),
+  V("MELEKH_CPL","מַלְכֵי","מֶלֶךְ","king","subs",2500,{gn:"m",nu:"pl",st:"c"}),
+  V("MELEKH_APL","מְלָכִים","מֶלֶךְ","king","subs",2500,{gn:"m",nu:"pl",st:"a"}),
+  V("ERETS_PAUS","אָרֶץ","אֶרֶץ","earth, land","subs",2500,{gn:"f",nu:"sg",st:"a"})
+];
+
+/* ---- label maps (ETCBC code -> human) ---- */
+const LABELS = {
+  vs:{qal:"Qal",nif:"Nif'al",piel:"Pi'el",pual:"Pu'al",hit:"Hitpa'el",hif:"Hif'il",hof:"Hof'al",
+      peal:"Pe'al",peil:"Pe'il",pael:"Pa'el",hafel:"Haf'el",afel:"Af'el",shafel:"Shaf'el",
+      hitpeel:"Hitpe'el",hitpaal:"Hitpa'al",hofal:"Hof'al"},
+  vt:{perf:"Perfect",impf:"Imperfect",wayq:"Wayyiqtol",impv:"Imperative",infc:"Inf. construct",
+      infa:"Inf. absolute",ptca:"Participle",ptcp:"Participle (pass.)"},
+  ps:{p1:"1st",p2:"2nd",p3:"3rd"},
+  gn:{m:"masc.",f:"fem."},
+  nu:{sg:"singular",pl:"plural",du:"dual"},
+  st:{a:"absolute",c:"construct",e:"emphatic"}
+};
+const CAT_NAME = {vs:"Binyan",vt:"Conjugation",ps:"Person",gn:"Gender",nu:"Number",st:"State"};
+const GRAM_CATS = ["vs","vt","ps","gn","nu","st"];
+const CAT_OPTS = {
+  vs:{ he:["qal","nif","piel","pual","hit","hif","hof"],
+       arc:["peal","peil","pael","hafel","afel","shafel","hitpeel","hitpaal","hofal"] },
+  vt:["perf","impf","wayq","impv","infc","infa","ptca","ptcp"],
+  ps:["p1","p2","p3"], gn:["m","f"], nu:["sg","pl","du"], st:["a","c","e"]
+};
+const LANG_LABELS = [{key:"he",label:"Hebrew",he:"עִבְרִית"},{key:"arc",label:"Aramaic",he:"אֲרָמִית"},{key:"en",label:"English (gloss)"}];
+
+/* ---- state ---- */
+let FULL = store.get("otsar.v3.vocab") || SAMPLE.slice();
+let DECK = store.get("otsar.v3.deck") || [];
+let source = store.get("otsar.v3.source") || "full";
+let deckName = store.get("otsar.v3.deckname") || "";
+let VOCAB = (source==="deck" && DECK.length) ? DECK : FULL;
+let progress = store.get("otsar.v3.progress") || {};
+let setups = store.get("otsar.v3.setups") || {};
+let settings = Object.assign(
+  {langs:["he","en"], gram:[], askGloss:true, pos:{verb:true,noun:true,particle:true}, includeNames:true, grading:"typed", book:"", context:true, chapter:"", showKeyboard:true, progressScope:"personal", worksheet:false,
+   freqMin:0, freqMax:6000, size:20, theme:"light", kbdLayout:"phonetic", checkVowels:false, showVowels:true, unit:"lexeme"},
+  store.get("otsar.v3.settings") || {}
+);
+if(!Array.isArray(settings.modes)) settings.modes=[settings.grading||"typed"];
+let session=[], sIndex=0, cardStart=0, sCorrect=0, sTimeMs=0, current=null, spec=null, graded=false, lastHeKey=null;
+let cardMode="typed", inMatch=false, inSheet=false, sheet=null;
+
+// ---- feedback (Web3Forms) ----
+const APP_VERSION   = "Otsar 0.2 · 2026-06-17";
+const REPORT_ENDPOINT = "https://api.web3forms.com/submit";   // if you didn't use web3forms.com, change to your service's submit URL
+const REPORT_KEY      = "4281a292-e834-429a-a1da-b2fa0e0f4b6e";
+let reportType = "Bug";
+
+/* ---- text helpers ---- */
+const FINALS = {"\u05DA":"\u05DB","\u05DD":"\u05DE","\u05DF":"\u05E0","\u05E3":"\u05E4","\u05E5":"\u05E6"};
+function heSkeleton(s){                                  // consonants only, finals normalised
+  let out="";
+  for(const ch of (s||"")){
+    if(ch>="\u05D0"&&ch<="\u05EA") out += (FINALS[ch]||ch);
+  }
+  return out;
+}
+function normGloss(s){
+  return (s||"").toLowerCase().replace(/[().]/g,"").replace(/^to\s+/,"").replace(/^(a|an|the)\s+/,"").replace(/[^a-z\s'-]/g,"").trim();
+}
+function glossVariants(g){ return (g||"").split(/[,;/]/).map(normGloss).filter(Boolean); }
+function glossKey(g){ return normGloss(g); }
+function bucket(sp){ if(sp==="verb")return "verb"; if(sp==="nmpr")return "name"; if(["subs","adjv"].includes(sp))return "noun"; return "particle"; }
+function isAramaic(it){ return String(it.lang||"").toLowerCase().startsWith("aram") || it.lang==="arc"; }
+function srcKey(it){ return isAramaic(it)?"arc":"he"; }
+function heVowelKey(s){
+  s=(s||"").normalize("NFC"); let out="";
+  for(const ch of s){ const c=ch.codePointAt(0);
+    if(c>=0x0591&&c<=0x05AF) continue;                       // cantillation accents
+    if(c===0x05BD||c===0x05BF||c===0x05C0||c===0x05C3) continue; // meteg, rafe, paseq, sof pasuq
+    if(c>=0x05D0&&c<=0x05EA){ out+=(FINALS[ch]||ch); continue; } // consonants, finals normalised
+    if(c>=0x05B0&&c<=0x05C7){ out+=ch; continue; }            // niqqud (vowels, dagesh, dots)
+  }
+  return canonHe(out);
+}
+function heKey(s){ return settings.checkVowels ? heVowelKey(s) : heSkeleton(s); }
+function stripPoints(s){ let o=""; for(const ch of (s||"")){ const c=ch.codePointAt(0); if(c>=0x0591&&c<=0x05C7) continue; o+=ch; } return o; }
+function canonHe(s){ return (s||"").normalize("NFC").replace(/\u05BA/g,"\u05B9").replace(/\u05B9\u05D5/g,"\u05D5\u05B9"); }
+const KBD = {
+  phonetic:{a:'א',b:'ב',v:'ו',g:'ג',d:'ד',h:'ה',w:'ו',z:'ז',j:'ח',y:'י',k:'כ',l:'ל',m:'מ',n:'נ',s:'ס',e:'ע',p:'פ',q:'ק',r:'ר',x:'ש',t:'ת',c:'צ'},
+  israeli:{t:'א',c:'ב',d:'ג',s:'ד',v:'ה',u:'ו',z:'ז',j:'ח',y:'ט',h:'י',f:'כ',k:'ל',n:'מ',b:'נ',x:'ס',g:'ע',p:'פ',m:'צ',e:'ק',r:'ר',a:'ש',',':'ת',l:'ך',o:'ם',i:'ן',';':'ף','.':'ץ'}
+};
+function mapHeKey(key){ const m=KBD[settings.kbdLayout]||KBD.phonetic; return m[key]||null; }
+function niqqudFor(e){ const k=e.key.toLowerCase(); switch(k){
+  case "a": return e.shiftKey?"\u05B8":"\u05B7";
+  case "e": return e.shiftKey?"\u05B5":"\u05B6";
+  case "i": return "\u05B4";
+  case "o": return e.shiftKey?"\u05BA":"\u05B9";
+  case "u": return "\u05BB";
+  case ";": return "\u05B0";
+  case "=": case "d": return "\u05BC";
+  case "x": return "\u05C1";
+  case "s": return "\u05C2"; } return null; }
+const NIQQUD = [["\u05B0","shva"],["\u05B1","ḥataf segol"],["\u05B2","ḥataf pataḥ"],["\u05B3","ḥataf qamats"],["\u05B4","ḥiriq"],["\u05B5","tsere"],["\u05B6","segol"],["\u05B7","pataḥ"],["\u05B8","qamats"],["\u05B9","ḥolam"],["\u05BB","qubuts"],["\u05BC","dagesh"],["\u05C1","shin dot"],["\u05C2","sin dot"]];
+function effUnit(){ return settings.gram.length>0 ? "form" : settings.unit; }
+function reflectUnit(){
+  const locked = settings.gram.length>0;
+  document.querySelectorAll("#seg-unit button").forEach(x=>{ const isForm=x.dataset.unit==="form"; x.classList.toggle("on", locked ? isForm : (x.dataset.unit===settings.unit)); const dim=locked && !isForm; x.style.opacity=dim?".4":""; x.style.cursor=dim?"not-allowed":""; });
+  const n=document.getElementById("unit-note"); if(n) n.style.display = locked ? "block" : "none";
+}
+function lexKey(it){ return srcKey(it)+"|"+(it.lex||it.lemma); }
+function chapOf(it){ if(it.c!=null) return String(it.c); const m=(it.ref||"").split(" ").pop(); return m.includes(":")?m.split(":")[0]:""; }
+function dispForm(it){ return effUnit()==="lexeme" ? (it.lemma||it.form) : it.form; }
+function collapse(list){
+  if(effUnit()==="form") return list;
+  const g={}; list.forEach(it=>{ const k=lexKey(it); (g[k]=g[k]||[]).push(it); });
+  return Object.values(g).map(arr => arr.find(x=>heSkeleton(x.form)===heSkeleton(x.lemma)) || arr.slice().sort((a,b)=>((b.n||b.freq||0)-(a.n||a.freq||0)))[0]);
+}
+function activeVocab(){ return collapse(VOCAB); }
+
+/* ---- dynamic selector options per (category, language) ---- */
+function optionsFor(cat, srcLangKey){
+  let base = CAT_OPTS[cat];
+  base = (base && !Array.isArray(base)) ? (base[srcLangKey] || base.he || []) : (base || Object.keys(LABELS[cat]||{}));
+  const vals = new Set(base);
+  FULL.forEach(it=>{ if(srcKey(it)===srcLangKey && it[cat]) vals.add(it[cat]); });   // include anything attested too
+  const order = Object.keys(LABELS[cat]||{});
+  return [...vals].sort((a,b)=> (order.indexOf(a)+1||99) - (order.indexOf(b)+1||99));
+}
+
+/* ---- scheduler (per-lexeme; direction-aware is a planned upgrade) ---- */
+const DAY=86400000;
+function rec(id){ return progress[id] || {seen:0,attempts:0,lapses:0,lastSeen:null,totalMs:0,accept:[]}; }
+function clamp(x){ return Math.max(0,Math.min(1,x)); }
+function freqNorm(f){ return clamp(Math.log((f||1)+1)/Math.log(6000)); }
+function activation(id){
+  const r=rec(id); if(!r.seen) return 0;
+  const days=r.lastSeen?(Date.now()-r.lastSeen)/DAY:99;
+  const avg=r.attempts?r.totalMs/r.attempts:6000;
+  return 0.45*clamp(1-days/21)+0.20*clamp(1-avg/8000)+0.35*(r.attempts?clamp(1-r.lapses/r.attempts):0.5);
+}
+function priority(it){
+  const r=rec(lexKey(it)), j=(Math.random()-0.5)*0.08;
+  if(!r.seen) return 0.62+0.30*freqNorm(it.freq)+j;
+  return (1-activation(lexKey(it)))+0.10*freqNorm(it.freq)+j;
+}
+
+/* ---- pool / session ---- */
+function activeSourceKeys(){ return settings.langs.filter(l=>l==="he"||l==="arc"); }
+function poolItems(){
+  const src=activeSourceKeys();
+  let base = VOCAB;
+  if(settings.book) base = base.filter(it=>it.book===settings.book);
+  if(settings.chapter) base = base.filter(it=>chapOf(it)===String(settings.chapter));
+  return collapse(base).filter(it=>{
+    const b=bucket(it.sp);
+    const clsOk = b==="name" ? settings.includeNames : !!settings.pos[b];
+    return src.includes(srcKey(it)) && clsOk && (it.freq||0)>=settings.freqMin && (it.freq||0)<=settings.freqMax;
+  });
+}
+function applicableCats(it){ return settings.gram.filter(c=> it[c]); }
+
+function buildSession(){
+  const pool=poolItems();
+  document.getElementById("done-state").style.display="none";
+  const worksheet = !!settings.worksheet;
+  const cmodes = settings.modes.filter(m=>m!=="match");
+  const matchMode = !worksheet && settings.modes.includes("match") && (cmodes.length===0 || Math.random()<0.5);
+  const ok = pool.length>0 && activeSourceKeys().length>0;
+  document.getElementById("empty-state").style.display = ok?"none":"block";
+  document.getElementById("card").style.display = (ok && !matchMode && !worksheet)?"flex":"none";
+  document.getElementById("match-board").style.display = (ok && matchMode)?"block":"none";
+  document.getElementById("worksheet").style.display = (ok && worksheet)?"block":"none";
+  if(!ok){
+    document.getElementById("match-board").style.display="none";
+    document.getElementById("worksheet").style.display="none"; inSheet=false;
+    document.getElementById("empty-title").textContent = activeSourceKeys().length? "Nothing to drill" : "Add a language";
+    document.getElementById("empty-msg").textContent = activeSourceKeys().length
+      ? "No words match the current word-class or frequency filters." 
+      : "Put Hebrew or Aramaic into the language window — English alone has nothing to show.";
+    updateLine(); return;
+  }
+  const ranked = pool.map(it=>({it,p:priority(it)})).sort((a,b)=>b.p-a.p);
+  session = ranked.slice(0,Math.min(settings.size,ranked.length)).map(x=>x.it);
+  for(let i=session.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [session[i],session[j]]=[session[j],session[i]]; }
+  if(worksheet){ renderWorksheet(session); return; }
+  if(matchMode){ startMatch(pool); return; }
+  sIndex=0; sCorrect=0; sTimeMs=0;
+  nextCard();
+}
+
+/* ---- Match mode: drag-or-tap pairing of lexemes and glosses ---- */
+let matchState=null;
+function startMatch(pool){
+  inMatch=true; inSheet=false;
+  const ranked = pool.map(it=>({it,p:priority(it)})).sort((a,b)=>b.p-a.p);
+  const onlyMatch = settings.modes.length===1 && settings.modes[0]==="match";
+  const cap = onlyMatch ? Math.max(2, settings.size||6) : 6;
+  const chosen=[], seenG=new Set(), seenK=new Set();
+  for(const {it} of ranked){
+    const k=lexKey(it), g=glossKey(it.gloss);
+    if(seenK.has(k)||seenG.has(g)) continue;
+    seenK.add(k); seenG.add(g); chosen.push(it);
+    if(chosen.length>=cap) break;
+  }
+  const shuf=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+  matchState={ total:chosen.length, matched:0, sel:null, drag:null, start:performance.now() };
+  document.getElementById("match-done").style.display="none";
+  const heCol=document.getElementById("match-he"), glCol=document.getElementById("match-gl");
+  const mk=(text,key,side,he)=>{ const t=document.createElement("div"); t.className="match-tile"+(he?" he":""); t.textContent=text; t.dataset.key=key; t.dataset.side=side; t.draggable=true; return t; };
+  heCol.innerHTML=""; glCol.innerHTML="";
+  shuf(chosen).forEach(it=>{ const disp=(!settings.showVowels)?stripPoints(dispForm(it)):dispForm(it); heCol.appendChild(mk(disp, lexKey(it), "he", true)); });
+  shuf(chosen).forEach(it=>{ glCol.appendChild(mk(it.gloss, lexKey(it), "gl", false)); });
+  updateMatchLine();
+}
+function matchTileClick(t){
+  if(!matchState || t.classList.contains("matched")) return;
+  const sel=matchState.sel;
+  if(!sel){ matchState.sel=t; t.classList.add("sel"); return; }
+  if(sel===t){ t.classList.remove("sel"); matchState.sel=null; return; }
+  if(sel.dataset.side===t.dataset.side){ sel.classList.remove("sel"); matchState.sel=t; t.classList.add("sel"); return; }
+  resolveMatch(sel.dataset.side==="he"?sel:t, sel.dataset.side==="he"?t:sel);
+}
+function resolveMatch(heTile, glTile){
+  if(matchState) matchState.sel=null;
+  document.querySelectorAll(".match-tile.sel").forEach(x=>x.classList.remove("sel"));
+  const correct = heTile.dataset.key===glTile.dataset.key;
+  matchRecord(heTile.dataset.key, correct);
+  if(correct){
+    [heTile,glTile].forEach(x=>{ x.classList.add("matched"); x.classList.remove("sel"); });
+    matchState.matched++; updateMatchLine();
+    if(matchState.matched>=matchState.total) matchDone();
+  } else {
+    [heTile,glTile].forEach(x=>{ x.classList.add("wrong"); setTimeout(()=>x.classList.remove("wrong"),320); });
+  }
+}
+function matchRecord(key, correct){
+  const r=rec(key); r.seen=1; r.attempts=(r.attempts||0)+1; r.lastSeen=Date.now(); if(!correct) r.lapses=(r.lapses||0)+1;
+  progress[key]=r; store.set("otsar.v3.progress",progress);
+}
+function matchDone(){
+  const secs=((performance.now()-matchState.start)/1000).toFixed(1);
+  const d=document.getElementById("match-done");
+  d.innerHTML=`<div style="font-family:var(--serif);font-size:1.3rem;color:var(--ink)">All matched \u00b7 ${secs}s</div><button class="btn-primary" id="match-again" style="margin-top:14px">New round</button>`;
+  d.style.display="block";
+  document.getElementById("match-again").addEventListener("click",buildSession);
+}
+function updateMatchLine(){
+  if(!matchState) return;
+  document.getElementById("session-count").textContent = `${matchState.matched} / ${matchState.total} matched`;
+  document.getElementById("session-track").style.width = (matchState.total?matchState.matched/matchState.total*100:0)+"%";
+  document.getElementById("session-acc").textContent="";
+}
+
+/* ---- Worksheet: all cards at once, typed only ---- */
+function wsMakeComp(c,i){
+  const box=document.createElement("div"); box.className="comp"; box.dataset.idx=i;
+  if(c.type==="gloss"){
+    box.innerHTML=`<span class="clabel">English gloss</span>`;
+    const inp=document.createElement("input"); inp.className="ans-input"; inp.type="text"; inp.autocomplete="off"; inp.spellcheck=false; inp.dataset.role="gloss"; box.appendChild(inp);
+  } else if(c.type==="word"){
+    box.innerHTML=`<span class="clabel">${c.lang==="arc"?"Aramaic":"Hebrew"} word</span>`;
+    const inp=document.createElement("input"); inp.className="ans-input he-input"; inp.type="text"; inp.dir="rtl"; inp.autocomplete="off"; inp.spellcheck=false; inp.dataset.role="word"; inp.addEventListener("focusin",()=>{ lastHeKey=inp; showKbd(true); }); box.appendChild(inp);
+  } else if(c.type==="gram"){
+    box.innerHTML=`<span class="clabel">${CAT_NAME[c.cat]}</span>`;
+    const opts=document.createElement("div"); opts.className="selopts"; opts.dataset.role="gram";
+    c.options.forEach(code=>{ const b=document.createElement("button"); b.className="selopt"; b.type="button"; b.dataset.code=code; b.textContent=(LABELS[c.cat]&&LABELS[c.cat][code])||code; b.addEventListener("click",()=>{ if(opts.classList.contains("graded"))return; opts.querySelectorAll(".selopt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); }); opts.appendChild(b); });
+    box.appendChild(opts);
+  }
+  return box;
+}
+function wsGradeComp(c, box){
+  let ok=true;
+  if(c.type==="gloss"){ const inp=box.querySelector("input"); const typed=normGloss(inp.value); ok=!!(typed && c.accept.includes(typed)); inp.classList.add(ok?"ok":"bad"); inp.disabled=true; if(!ok) appendReveal(box, `gloss: <b>${escapeHtml(c.display)}</b>`); }
+  else if(c.type==="word"){ const inp=box.querySelector("input"); const typed=heKey(inp.value); ok=!!(typed && c.accept.includes(typed)); inp.classList.add(ok?"ok":"bad"); inp.disabled=true; if(!ok) appendReveal(box, `answer: <span class="he">${c.display.join(" · ")}</span>`); }
+  else if(c.type==="gram"){ const opts=box.querySelector(".selopts"); opts.classList.add("graded"); const chosen=opts.querySelector(".selopt.sel"); ok=!!(chosen && chosen.dataset.code===c.correct); opts.querySelectorAll(".selopt").forEach(b=>{ if(b.dataset.code===c.correct) b.classList.add("ok"); if(b.classList.contains("sel") && b.dataset.code!==c.correct) b.classList.add("bad"); }); }
+  return ok;
+}
+function renderWorksheet(items){
+  inMatch=false; inSheet=true;
+  const wrap=document.getElementById("worksheet"); wrap.style.display="block";
+  wrap.innerHTML=`<div id="ws-list"></div><div id="ws-foot"><button class="btn-primary" id="ws-check">Check all</button><div class="ws-summary" id="ws-summary"></div></div>`;
+  const list=document.getElementById("ws-list");
+  sheet={ rows:[], start:performance.now(), graded:false };
+  items.forEach((it,idx)=>{
+    const spec=buildSpec(it);
+    const row=document.createElement("div"); row.className="ws-row";
+    const promptHe = spec.promptKind!=="en";
+    const prShown = (promptHe && !settings.showVowels) ? stripPoints(spec.promptText) : spec.promptText;
+    const head=document.createElement("div"); head.className="ws-q";
+    head.innerHTML=`<span class="ws-num">${idx+1}</span><span class="ws-prompt ${promptHe?"he":"en"}">${escapeHtml(prShown)}</span>`;
+    row.appendChild(head);
+    const ans=document.createElement("div"); ans.className="ws-ans";
+    spec.comps.forEach((c,ci)=>ans.appendChild(wsMakeComp(c,ci)));
+    row.appendChild(ans); list.appendChild(row);
+    sheet.rows.push({it, spec, ans, row});
+  });
+  document.getElementById("ws-check").onclick=gradeWorksheet;
+  document.getElementById("session-count").textContent=`${items.length} on the sheet`;
+  document.getElementById("session-track").style.width="0%";
+  document.getElementById("session-acc").textContent="";
+  showKbd(false);
+}
+function gradeWorksheet(){
+  if(!sheet || sheet.graded) return;
+  let correct=0;
+  sheet.rows.forEach(r=>{
+    const boxes=[...r.ans.querySelectorAll(".comp")]; let allOk=true;
+    boxes.forEach(box=>{ const c=r.spec.comps[+box.dataset.idx]; if(!wsGradeComp(c,box)) allOk=false; });
+    if(allOk) correct++;
+    const rr=rec(lexKey(r.it)); rr.seen=1; rr.attempts=(rr.attempts||0)+1; rr.lastSeen=Date.now(); if(!allOk) rr.lapses=(rr.lapses||0)+1; progress[lexKey(r.it)]=rr;
+    r.row.classList.add(allOk?"ws-ok":"ws-bad");
+  });
+  store.set("otsar.v3.progress",progress); sheet.graded=true;
+  const secs=((performance.now()-sheet.start)/1000).toFixed(0);
+  document.getElementById("ws-summary").innerHTML=`<div style="margin-top:14px;font-family:var(--serif);font-size:1.25rem;color:var(--ink)">${correct} / ${sheet.rows.length} correct · ${secs}s</div>`;
+  const cb=document.getElementById("ws-check"); cb.textContent="New sheet"; cb.onclick=buildSession;
+  document.getElementById("session-track").style.width="100%"; showKbd(false);
+}
+
+/* ---- build the answer spec for an item ---- */
+function buildSpec(it){
+  const enActive = settings.langs.includes("en");
+  const src = activeSourceKeys();
+  // direction: produce only possible if English active AND a source lang active
+  const canProduce = enActive && src.length>0;
+  const produce = canProduce && (Math.random()<0.5);
+
+  if(produce){
+    // prompt = gloss; answer = the word(s), one field per active source lang that has this gloss
+    const key=glossKey(it.gloss);
+    const groups={};
+    src.forEach(lk=>{
+      const matches=activeVocab().filter(x=>srcKey(x)===lk && glossKey(x.gloss)===key);
+      if(matches.length) groups[lk]=matches;
+    });
+    const comps = Object.keys(groups).map(lk=>({
+      type:"word", lang:lk,
+      accept: groups[lk].map(x=>heKey(x.lemma)),
+      display: [...new Set(groups[lk].map(x=>x.lemma))]
+    }));
+    return {direction:"produce", promptText:it.gloss, promptKind:"en", comps};
+  }
+
+  // recognise: prompt = the form; answer = gloss (if on) + applicable grammar
+  const comps=[];
+  if(settings.askGloss) comps.push({type:"gloss", accept:glossVariantsFor(it), display:it.gloss, id:it.id});
+  applicableCats(it).forEach(cat=>{
+    comps.push({type:"gram", cat, options:optionsFor(cat,srcKey(it)), correct:it[cat]});
+  });
+  if(!comps.length) comps.push({type:"gloss", accept:glossVariantsFor(it), display:it.gloss, id:it.id}); // never empty
+  return {direction:"recognise", promptText:dispForm(it), promptKind:srcKey(it), comps};
+}
+
+/* ---- card lifecycle ---- */
+function nextCard(){
+  if(sIndex>=session.length){ finish(); return; }
+  graded=false;
+  inMatch=false; inSheet=false;
+  const cmodes = settings.modes.filter(m=>m!=="match");
+  cardMode = cmodes.length ? cmodes[Math.floor(Math.random()*cmodes.length)] : "typed";
+  const self = cardMode==="selfrate";
+  document.getElementById("check-btn").style.display = self?"none":"inline-block";
+  document.getElementById("reveal-btn").style.display = self?"inline-block":"none";
+  document.getElementById("grade").style.display="none";
+  document.getElementById("next-btn").style.display="none";
+  document.getElementById("override-btn").style.display="none";
+  document.getElementById("verdict").textContent=""; document.getElementById("verdict").className="verdict";
+  document.getElementById("hint").innerHTML = self ? "Press <b>space</b> to reveal, then rate yourself (1·2·3)" : "Fill the answer, then press <b>Enter</b>";
+  hideContext();
+
+  current=session[sIndex];
+  // pick a spec; if recognise turns out empty for some reason, gloss fallback already handles it
+  spec=buildSpec(current);
+  { const cb=document.getElementById("ctx-btn"); if(cb) cb.style.display = (current.ctx && spec.direction!=="produce") ? "inline-block" : "none"; }
+  { const pn=document.getElementById("pos-note"); if(pn){ const vl = effUnit()==="lexeme" && current.sp==="verb"; pn.textContent = vl ? "verbal lexeme \u2014 give the root / stem" : ""; pn.style.display = vl ? "block" : "none"; } }
+
+  const pt=document.getElementById("prompt-text");
+  pt.className = (spec.promptKind==="en") ? "en" : "he";
+  pt.textContent = (spec.promptKind!=="en" && !settings.showVowels) ? stripPoints(spec.promptText) : spec.promptText;
+  document.getElementById("prompt-label").textContent =
+    spec.direction==="produce" ? "Gloss — give the word" : (spec.promptKind==="arc"?"Aramaic":"Hebrew");
+
+  const a=activation(lexKey(current));
+  document.getElementById("meter").style.width=(a*100).toFixed(0)+"%";
+
+  renderAnswer(spec);
+  updateLine();
+  cardStart=performance.now();
+  // focus first input
+  const f=document.querySelector("#answer-area input, #answer-area .selopt");
+  if(f && f.tagName==="INPUT") f.focus();
+}
+
+function renderAnswer(spec){
+  if(cardMode==="selfrate"){ renderSelfAnswer(spec); return; }
+  const wrap=document.getElementById("answer-area");
+  wrap.innerHTML="";
+  spec.comps.forEach((c,i)=>{
+    const box=document.createElement("div"); box.className="comp"; box.dataset.idx=i;
+    if(c.type==="gloss"){
+      box.innerHTML=`<span class="clabel">English gloss</span>`;
+      const inp=document.createElement("input"); inp.className="ans-input"; inp.type="text";
+      inp.autocomplete="off"; inp.spellcheck=false; inp.dataset.role="gloss";
+      box.appendChild(inp);
+    } else if(c.type==="word"){
+      box.innerHTML=`<span class="clabel">${c.lang==="arc"?"Aramaic":"Hebrew"} word</span>`;
+      const inp=document.createElement("input"); inp.className="ans-input he-input"; inp.type="text";
+      inp.dir="rtl"; inp.autocomplete="off"; inp.spellcheck=false; inp.dataset.role="word";
+      inp.addEventListener("focusin",()=>{ lastHeKey=inp; showKbd(true); });
+      box.appendChild(inp);
+    } else if(c.type==="gram"){
+      box.innerHTML=`<span class="clabel">${CAT_NAME[c.cat]}</span>`;
+      const opts=document.createElement("div"); opts.className="selopts"; opts.dataset.role="gram";
+      c.options.forEach(code=>{
+        const b=document.createElement("button"); b.className="selopt"; b.type="button"; b.dataset.code=code;
+        b.textContent=(LABELS[c.cat]&&LABELS[c.cat][code])||code;
+        b.addEventListener("click",()=>{ if(graded)return; opts.querySelectorAll(".selopt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); });
+        opts.appendChild(b);
+      });
+      box.appendChild(opts);
+    }
+    wrap.appendChild(box);
+  });
+  // show keyboard if a word component exists
+  const hasWord = spec.comps.some(c=>c.type==="word");
+  showKbd(hasWord);
+  document.getElementById("keyboard").classList.toggle("show-niqqud", hasWord && settings.checkVowels);
+  if(hasWord){ const wi=wrap.querySelector('input[data-role="word"]'); if(wi){ lastHeKey=wi; } }
+}
+
+function gradeCard(){
+  if(graded) return;
+  const boxes=[...document.querySelectorAll("#answer-area .comp")];
+  let allOk=true, glossWrongButTyped=false;
+  boxes.forEach(box=>{
+    const c=spec.comps[+box.dataset.idx];
+    if(c.type==="gloss"){
+      const inp=box.querySelector("input"); const typed=normGloss(inp.value);
+      const ok = typed && c.accept.includes(typed);
+      inp.classList.add(ok?"ok":"bad"); inp.disabled=true;
+      if(!ok){ allOk=false; if(typed) glossWrongButTyped=true;
+        appendReveal(box, `gloss: <b>${escapeHtml(c.display)}</b>`); }
+    } else if(c.type==="word"){
+      const inp=box.querySelector("input"); const typed=heKey(inp.value);
+      const ok = typed && c.accept.includes(typed);
+      inp.classList.add(ok?"ok":"bad"); inp.disabled=true;
+      if(!ok){ allOk=false; appendReveal(box, `answer: <span class="he">${c.display.join(" · ")}</span>`); }
+    } else if(c.type==="gram"){
+      const opts=box.querySelector(".selopts"); opts.classList.add("graded");
+      const chosen=opts.querySelector(".selopt.sel");
+      const ok = chosen && chosen.dataset.code===c.correct;
+      opts.querySelectorAll(".selopt").forEach(b=>{
+        if(b.dataset.code===c.correct) b.classList.add("ok");
+        if(b.classList.contains("sel") && b.dataset.code!==c.correct) b.classList.add("bad");
+      });
+      if(!ok) allOk=false;
+    }
+  });
+
+  graded=true;
+  const ms=performance.now()-cardStart; sTimeMs+=ms;
+  const r=rec(lexKey(current)); r.seen=1; r.attempts+=1; r.lastSeen=Date.now(); r.totalMs+=ms; if(!allOk) r.lapses+=1;
+  progress[lexKey(current)]=r; store.set("otsar.v3.progress",progress);
+  if(allOk) sCorrect++;
+
+  const v=document.getElementById("verdict");
+  v.textContent = allOk?"Correct":"Not quite — see the answer above";
+  v.className = "verdict "+(allOk?"pass":"fail");
+  document.getElementById("check-btn").style.display="none";
+  document.getElementById("next-btn").style.display="inline-block";
+  document.getElementById("override-btn").style.display = (!allOk && glossWrongButTyped) ? "inline-block" : "none";
+  document.getElementById("next-btn").focus();
+  showKbd(false);
+  updateLine();
+}
+
+function renderSelfAnswer(spec){
+  const wrap=document.getElementById("answer-area");
+  const parts=spec.comps.map(c=>{
+    if(c.type==="gloss") return `<div class="comp"><span class="clabel">English gloss</span><div class="self-ans">${escapeHtml(c.display)}</div></div>`;
+    if(c.type==="word")  return `<div class="comp"><span class="clabel">${c.lang==="arc"?"Aramaic":"Hebrew"}</span><div class="self-ans he">${c.display.map(escapeHtml).join("  ·  ")}</div></div>`;
+    return `<div class="comp"><span class="clabel">${CAT_NAME[c.cat]}</span><div class="self-ans">${escapeHtml((LABELS[c.cat]&&LABELS[c.cat][c.correct])||c.correct)}</div></div>`;
+  });
+  wrap.innerHTML=`<div id="self-reveal" style="display:none">${parts.join("")}</div>`;
+  showKbd(false);
+  document.getElementById("keyboard").classList.remove("show-niqqud");
+}
+function revealSelf(){
+  if(graded) return;
+  const sr=document.getElementById("self-reveal"); if(sr) sr.style.display="flex";
+  document.getElementById("reveal-btn").style.display="none";
+  document.getElementById("grade").style.display="flex";
+}
+function gradeSelf(q){
+  if(graded) return;
+  const sr=document.getElementById("self-reveal");
+  if(sr && sr.style.display==="none"){ revealSelf(); return; }
+  graded=true;
+  const ms=performance.now()-cardStart; sTimeMs+=ms;
+  const r=rec(lexKey(current)); r.seen=1; r.attempts+=1; r.lastSeen=Date.now(); r.totalMs+=ms; r.lapses+=(1-q);
+  progress[lexKey(current)]=r; store.set("otsar.v3.progress",progress);
+  if(q>=1) sCorrect++;
+  document.getElementById("grade").style.display="none";
+  sIndex++; nextCard();
+}
+
+function overrideCorrect(){
+  // remember the typed gloss as accepted for this lexeme, flip verdict to pass
+  const box=[...document.querySelectorAll("#answer-area .comp")].find(b=>spec.comps[+b.dataset.idx].type==="gloss");
+  if(box){
+    const inp=box.querySelector("input"); const typed=normGloss(inp.value);
+    inp.classList.remove("bad"); inp.classList.add("ok");
+    const rl=box.querySelector(".reveal-line"); if(rl) rl.remove();
+    const r=rec(lexKey(current)); r.accept=r.accept||[]; if(typed && !r.accept.includes(typed)) r.accept.push(typed);
+    if(!r.lapsesAdjusted){ r.lapses=Math.max(0,r.lapses-1); r.lapsesAdjusted=true; sCorrect++; }
+    progress[lexKey(current)]=r; store.set("otsar.v3.progress",progress);
+  }
+  document.getElementById("override-btn").style.display="none";
+  const v=document.getElementById("verdict"); v.textContent="Counted as correct — remembered"; v.className="verdict pass";
+  updateLine();
+}
+
+// accepted gloss variants include any remembered synonyms
+function glossVariantsFor(it){ return [...glossVariants(it.gloss), ...((rec(lexKey(it)).accept)||[])]; }
+
+function appendReveal(box, html){
+  const d=document.createElement("div"); d.className="reveal-line"; d.innerHTML=html; box.appendChild(d);
+}
+function escapeHtml(s){ return (s||"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m])); }
+
+function renderContext(force){
+  const el=document.getElementById("context");
+  if(!current || !current.ctx){ el.style.display="none"; el.innerHTML=""; return; }
+  const O="\uE000", C="\uE001"; const ctx=current.ctx.replace(/[\u0591-\u05AF\u05BD\u05BF\u05C0\u05C3]/g,""); let body;
+  if(ctx.indexOf(O)>=0 && ctx.indexOf(C)>ctx.indexOf(O)){
+    const i=ctx.indexOf(O), j=ctx.indexOf(C);
+    body = escapeHtml(ctx.slice(0,i)) + `<span class="hit">${escapeHtml(ctx.slice(i+1,j))}</span>` + escapeHtml(ctx.slice(j+1));
+  } else {
+    const fs=heSkeleton(current.form);
+    body = ctx.split(/\s+/).map(w=>{
+      const ts=heSkeleton(w);
+      const hit = fs && (ts===fs || (ts.length>=fs.length && (ts.endsWith(fs)||ts.startsWith(fs))));
+      return hit ? `<span class="hit">${escapeHtml(w)}</span>` : escapeHtml(w);
+    }).join(" ");
+  }
+  el.innerHTML=`<span class="ref">${escapeHtml(current.ref||"")}</span>`+body;
+  el.style.display="block";
+  const cb=document.getElementById("ctx-btn"); if(cb) cb.style.display="none";
+}
+function hideContext(){ const el=document.getElementById("context"); if(el){ el.style.display="none"; el.innerHTML=""; } }
+const BOOK_ORDER=["Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","1_Samuel","2_Samuel","1_Kings","2_Kings","Isaiah","Jeremiah","Ezekiel","Hosea","Joel","Amos","Obadiah","Jonah","Micah","Nahum","Habakkuk","Zephaniah","Haggai","Zechariah","Malachi","Psalms","Job","Proverbs","Ruth","Song_of_songs","Ecclesiastes","Lamentations","Esther","Daniel","Ezra","Nehemiah","1_Chronicles","2_Chronicles"];
+function buildBooks(){
+  const sel=document.getElementById("book-select"); if(!sel) return;
+  const present=new Set(VOCAB.map(it=>it.book).filter(Boolean));
+  const books=BOOK_ORDER.filter(b=>present.has(b)).concat([...present].filter(b=>!BOOK_ORDER.includes(b)).sort());
+  sel.innerHTML=`<option value="">All books</option>`+books.map(b=>`<option value="${escapeHtml(b)}">${escapeHtml(b.replace(/_/g," "))}</option>`).join("");
+  if(settings.book && !present.has(settings.book)) settings.book="";
+  sel.value=settings.book||"";
+}
+function buildChapters(){
+  const sel=document.getElementById("chapter-select"); if(!sel) return;
+  let chs=[]; if(settings.book){ chs=[...new Set(VOCAB.filter(it=>it.book===settings.book).map(chapOf).filter(Boolean))].map(Number).filter(n=>!isNaN(n)).sort((a,b)=>a-b); }
+  sel.disabled=!settings.book;
+  sel.innerHTML=`<option value="">All chapters</option>`+chs.map(c=>`<option value="${c}">${c}</option>`).join("");
+  if(settings.chapter && !chs.includes(Number(settings.chapter))) settings.chapter="";
+  sel.value=settings.chapter||"";
+}
+
+function finish(){
+  document.getElementById("card").style.display="none";
+  const n=session.length;
+  document.getElementById("done-reviewed").textContent=n;
+  document.getElementById("done-acc").textContent=n?Math.round(100*sCorrect/n)+"%":"0%";
+  document.getElementById("done-time").textContent=n?(sTimeMs/n/1000).toFixed(1)+"s":"0.0s";
+  document.getElementById("done-state").style.display="block";
+  showKbd(false); updateLine(true);
+}
+function updateLine(done){
+  const total=session.length, cur=done?total:Math.min(sIndex+(graded?1:0),total);
+  document.getElementById("session-count").textContent= total?(Math.min(sIndex,total)+" / "+total):"0 / 0";
+  document.getElementById("session-track").style.width= total?(100*cur/total)+"%":"0%";
+  document.getElementById("session-acc").textContent= cur>0?Math.round(100*sCorrect/Math.max(cur,1))+"% correct":"";
+}
+
+/* ---- hebrew keyboard ---- */
+const KEYS = "אבגדהוזחטיכלמנסעפצקרשת".split("");
+const FINKEYS = "ךםןףץ".split("");
+const NQ_HINT={"\u05B7":"a","\u05B8":"A","\u05B6":"e","\u05B5":"E","\u05B4":"i","\u05B9":"o","\u05BA":"O","\u05BB":"u","\u05B0":";","\u05BC":"=","\u05C1":"\u2325x","\u05C2":"\u2325s"};
+function latinHint(ch){ const m=KBD[settings.kbdLayout]||KBD.phonetic; for(const k in m){ if(m[k]===ch) return k; } return ""; }
+function keycap(ch,hint){ const b=document.createElement("button"); b.className="key"; b.type="button"; b.textContent=ch; if(hint){ const hs=document.createElement("span"); hs.className="khint"; hs.textContent=hint; b.appendChild(hs); } b.addEventListener("mousedown",e=>{ e.preventDefault(); insertHe(ch); }); return b; }
+function buildKeyboard(){
+  const g=document.getElementById("kbd-grid"); g.innerHTML="";
+  KEYS.concat(FINKEYS).forEach(ch=>{ g.appendChild(keycap(ch, latinHint(ch))); });
+  const sp=document.createElement("button"); sp.className="key util space"; sp.type="button"; sp.textContent="space";
+  sp.addEventListener("mousedown",e=>{ e.preventDefault(); insertHe(" "); }); g.appendChild(sp);
+  const bs=document.createElement("button"); bs.className="key util"; bs.type="button"; bs.textContent="⌫";
+  bs.style.gridColumn="span 5";
+  bs.addEventListener("mousedown",e=>{ e.preventDefault(); backHe(); }); g.appendChild(bs);
+  const ng=document.getElementById("kbd-niqqud"); ng.innerHTML="";
+  NIQQUD.forEach(([mark,name])=>{ const b=document.createElement("button"); b.className="key nq"; b.type="button"; b.title=name; b.textContent="\u25CC"+mark; const h=NQ_HINT[mark]; if(h){ const hs=document.createElement("span"); hs.className="khint"; hs.textContent=h; b.appendChild(hs);} b.addEventListener("mousedown",e=>{e.preventDefault(); insertHe(mark);}); ng.appendChild(b); });
+}
+let kbdNeeded=false;
+function showKbd(on){ kbdNeeded=!!on; document.getElementById("keyboard").classList.toggle("show", kbdNeeded && settings.showKeyboard!==false); }
+function insertHe(ch){
+  const inp=lastHeKey; if(!inp||inp.disabled) return;
+  const s=inp.selectionStart??inp.value.length, e=inp.selectionEnd??inp.value.length;
+  inp.value=inp.value.slice(0,s)+ch+inp.value.slice(e); const pos=s+ch.length; inp.setSelectionRange(pos,pos); inp.focus();
+}
+function backHe(){ const inp=lastHeKey; if(!inp||inp.disabled) return; inp.value=inp.value.slice(0,-1); inp.focus(); }
+
+/* ---- pool widget (drag + tap) ---- */
+function makePool(mountId, labels, getSet, setSet, emptyText){
+  const mount=document.getElementById(mountId); mount.innerHTML="";
+  const win=document.createElement("div"); win.className="pool-window"; win.dataset.empty=emptyText;
+  const tray=document.createElement("div"); tray.className="pool-tray";
+  const trayLabel=document.createElement("span"); trayLabel.className="pool-tray-label"; trayLabel.textContent="available";
+  tray.appendChild(trayLabel);
+  mount.appendChild(win); mount.appendChild(tray);
+
+  function render(){
+    const set=getSet();
+    win.classList.toggle("empty",set.length===0);
+    [...win.querySelectorAll(".chip"),...tray.querySelectorAll(".chip")].forEach(c=>c.remove());
+    labels.forEach(l=>{
+      const inWin=set.includes(l.key);
+      const chip=document.createElement("button"); chip.className="chip"; chip.type="button"; chip.draggable=true; chip.dataset.key=l.key;
+      chip.innerHTML = l.he ? `${l.label} <span class="he">${l.he}</span>` : l.label;
+      chip.addEventListener("click",()=>toggle(l.key));
+      chip.addEventListener("dragstart",e=>{ chip.classList.add("drag"); e.dataTransfer.setData("text/plain",l.key); });
+      chip.addEventListener("dragend",()=>chip.classList.remove("drag"));
+      (inWin?win:tray).appendChild(chip);
+    });
+  }
+  function toggle(key){ const set=getSet(); setSet(set.includes(key)?set.filter(k=>k!==key):[...set,key]); render(); afterPoolChange(); }
+  function moveTo(key,toWin){ const set=getSet(); const has=set.includes(key);
+    if(toWin&&!has) setSet([...set,key]); else if(!toWin&&has) setSet(set.filter(k=>k!==key));
+    render(); afterPoolChange(); }
+  [win,tray].forEach((zone,zi)=>{
+    zone.addEventListener("dragover",e=>e.preventDefault());
+    zone.addEventListener("drop",e=>{ e.preventDefault(); const key=e.dataTransfer.getData("text/plain"); if(key) moveTo(key, zi===0); });
+  });
+  render();
+  return {render};
+}
+let langPool, gramPool;
+function afterPoolChange(){ saveSettings(); buildSession(); }
+
+/* ---- settings wiring ---- */
+function saveSettings(){ store.set("otsar.v3.settings",settings); }
+function applyTheme(){ document.body.dataset.theme=settings.theme; }
+
+const RD_SRC="PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlYWQ+CjxtZXRhIGNoYXJzZXQ9IlVURi04Ij4KPG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIj4KPHRpdGxlPk90c2FyIMK3IFJlYWRlcjwvdGl0bGU+CjxsaW5rIHJlbD0icHJlY29ubmVjdCIgaHJlZj0iaHR0cHM6Ly9mb250cy5nb29nbGVhcGlzLmNvbSI+CjxsaW5rIHJlbD0icHJlY29ubmVjdCIgaHJlZj0iaHR0cHM6Ly9mb250cy5nc3RhdGljLmNvbSIgY3Jvc3NvcmlnaW4+CjxsaW5rIGhyZWY9Imh0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzMj9mYW1pbHk9RnJhbmsrUnVobCtMaWJyZTp3Z2h0QDQwMDs1MDA7NzAwJmZhbWlseT1TcGVjdHJhbDppdGFsLHdnaHRAMCw0MDA7MCw1MDA7MSw0MDAmZGlzcGxheT1zd2FwIiByZWw9InN0eWxlc2hlZXQiPgo8c3R5bGU+CiAgOnJvb3R7CiAgICAtLXBhcGVyOiNGMUYyRUM7IC0tcGFwZXItMjojRTlFQUUyOyAtLWluazojMUIxRTFDOyAtLWluay1zb2Z0OiM1RTYyNUI7CiAgICAtLWhhaXI6I0Q4REFEMDsgLS10ZWtoZWxldDojMzQ0NDhBOyAtLXRla2hlbGV0LXNvZnQ6IzVkNmJiMDsgLS1tYWRkZXI6IzlBM0EzODsKICAgIC0tZ3JlZW46IzNmNmI0ZDsgLS1jYXJkOiNGQkZCRjc7CiAgICAtLWhlOiJGcmFuayBSdWhsIExpYnJlIiwgc2VyaWY7IC0tc2VyaWY6IlNwZWN0cmFsIiwgR2VvcmdpYSwgc2VyaWY7CiAgICAtLXNhbnM6LWFwcGxlLXN5c3RlbSxCbGlua01hY1N5c3RlbUZvbnQsIlNlZ29lIFVJIixSb2JvdG8sSGVsdmV0aWNhLEFyaWFsLHNhbnMtc2VyaWY7CiAgfQogICp7Ym94LXNpemluZzpib3JkZXItYm94fQogIGJvZHl7bWFyZ2luOjA7IGJhY2tncm91bmQ6dmFyKC0tcGFwZXIpOyBjb2xvcjp2YXIoLS1pbmspOyBmb250LWZhbWlseTp2YXIoLS1zYW5zKTsgLXdlYmtpdC1mb250LXNtb290aGluZzphbnRpYWxpYXNlZH0KICBoZWFkZXJ7cG9zaXRpb246c3RpY2t5OyB0b3A6MDsgei1pbmRleDozMDsgYmFja2dyb3VuZDpjb2xvci1taXgoaW4gc3JnYix2YXIoLS1wYXBlcikgOTIlLHRyYW5zcGFyZW50KTsgYmFja2Ryb3AtZmlsdGVyOmJsdXIoOHB4KTsgYm9yZGVyLWJvdHRvbToxcHggc29saWQgdmFyKC0taGFpcil9CiAgLmJhcnttYXgtd2lkdGg6OTAwcHg7IG1hcmdpbjowIGF1dG87IHBhZGRpbmc6MTRweCAyMnB4OyBkaXNwbGF5OmZsZXg7IGFsaWduLWl0ZW1zOmNlbnRlcjsgZ2FwOjE2cHg7IGZsZXgtd3JhcDp3cmFwfQogIC5icmFuZHtkaXNwbGF5OmZsZXg7IGFsaWduLWl0ZW1zOmJhc2VsaW5lOyBnYXA6MTBweDsgbWFyZ2luLWlubGluZS1lbmQ6YXV0b30KICAuYnJhbmQgLmFse2ZvbnQtZmFtaWx5OnZhcigtLWhlKTsgZm9udC1zaXplOjEuNXJlbTsgY29sb3I6dmFyKC0tdGVraGVsZXQpOyBsaW5lLWhlaWdodDoxfQogIC5icmFuZCAubm17Zm9udC1mYW1pbHk6dmFyKC0tc2VyaWYpOyBmb250LXNpemU6MS4zNXJlbTsgZm9udC13ZWlnaHQ6NTAwfQogIC5icmFuZCAuZWJ7Zm9udC1mYW1pbHk6dmFyKC0tc2Fucyk7IGZvbnQtc2l6ZToxMHB4OyBsZXR0ZXItc3BhY2luZzouMjJlbTsgdGV4dC10cmFuc2Zvcm06dXBwZXJjYXNlOyBjb2xvcjp2YXIoLS1pbmstc29mdCl9CiAgc2VsZWN0LCAuYnRue2ZvbnQtZmFtaWx5OnZhcigtLXNhbnMpOyBmb250LXNpemU6MTNweDsgY29sb3I6dmFyKC0taW5rKTsgYmFja2dyb3VuZDp2YXIoLS1jYXJkKTsgYm9yZGVyOjFweCBzb2xpZCB2YXIoLS1oYWlyKTsgYm9yZGVyLXJhZGl1czo5cHg7IHBhZGRpbmc6N3B4IDEycHg7IGN1cnNvcjpwb2ludGVyfQogIHNlbGVjdDpmb2N1cywuYnRuOmZvY3Vze291dGxpbmU6bm9uZTsgYm9yZGVyLWNvbG9yOnZhcigtLXRla2hlbGV0KX0KICAuYnRuOmhvdmVyLCBzZWxlY3Q6aG92ZXJ7Ym9yZGVyLWNvbG9yOnZhcigtLWluay1zb2Z0KX0KICAuY2hhcG5hdntkaXNwbGF5OmZsZXg7IGFsaWduLWl0ZW1zOmNlbnRlcjsgZ2FwOjZweH0KICAuY2hhcG5hdiAubGJse2ZvbnQtZmFtaWx5OnZhcigtLXNlcmlmKTsgZm9udC1zaXplOjFyZW07IG1pbi13aWR0aDo5NnB4OyB0ZXh0LWFsaWduOmNlbnRlcn0KICAuaWNvbmJ0bnt3aWR0aDozMnB4OyBoZWlnaHQ6MzJweDsgZGlzcGxheTpncmlkOyBwbGFjZS1pdGVtczpjZW50ZXI7IHBhZGRpbmc6MDsgZm9udC1zaXplOjE1cHh9CiAgLmRlY2tidG57cG9zaXRpb246cmVsYXRpdmV9CiAgLmRlY2tidG4gLmNudHtmb250LXZhcmlhbnQtbnVtZXJpYzp0YWJ1bGFyLW51bXN9CgogIG1haW57bWF4LXdpZHRoOjY4MHB4OyBtYXJnaW46MCBhdXRvOyBwYWRkaW5nOjQwcHggMjZweCAxNDBweH0KICAucmVmLWhlYWR7Zm9udC1mYW1pbHk6dmFyKC0tc2Fucyk7IGZvbnQtc2l6ZToxMXB4OyBsZXR0ZXItc3BhY2luZzouMmVtOyB0ZXh0LXRyYW5zZm9ybTp1cHBlcmNhc2U7IGNvbG9yOnZhcigtLWluay1zb2Z0KTsgdGV4dC1hbGlnbjpjZW50ZXI7IG1hcmdpbi1ib3R0b206MjZweH0KICAuY29se2RpcmVjdGlvbjpydGw7IGZvbnQtZmFtaWx5OnZhcigtLWhlKTsgZm9udC1zaXplOjEuODVyZW07IGxpbmUtaGVpZ2h0OjIuMzU7IGNvbG9yOnZhcigtLWluayk7IHRleHQtYWxpZ246cmlnaHR9CiAgLnZue2ZvbnQtZmFtaWx5OnZhcigtLXNhbnMpOyBkaXJlY3Rpb246bHRyOyB1bmljb2RlLWJpZGk6aXNvbGF0ZTsgZm9udC1zaXplOi42MnJlbTsgZm9udC13ZWlnaHQ6NjAwOyBjb2xvcjp2YXIoLS10ZWtoZWxldC1zb2Z0KTsgdmVydGljYWwtYWxpZ246c3VwZXI7IG1hcmdpbi1pbmxpbmUtc3RhcnQ6NHB4OyBtYXJnaW4taW5saW5lLWVuZDoxcHg7IHVzZXItc2VsZWN0Om5vbmV9CiAgLnd7Y3Vyc29yOnBvaW50ZXI7IGJvcmRlci1yYWRpdXM6NHB4OyBwYWRkaW5nOjAgMXB4OyB0cmFuc2l0aW9uOmJhY2tncm91bmQgLjEycywgY29sb3IgLjEyc30KICAudzpob3ZlcntiYWNrZ3JvdW5kOnZhcigtLXBhcGVyLTIpfQogIC53Lm9ue2JhY2tncm91bmQ6Y29sb3ItbWl4KGluIHNyZ2IsdmFyKC0tdGVraGVsZXQpIDE0JSx0cmFuc3BhcmVudCl9CiAgLncucWt7dGV4dC1kZWNvcmF0aW9uOnVuZGVybGluZSBkb3R0ZWQgdmFyKC0tbWFkZGVyKTsgdGV4dC11bmRlcmxpbmUtb2Zmc2V0OjZweH0KICAudyAucW17Zm9udC1mYW1pbHk6dmFyKC0tc2Fucyk7IGRpcmVjdGlvbjpsdHI7IHVuaWNvZGUtYmlkaTppc29sYXRlOyBmb250LXNpemU6LjVyZW07IGZvbnQtd2VpZ2h0OjcwMDsgY29sb3I6dmFyKC0tbWFkZGVyKTsgdmVydGljYWwtYWxpZ246c3VwZXI7IG1hcmdpbi1pbmxpbmUtc3RhcnQ6MXB4fQoKICAvKiBwb3BvdmVyICovCiAgLnBvcHtwb3NpdGlvbjpmaXhlZDsgei1pbmRleDo1MDsgd2lkdGg6MjY0cHg7IGJhY2tncm91bmQ6dmFyKC0tY2FyZCk7IGJvcmRlcjoxcHggc29saWQgdmFyKC0taGFpcik7IGJvcmRlci1yYWRpdXM6MTRweDsgYm94LXNoYWRvdzowIDE0cHggNDBweCByZ2JhKDIwLDIyLDIwLC4xNik7IHBhZGRpbmc6MTZweCAxN3B4OyBkaXNwbGF5Om5vbmU7IGRpcmVjdGlvbjpsdHJ9CiAgLnBvcC5zaG93e2Rpc3BsYXk6YmxvY2t9CiAgLnBvcCAuZm9ybXtmb250LWZhbWlseTp2YXIoLS1oZSk7IGRpcmVjdGlvbjpydGw7IGZvbnQtc2l6ZToycmVtOyBsaW5lLWhlaWdodDoxLjI7IHRleHQtYWxpZ246Y2VudGVyOyBtYXJnaW4tYm90dG9tOjJweH0KICAucG9wIC5sZW1tYXtmb250LWZhbWlseTp2YXIoLS1oZSk7IGRpcmVjdGlvbjpydGw7IGZvbnQtc2l6ZToxLjI1cmVtOyB0ZXh0LWFsaWduOmNlbnRlcjsgY29sb3I6dmFyKC0taW5rKX0KICAucG9wIC5nbG9zc3tmb250LWZhbWlseTp2YXIoLS1zZXJpZik7IGZvbnQtc3R5bGU6aXRhbGljOyBmb250LXNpemU6MS4wMnJlbTsgdGV4dC1hbGlnbjpjZW50ZXI7IGNvbG9yOnZhcigtLWluayk7IG1hcmdpbi10b3A6MnB4fQogIC5wb3AgLnJvd3N7bWFyZ2luLXRvcDoxM3B4OyBib3JkZXItdG9wOjFweCBzb2xpZCB2YXIoLS1oYWlyKTsgcGFkZGluZy10b3A6MTFweDsgZGlzcGxheTpmbGV4OyBmbGV4LWRpcmVjdGlvbjpjb2x1bW47IGdhcDo2cHh9CiAgLnBvcCAucm93e2Rpc3BsYXk6ZmxleDsganVzdGlmeS1jb250ZW50OnNwYWNlLWJldHdlZW47IGdhcDoxMnB4OyBmb250LXNpemU6MTIuNXB4fQogIC5wb3AgLnJvdyAua3tjb2xvcjp2YXIoLS1pbmstc29mdCk7IHRleHQtdHJhbnNmb3JtOnVwcGVyY2FzZTsgbGV0dGVyLXNwYWNpbmc6LjA4ZW07IGZvbnQtc2l6ZToxMC41cHg7IGFsaWduLXNlbGY6Y2VudGVyfQogIC5wb3AgLnJvdyAudntjb2xvcjp2YXIoLS1pbmspOyB0ZXh0LWFsaWduOnJpZ2h0fQogIC5wb3AgLnJvdyAudi5oZXtmb250LWZhbWlseTp2YXIoLS1oZSk7IGZvbnQtc2l6ZToxLjA1cmVtfQogIC5wb3AgLnFre21hcmdpbi10b3A6MTFweDsgYm9yZGVyLXRvcDoxcHggc29saWQgdmFyKC0taGFpcik7IHBhZGRpbmctdG9wOjEwcHg7IGZvbnQtc2l6ZToxMnB4OyBjb2xvcjp2YXIoLS1pbmstc29mdCl9CiAgLnBvcCAucWsgYntjb2xvcjp2YXIoLS1pbmspfSAucG9wIC5xayAuaGV7Zm9udC1mYW1pbHk6dmFyKC0taGUpOyBmb250LXNpemU6MS4xcmVtOyBjb2xvcjp2YXIoLS1pbmspfQogIC5wb3AgLmZ0YWd7Zm9udC1mYW1pbHk6dmFyKC0tc2Fucyk7IGZvbnQtc2l6ZTo5LjVweDsgbGV0dGVyLXNwYWNpbmc6LjE2ZW07IHRleHQtdHJhbnNmb3JtOnVwcGVyY2FzZTsgY29sb3I6dmFyKC0taW5rLXNvZnQpOyB0ZXh0LWFsaWduOmNlbnRlcjsgbWFyZ2luLXRvcDoxcHh9CiAgLnBvcCAuYWRkc3tkaXNwbGF5OmZsZXg7IGdhcDo4cHg7IG1hcmdpbi10b3A6MTRweH0KICAucG9wIC5hZGRzIGJ1dHRvbntmbGV4OjE7IHBhZGRpbmc6OXB4IDZweDsgYm9yZGVyLXJhZGl1czo5cHg7IGZvbnQtZmFtaWx5OnZhcigtLXNhbnMpOyBmb250LXNpemU6MTJweDsgY3Vyc29yOnBvaW50ZXI7IHRyYW5zaXRpb246YmFja2dyb3VuZCAuMTJzfQogIC5wb3AgLmFkZHMgLmItbGV4e2JvcmRlcjoxcHggc29saWQgdmFyKC0tdGVraGVsZXQpOyBiYWNrZ3JvdW5kOnZhcigtLXRla2hlbGV0KTsgY29sb3I6dmFyKC0tcGFwZXIpfQogIC5wb3AgLmFkZHMgLmItbGV4OmhvdmVye2JhY2tncm91bmQ6IzJiM2E3OH0KICAucG9wIC5hZGRzIC5iLWZvcm17Ym9yZGVyOjFweCBzb2xpZCB2YXIoLS10ZWtoZWxldCk7IGJhY2tncm91bmQ6dmFyKC0tY2FyZCk7IGNvbG9yOnZhcigtLXRla2hlbGV0KX0KICAucG9wIC5hZGRzIC5iLWZvcm06aG92ZXJ7YmFja2dyb3VuZDp2YXIoLS1wYXBlci0yKX0KICAucG9wIC5hZGRzIGJ1dHRvbi5pbntiYWNrZ3JvdW5kOnZhcigtLWNhcmQpOyBjb2xvcjp2YXIoLS1ncmVlbik7IGJvcmRlci1jb2xvcjp2YXIoLS1ncmVlbik7IGN1cnNvcjpkZWZhdWx0fQoKICAvKiBkZWNrIHBhbmVsICovCiAgLmRlY2t7cG9zaXRpb246Zml4ZWQ7IHRvcDo2NHB4OyByaWdodDoxOHB4OyB3aWR0aDozMDBweDsgbWF4LWhlaWdodDpjYWxjKDEwMHZoIC0gOTZweCk7IG92ZXJmbG93OmF1dG87IHotaW5kZXg6NDA7IGJhY2tncm91bmQ6dmFyKC0tY2FyZCk7IGJvcmRlcjoxcHggc29saWQgdmFyKC0taGFpcik7IGJvcmRlci1yYWRpdXM6MTRweDsgYm94LXNoYWRvdzowIDE0cHggNDBweCByZ2JhKDIwLDIyLDIwLC4xNCk7IHBhZGRpbmc6MTZweDsgZGlzcGxheTpub25lfQogIC5kZWNrLnNob3d7ZGlzcGxheTpibG9ja30KICBAbWVkaWEgKG1heC13aWR0aDoxMzQwcHgpeyBib2R5LmRlY2stb3BlbntwYWRkaW5nLXJpZ2h0OjMzMnB4fSB9CiAgQG1lZGlhIChtYXgtd2lkdGg6ODIwcHgpeyBib2R5LmRlY2stb3BlbntwYWRkaW5nLXJpZ2h0OjB9IC5kZWNreyBsZWZ0OjE0cHg7IHJpZ2h0OjE0cHg7IHdpZHRoOmF1dG87IG1heC1oZWlnaHQ6NjB2aCB9IH0KICAuZGVjayBoM3tmb250LWZhbWlseTp2YXIoLS1zZXJpZik7IGZvbnQtc2l6ZToxLjA1cmVtOyBtYXJnaW46MCAwIDJweH0KICAuZGVjayAuc3Vie2ZvbnQtZmFtaWx5OnZhcigtLXNhbnMpOyBmb250LXNpemU6MTFweDsgY29sb3I6dmFyKC0taW5rLXNvZnQpOyBtYXJnaW4tYm90dG9tOjEycHh9CiAgLmRlY2sgLmNoaXB7ZGlzcGxheTpmbGV4OyBhbGlnbi1pdGVtczpjZW50ZXI7IGZsZXgtd3JhcDp3cmFwOyBnYXA6NnB4IDhweDsgcGFkZGluZzo3cHggOXB4OyBib3JkZXI6MXB4IHNvbGlkIHZhcigtLWhhaXIpOyBib3JkZXItcmFkaXVzOjlweDsgbWFyZ2luLWJvdHRvbTo3cHh9CiAgLmRlY2sgLmNoaXAgLmJhZGdle2ZvbnQtZmFtaWx5OnZhcigtLXNhbnMpOyBmb250LXNpemU6OC41cHg7IGZvbnQtd2VpZ2h0OjcwMDsgbGV0dGVyLXNwYWNpbmc6LjA2ZW07IHRleHQtdHJhbnNmb3JtOnVwcGVyY2FzZTsgY29sb3I6dmFyKC0tcGFwZXIpOyBib3JkZXItcmFkaXVzOjVweDsgcGFkZGluZzoycHggNXB4fQogIC5kZWNrIC5jaGlwIC5iYWRnZS5sZXh7YmFja2dyb3VuZDp2YXIoLS10ZWtoZWxldCl9IC5kZWNrIC5jaGlwIC5iYWRnZS5mb3Jte2JhY2tncm91bmQ6dmFyKC0tZ3JlZW4pfQogIC5kZWNrIC5jaGlwIC5wcHtmb250LWZhbWlseTp2YXIoLS1zYW5zKTsgZm9udC1zaXplOjEwLjVweDsgY29sb3I6dmFyKC0taW5rLXNvZnQpOyB3aWR0aDoxMDAlfQogIC5kZWNrIC5jaGlwIC5oZXtmb250LWZhbWlseTp2YXIoLS1oZSk7IGZvbnQtc2l6ZToxLjE1cmVtfQogIC5kZWNrIC5jaGlwIC5ne2ZvbnQtZmFtaWx5OnZhcigtLXNlcmlmKTsgZm9udC1zdHlsZTppdGFsaWM7IGZvbnQtc2l6ZTouOXJlbTsgY29sb3I6dmFyKC0taW5rLXNvZnQpOyBtYXJnaW4taW5saW5lLWVuZDphdXRvfQogIC5kZWNrIC5jaGlwIGJ1dHRvbntib3JkZXI6bm9uZTsgYmFja2dyb3VuZDpub25lOyBjb2xvcjp2YXIoLS1tYWRkZXIpOyBjdXJzb3I6cG9pbnRlcjsgZm9udC1zaXplOjE1cHg7IGxpbmUtaGVpZ2h0OjF9CiAgLmRlY2sgLmVtcHR5e2ZvbnQtZmFtaWx5OnZhcigtLXNhbnMpOyBmb250LXNpemU6MTIuNXB4OyBjb2xvcjp2YXIoLS1pbmstc29mdCk7IHBhZGRpbmc6OHB4IDB9CiAgLmRlY2sgLmRuYW1le3dpZHRoOjEwMCU7IGJveC1zaXppbmc6Ym9yZGVyLWJveDsgZm9udC1mYW1pbHk6dmFyKC0tc2Fucyk7IGZvbnQtc2l6ZToxMi41cHg7IGNvbG9yOnZhcigtLWluayk7IGJhY2tncm91bmQ6dmFyKC0tY2FyZCk7IGJvcmRlcjoxcHggc29saWQgdmFyKC0taGFpcik7IGJvcmRlci1yYWRpdXM6OHB4OyBwYWRkaW5nOjdweCA5cHg7IG1hcmdpbi10b3A6NHB4fQogIC5kZWNrIC5kbmFtZTpmb2N1c3tvdXRsaW5lOm5vbmU7IGJvcmRlci1jb2xvcjp2YXIoLS10ZWtoZWxldCl9CiAgLmRlY2sgLmZvb3R7ZGlzcGxheTpmbGV4OyBnYXA6OHB4OyBtYXJnaW4tdG9wOjEwcHh9CiAgLmRlY2sgLmZvb3QgLmJ0bntmbGV4OjE7IHRleHQtYWxpZ246Y2VudGVyfQogIC5oaW50e21heC13aWR0aDo2ODBweDsgbWFyZ2luOjAgYXV0bzsgcGFkZGluZzowIDI2cHg7IGZvbnQtZmFtaWx5OnZhcigtLXNhbnMpOyBmb250LXNpemU6MTJweDsgY29sb3I6dmFyKC0taW5rLXNvZnQpOyB0ZXh0LWFsaWduOmNlbnRlcn0KICBpbnB1dFt0eXBlPWZpbGVde2Rpc3BsYXk6bm9uZX0KPC9zdHlsZT4KPC9oZWFkPgo8Ym9keT4KPGhlYWRlcj4KICA8ZGl2IGNsYXNzPSJiYXIiPgogICAgPGRpdiBjbGFzcz0iYnJhbmQiPjxzcGFuIGNsYXNzPSJhbCI+15A8L3NwYW4+PHNwYW4gY2xhc3M9Im5tIj5PdHNhcjwvc3Bhbj48c3BhbiBjbGFzcz0iZWIiPlJlYWRlcjwvc3Bhbj48L2Rpdj4KICAgIDxzZWxlY3QgaWQ9ImJvb2siIGFyaWEtbGFiZWw9IkJvb2siPjwvc2VsZWN0PgogICAgPGRpdiBjbGFzcz0iY2hhcG5hdiI+CiAgICAgIDxidXR0b24gY2xhc3M9ImJ0biBpY29uYnRuIiBpZD0icHJldiIgYXJpYS1sYWJlbD0iUHJldmlvdXMgY2hhcHRlciI+4oC5PC9idXR0b24+CiAgICAgIDxzcGFuIGNsYXNzPSJsYmwiIGlkPSJjaGFwbGJsIj48L3NwYW4+CiAgICAgIDxidXR0b24gY2xhc3M9ImJ0biBpY29uYnRuIiBpZD0ibmV4dCIgYXJpYS1sYWJlbD0iTmV4dCBjaGFwdGVyIj7igLo8L2J1dHRvbj4KICAgIDwvZGl2PgogICAgPGJ1dHRvbiBjbGFzcz0iYnRuIGRlY2tidG4iIGlkPSJkZWNrLW9wZW4iPkRlY2sgwrcgPHNwYW4gY2xhc3M9ImNudCIgaWQ9ImRlY2stY291bnQiPjA8L3NwYW4+PC9idXR0b24+CiAgICA8YnV0dG9uIGNsYXNzPSJidG4iIGlkPSJsb2FkIj5Mb2FkIHRleHTigKY8L2J1dHRvbj4KICAgIDxpbnB1dCB0eXBlPSJmaWxlIiBpZD0iZmlsZSIgYWNjZXB0PSJhcHBsaWNhdGlvbi9qc29uLC5qc29uIiBtdWx0aXBsZT4KICA8L2Rpdj4KPC9oZWFkZXI+Cgo8ZGl2IGNsYXNzPSJoaW50IiBpZD0iaGludCI+PC9kaXY+CjxtYWluPjxkaXYgY2xhc3M9InJlZi1oZWFkIiBpZD0icmVmLWhlYWQiPjwvZGl2PjxkaXYgY2xhc3M9ImNvbCIgaWQ9ImNvbCI+PC9kaXY+PC9tYWluPgoKPGRpdiBjbGFzcz0icG9wIiBpZD0icG9wIj48L2Rpdj4KCjxkaXYgY2xhc3M9ImRlY2siIGlkPSJkZWNrIj4KICA8aDM+RGVjazwvaDM+CiAgPGRpdiBjbGFzcz0ic3ViIj5Xb3JkcyB5b3UgY29sbGVjdCB3aGlsZSByZWFkaW5nLiBFeHBvcnQgYXMgYSBwcmVzZXQgZm9yIHRoZSBkcmlsbC48L2Rpdj4KICA8ZGl2IGlkPSJkZWNrLWxpc3QiPjwvZGl2PgogIDxpbnB1dCBpZD0iZGVjay1uYW1lIiBjbGFzcz0iZG5hbWUiIHBsYWNlaG9sZGVyPSJEZWNrIG5hbWUg4oCUIGUuZy4gTGV2IHZlcmJzIDHigJMxMSI+CiAgPGRpdiBjbGFzcz0iZm9vdCI+CiAgICA8YnV0dG9uIGNsYXNzPSJidG4iIGlkPSJkZWNrLXNlbmQiIHN0eWxlPSJkaXNwbGF5Om5vbmUiPlNlbmQgdG8gRHJpbGw8L2J1dHRvbj4KICAgIDxidXR0b24gY2xhc3M9ImJ0biIgaWQ9ImRlY2stZXhwb3J0Ij5FeHBvcnQgZGVjazwvYnV0dG9uPgogICAgPGJ1dHRvbiBjbGFzcz0iYnRuIiBpZD0iZGVjay1jbGVhciI+Q2xlYXI8L2J1dHRvbj4KICA8L2Rpdj4KPC9kaXY+Cgo8c2NyaXB0PgovKiAtLS0tLS0tLS0tIGxhYmVsIG1hcHMgKHJlYWRhYmxlLCBub3QgU0hFQkFOUSBpbnRlcm5hbHMpIC0tLS0tLS0tLS0gKi8KY29uc3QgU1A9e3N1YnM6Im5vdW4iLG5tcHI6InByb3BlciBub3VuIix2ZXJiOiJ2ZXJiIixhZGp2OiJhZGplY3RpdmUiLGFkdmI6ImFkdmVyYiIscHJlcDoicHJlcG9zaXRpb24iLGNvbmo6ImNvbmp1bmN0aW9uIixhcnQ6ImFydGljbGUiLGludGo6ImludGVyamVjdGlvbiIsbmVnYToibmVnYXRpdmUiLGlucmc6ImludGVycm9nYXRpdmUiLHByZGU6ImRlbW9uc3RyYXRpdmUiLHByaW46ImludGVycm9nLiBwcm9ub3VuIixwcnBzOiJwcm9ub3VuIixxdW90OiJxdW90YXRpb24ifTsKY29uc3QgVlM9e3FhbDoicWFsIixuaWY6Im5pZmFsIixwaWVsOiJwaWVsIixwdWFsOiJwdWFsIixoaXQ6ImhpdHBhZWwiLGhpZjoiaGlmaWwiLGhvZjoiaG9mYWwiLHBlYWw6InBlYWwiLHBlaWw6InBlaWwiLHBhZWw6InBhZWwiLGhhZmVsOiJoYWZlbCIsYWZlbDoiYWZlbCIsc2hhZmVsOiJzaGFmZWwiLGhpdHBlZWw6ImhpdHBlZWwiLGhpdHBhYWw6ImhpdHBhYWwiLGhvZmFsOiJob2ZhbCJ9Owpjb25zdCBWVD17cGVyZjoicGVyZmVjdCIsaW1wZjoiaW1wZXJmZWN0Iix3YXlxOiJ3YXl5aXF0b2wiLGltcHY6ImltcGVyYXRpdmUiLGluZmM6ImluZi4gY29uc3RydWN0IixpbmZhOiJpbmYuIGFic29sdXRlIixwdGNhOiJwYXJ0aWNpcGxlIixwdGNwOiJwYXNzLiBwYXJ0aWNpcGxlIn07CmNvbnN0IFBTPXtwMToiMXN0IHBlcnNvbiIscDI6IjJuZCBwZXJzb24iLHAzOiIzcmQgcGVyc29uIn07CmNvbnN0IEdOPXttOiJtYXNjdWxpbmUiLGY6ImZlbWluaW5lIn07CmNvbnN0IE5VPXtzZzoic2luZ3VsYXIiLHBsOiJwbHVyYWwiLGR1OiJkdWFsIn07CmNvbnN0IFNUPXthOiJhYnNvbHV0ZSIsYzoiY29uc3RydWN0IixlOiJlbXBoYXRpYyJ9OwoKLyogLS0tLS0tLS0tLSBzYW1wbGUgcGFzc2FnZSAoaWxsdXN0cmF0aXZlIOKAlCBsb2FkIHlvdXIgZXhwb3J0IGZvciByZWFsIGRhdGEpIC0tLS0tLS0tLS0gKi8KY29uc3QgU0FNUExFPVsKICAvLyBHZW5lc2lzIDE6MQogIHtib29rOiJHZW5lc2lzIixjOjEsdjoxLHc6IteR1rDWvNeo1rXXkNep1rTXgdaW15nXqiIsdHI6IiAiLGxleDoiUj5DSlQvIixsZW1tYToi16jWtdeQ16nWtNeB15nXqiIsZ2xvc3M6ImJlZ2lubmluZyIsc3A6InN1YnMiLGduOiJmIixudToic2ciLHN0OiJhIn0sCiAge2Jvb2s6IkdlbmVzaXMiLGM6MSx2OjEsdzoi15HWuNa816jWuNaj15AiLHRyOiIgIixsZXg6IkJSPjwvIixsZW1tYToi15HWuNa816jWuNeQIixnbG9zczoiY3JlYXRlIixzcDoidmVyYiIsdnM6InFhbCIsdnQ6InBlcmYiLHBzOiJwMyIsZ246Im0iLG51OiJzZyJ9LAogIHtib29rOiJHZW5lc2lzIixjOjEsdjoxLHc6IteQ1rHXnNa515TWtNaR15nXnSIsdHI6IiAiLGxleDoiPkxISk0vIixsZW1tYToi15DWsdec1rnXlNa015nXnSIsZ2xvc3M6ImdvZChzKSwgR29kIixzcDoic3VicyIsZ246Im0iLG51OiJwbCJ9LAogIHtib29rOiJHZW5lc2lzIixjOjEsdjoxLHc6IteQ1rXWpdeqIix0cjoiICIsbGV4OiI+VCIsbGVtbWE6IteQ1rXXqiIsZ2xvc3M6IltkaXJlY3Qgb2JqZWN0IG1hcmtlcl0iLHNwOiJwcmVwIn0sCiAge2Jvb2s6IkdlbmVzaXMiLGM6MSx2OjEsdzoi15TWt9ep1rjWvNeB157Wt9aW15nWtNedIix0cjoiICIsbGV4OiJDTUpNLyIsbGVtbWE6Itep1rjXgdee1rfXmda0150iLGdsb3NzOiJoZWF2ZW5zIixzcDoic3VicyIsZ246Im0iLG51OiJwbCIsc3Q6ImEifSwKICB7Ym9vazoiR2VuZXNpcyIsYzoxLHY6MSx3OiLXldaw15DWtdal16oiLHRyOiIgIixsZXg6Ij5UIixsZW1tYToi15DWtdeqIixnbG9zczoiW2RpcmVjdCBvYmplY3QgbWFya2VyXSIsc3A6InByZXAifSwKICB7Ym9vazoiR2VuZXNpcyIsYzoxLHY6MSx3OiLXlNa415DWuNa916jWttelIix0cjoi14MgIixsZXg6Ij5SWS8iLGxlbW1hOiLXkNa216jWttelIixnbG9zczoiZWFydGgsIGxhbmQiLHNwOiJzdWJzIixnbjoiZiIsbnU6InNnIixzdDoiYSJ9LAogIC8vIEdlbmVzaXMgMToyCiAge2Jvb2s6IkdlbmVzaXMiLGM6MSx2OjIsdzoi15XWsNeU1rjXkNa416jWttelIix0cjoiICIsbGV4OiI+UlkvIixsZW1tYToi15DWtteo1rbXpSIsZ2xvc3M6ImVhcnRoLCBsYW5kIixzcDoic3VicyIsZ246ImYiLG51OiJzZyIsc3Q6ImEifSwKICB7Ym9vazoiR2VuZXNpcyIsYzoxLHY6Mix3OiLXlNa415nWsNeq1rjXlCIsdHI6IiAiLGxleDoiSEpIWyIsbGVtbWE6IteU1rjXmda415QiLGdsb3NzOiJiZSwgYmVjb21lIixzcDoidmVyYiIsdnM6InFhbCIsdnQ6InBlcmYiLHBzOiJwMyIsZ246ImYiLG51OiJzZyJ9LAogIHtib29rOiJHZW5lc2lzIixjOjEsdjoyLHc6Iteq1rnXlNeV1rwiLHRyOiIgIixsZXg6IlRIVy8iLGxlbW1hOiLXqta51rzXlNeV1rwiLGdsb3NzOiJmb3JtbGVzc25lc3MsIHdhc3RlIixzcDoic3VicyIsZ246Im0iLG51OiJzZyIsc3Q6ImEifSwKICB7Ym9vazoiR2VuZXNpcyIsYzoxLHY6Mix3OiLXlda415HWudeU15XWvCIsdHI6IiAiLGxleDoiQkhXLyIsbGVtbWE6IteR1rnWvNeU15XWvCIsZ2xvc3M6ImVtcHRpbmVzcywgdm9pZCIsc3A6InN1YnMiLGduOiJtIixudToic2ciLHN0OiJhIn0sCiAge2Jvb2s6IkdlbmVzaXMiLGM6MSx2OjIsdzoi15XWsNeX1rnXqda214HXmtawIix0cjoiICIsbGV4OiJYQ0svIixsZW1tYToi15fWudep1rbXgdea1rAiLGdsb3NzOiJkYXJrbmVzcyIsc3A6InN1YnMiLGduOiJtIixudToic2ciLHN0OiJhIn0sCiAge2Jvb2s6IkdlbmVzaXMiLGM6MSx2OjIsdzoi16LWt9ecIix0cjoi1r4iLGxleDoiPEwiLGxlbW1hOiLXota315wiLGdsb3NzOiJ1cG9uLCBvbiwgb3ZlciIsc3A6InByZXAifSwKICB7Ym9vazoiR2VuZXNpcyIsYzoxLHY6Mix3OiLXpNaw1rzXoNa115kiLHRyOiIgIixsZXg6IlBOSC8iLGxlbW1hOiLXpNa41rzXoNa015nXnSIsZ2xvc3M6ImZhY2UiLHNwOiJzdWJzIixnbjoibSIsbnU6InBsIixzdDoiYyJ9LAogIHtib29rOiJHZW5lc2lzIixjOjEsdjoyLHc6Iteq1rDXlNeV1rnXnSIsdHI6IiAiLGxleDoiVEhXTS8iLGxlbW1hOiLXqtaw1rzXlNeV1rnXnSIsZ2xvc3M6ImRlZXAsIHByaW1ldmFsIG9jZWFuIixzcDoic3VicyIsbnU6InNnIixzdDoiYSJ9LAogIHtib29rOiJHZW5lc2lzIixjOjEsdjoyLHc6IteV1rDXqNeV1rzXl9a3Iix0cjoiICIsbGV4OiJSV1gvIixsZW1tYToi16jXlda815fWtyIsZ2xvc3M6IndpbmQsIHNwaXJpdCwgYnJlYXRoIixzcDoic3VicyIsZ246ImYiLG51OiJzZyIsc3Q6ImMifSwKICB7Ym9vazoiR2VuZXNpcyIsYzoxLHY6Mix3OiLXkNax15zWudeU1rTXmdedIix0cjoiICIsbGV4OiI+TEhKTS8iLGxlbW1hOiLXkNax15zWudeU1rTXmdedIixnbG9zczoiZ29kKHMpLCBHb2QiLHNwOiJzdWJzIixnbjoibSIsbnU6InBsIn0sCiAge2Jvb2s6IkdlbmVzaXMiLGM6MSx2OjIsdzoi157WsNeo1rfXl9a216TWtteqIix0cjoiICIsbGV4OiJSWFBbIixsZW1tYToi16jWuNeX1rfXoyIsZ2xvc3M6ImhvdmVyLCBzb2FyIixzcDoidmVyYiIsdnM6InBpZWwiLHZ0OiJwdGNhIixnbjoiZiIsbnU6InNnIixzdDoiYSJ9LAogIHtib29rOiJHZW5lc2lzIixjOjEsdjoyLHc6Itei1rfXnCIsdHI6Ita+IixsZXg6IjxMIixsZW1tYToi16LWt9ecIixnbG9zczoidXBvbiwgb24sIG92ZXIiLHNwOiJwcmVwIn0sCiAge2Jvb2s6IkdlbmVzaXMiLGM6MSx2OjIsdzoi16TWsNa816DWtdeZIix0cjoiICIsbGV4OiJQTkgvIixsZW1tYToi16TWuNa816DWtNeZ150iLGdsb3NzOiJmYWNlIixzcDoic3VicyIsZ246Im0iLG51OiJwbCIsc3Q6ImMifSwKICB7Ym9vazoiR2VuZXNpcyIsYzoxLHY6Mix3OiLXlNa3157WuNa815nWtNedIix0cjoi14MgIixsZXg6Ik1KTS8iLGxlbW1hOiLXnta315nWtNedIixnbG9zczoid2F0ZXIiLHNwOiJzdWJzIixnbjoibSIsbnU6InBsIixzdDoiYSJ9LAogIC8vIEdlbmVzaXMgMTozCiAge2Jvb2s6IkdlbmVzaXMiLGM6MSx2OjMsdzoi15XWt9eZ1rnWvNeQ157WtteoIix0cjoiICIsbGV4OiI+TVJbIixsZW1tYToi15DWuNee1rfXqCIsZ2xvc3M6InNheSIsc3A6InZlcmIiLHZzOiJxYWwiLHZ0OiJ3YXlxIixwczoicDMiLGduOiJtIixudToic2cifSwKICB7Ym9vazoiR2VuZXNpcyIsYzoxLHY6Myx3OiLXkNax15zWudeU1rTXmdedIix0cjoiICIsbGV4OiI+TEhKTS8iLGxlbW1hOiLXkNax15zWudeU1rTXmdedIixnbG9zczoiZ29kKHMpLCBHb2QiLHNwOiJzdWJzIixnbjoibSIsbnU6InBsIn0sCiAge2Jvb2s6IkdlbmVzaXMiLGM6MSx2OjMsdzoi15nWsNeU1rTXmSIsdHI6IiAiLGxleDoiSEpIWyIsbGVtbWE6IteU1rjXmda415QiLGdsb3NzOiJiZSwgYmVjb21lIixzcDoidmVyYiIsdnM6InFhbCIsdnQ6ImltcGYiLHBzOiJwMyIsZ246Im0iLG51OiJzZyJ9LAogIHtib29rOiJHZW5lc2lzIixjOjEsdjozLHc6IteQ15XWudeoIix0cjoiICIsbGV4OiI+V1IvIixsZW1tYToi15DXlda516giLGdsb3NzOiJsaWdodCIsc3A6InN1YnMiLGduOiJtIixudToic2ciLHN0OiJhIn0sCiAge2Jvb2s6IkdlbmVzaXMiLGM6MSx2OjMsdzoi15XWt9eZ1rDXlNa015kiLHRyOiLWviIsbGV4OiJISkhbIixsZW1tYToi15TWuNeZ1rjXlCIsZ2xvc3M6ImJlLCBiZWNvbWUiLHNwOiJ2ZXJiIix2czoicWFsIix2dDoid2F5cSIscHM6InAzIixnbjoibSIsbnU6InNnIn0sCiAge2Jvb2s6IkdlbmVzaXMiLGM6MSx2OjMsdzoi15DXlda516giLHRyOiLXgyAiLGxleDoiPldSLyIsbGVtbWE6IteQ15XWudeoIixnbG9zczoibGlnaHQiLHNwOiJzdWJzIixnbjoibSIsbnU6InNnIixzdDoiYSJ9LAogIC8vIFFlcmUvS2V0aXYgZGVtb25zdHJhdGlvbiAodGhlIFRvcmFoJ3MgcGVycGV0dWFsIHFlcmUgZm9yICJzaGUiKQogIHtib29rOiJEZW1vIMK3IHFlcmUva2V0aXYiLGM6MSx2OjEsdzoi15TWtNeV15AiLHRyOiIgIixxOiLXlNa015nXkCIsbGV4OiJISj4iLGxlbW1hOiLXlNa015nXkCIsZ2xvc3M6InNoZSwgaXQiLHNwOiJwcnBzIixwczoicDMiLGduOiJmIixudToic2cifSwKICB7Ym9vazoiRGVtbyDCtyBxZXJlL2tldGl2IixjOjEsdjoxLHc6Iteg1rjXqtaw16DWuNeUIix0cjoi14MgIixsZXg6Ik5UTlsiLGxlbW1hOiLXoNa416rWt9efIixnbG9zczoiZ2l2ZSwgcHV0LCBzZXQiLHNwOiJ2ZXJiIix2czoicWFsIix2dDoicGVyZiIscHM6InAzIixnbjoiZiIsbnU6InNnIn0KXTsKCi8qIC0tLS0tLS0tLS0gc3RhdGUgLS0tLS0tLS0tLSAqLwpsZXQgREFUQSA9IFNBTVBMRS5zbGljZSgpOwpsZXQgY3VyQm9vaz1udWxsLCBjdXJDaGFwPW51bGw7CmxldCBkZWNrID0gW107CmNvbnN0ICQgPSBpZCA9PiBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChpZCk7CgpsZXQgSURYPW5ldyBNYXAoKSwgQk9PS0xJU1Q9W107CmZ1bmN0aW9uIGluZGV4RGF0YSgpewogIElEWD1uZXcgTWFwKCk7IEJPT0tMSVNUPVtdOwogIGZvcihsZXQgaT0wO2k8REFUQS5sZW5ndGg7aSsrKXsKICAgIGNvbnN0IHg9REFUQVtpXTsgeC5fZ2k9aTsKICAgIGxldCBiPUlEWC5nZXQoeC5ib29rKTsKICAgIGlmKCFiKXsgYj17Y3NldDpuZXcgU2V0KCksY21hcDpuZXcgTWFwKCksY2hhcHM6W119OyBJRFguc2V0KHguYm9vayxiKTsgQk9PS0xJU1QucHVzaCh4LmJvb2spOyB9CiAgICBsZXQgYXJyPWIuY21hcC5nZXQoeC5jKTsKICAgIGlmKCFhcnIpeyBhcnI9W107IGIuY21hcC5zZXQoeC5jLGFycik7IGIuY3NldC5hZGQoeC5jKTsgfQogICAgYXJyLnB1c2goeCk7CiAgfQogIElEWC5mb3JFYWNoKGI9PnsgYi5jaGFwcz1bLi4uYi5jc2V0XS5zb3J0KChhLGMpPT5hLWMpOyBiLmNzZXQ9bnVsbDsgfSk7Cn0KZnVuY3Rpb24gYm9va3NJbigpeyByZXR1cm4gQk9PS0xJU1Q7IH0KZnVuY3Rpb24gY2hhcHRlcnNJbihib29rKXsgY29uc3QgYj1JRFguZ2V0KGJvb2spOyByZXR1cm4gYj9iLmNoYXBzOltdOyB9CgpmdW5jdGlvbiBidWlsZEJvb2tTZWxlY3QoKXsKICBjb25zdCBzZWw9JCgiYm9vayIpOyBjb25zdCBib29rcz1ib29rc0luKCk7CiAgc2VsLmlubmVySFRNTCA9IGJvb2tzLm1hcChiPT5gPG9wdGlvbiB2YWx1ZT0iJHtiLnJlcGxhY2UoLyIvZywnJnF1b3Q7Jyl9Ij4ke2VzY2FwZUh0bWwoYil9PC9vcHRpb24+YCkuam9pbigiIik7CiAgaWYoIWJvb2tzLmluY2x1ZGVzKGN1ckJvb2spKSBjdXJCb29rPWJvb2tzWzBdOwogIHNlbC52YWx1ZT1jdXJCb29rOwp9CmZ1bmN0aW9uIHNldENoYXB0ZXIoYyl7IGNvbnN0IGNocz1jaGFwdGVyc0luKGN1ckJvb2spOyBjdXJDaGFwID0gY2hzLmluY2x1ZGVzKGMpP2M6Y2hzWzBdOyByZW5kZXIoKTsgfQoKZnVuY3Rpb24gbGV4S2V5KHgpeyByZXR1cm4gKHgubGV4fHx4LmxlbW1hfHx4LncpOyB9CgovKiAtLS0tLS0tLS0tIHJlbmRlciAtLS0tLS0tLS0tICovCmZ1bmN0aW9uIHJlbmRlcigpewogIGNvbnN0IGNocz1jaGFwdGVyc0luKGN1ckJvb2spOwogIGlmKCFjaHMuaW5jbHVkZXMoY3VyQ2hhcCkpIGN1ckNoYXA9Y2hzWzBdOwogICQoImNoYXBsYmwiKS50ZXh0Q29udGVudCA9IGAke2Rpc3BsYXlCb29rKGN1ckJvb2spfSAke2N1ckNoYXB9YDsKICAkKCJyZWYtaGVhZCIpLnRleHRDb250ZW50ID0gZGlzcGxheUJvb2soY3VyQm9vayk7CiAgY29uc3QgX2JrPUlEWC5nZXQoY3VyQm9vayk7IGNvbnN0IHdvcmRzID0gKF9iayAmJiBfYmsuY21hcC5nZXQoY3VyQ2hhcCkpIHx8IFtdOwogIGNvbnN0IGNvbD0kKCJjb2wiKTsgY29sLmlubmVySFRNTD0iIjsKICBsZXQgbGFzdFY9bnVsbDsKICB3b3Jkcy5mb3JFYWNoKCh4KT0+ewogICAgY29uc3QgZ2kgPSB4Ll9naTsKICAgIGlmKHgudiE9PWxhc3RWKXsgY29uc3Qgdm49ZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgic3BhbiIpOyB2bi5jbGFzc05hbWU9InZuIjsgdm4udGV4dENvbnRlbnQ9eC52OyBjb2wuYXBwZW5kQ2hpbGQodm4pOyBsYXN0Vj14LnY7IH0KICAgIGNvbnN0IHNwPWRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoInNwYW4iKTsKICAgIHNwLmNsYXNzTmFtZT0idyIrKHgucT8iIHFrIjoiIik7IHNwLmRhdGFzZXQuaT1naTsKICAgIHNwLnRleHRDb250ZW50ID0geC53OwogICAgaWYoeC5xKXsgY29uc3QgbT1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCJzcGFuIik7IG0uY2xhc3NOYW1lPSJxbSI7IG0udGV4dENvbnRlbnQ9InEiOyBzcC5hcHBlbmRDaGlsZChtKTsgfQogICAgY29sLmFwcGVuZENoaWxkKHNwKTsKICAgIGlmKHgudHIpIGNvbC5hcHBlbmRDaGlsZChkb2N1bWVudC5jcmVhdGVUZXh0Tm9kZSh4LnRyKSk7CiAgfSk7CiAgY29uc3QgcHJldkM9Y2hzW2Nocy5pbmRleE9mKGN1ckNoYXApLTFdLCBuZXh0Qz1jaHNbY2hzLmluZGV4T2YoY3VyQ2hhcCkrMV07CiAgJCgicHJldiIpLmRpc2FibGVkID0gcHJldkM9PT11bmRlZmluZWQ7ICQoIm5leHQiKS5kaXNhYmxlZCA9IG5leHRDPT09dW5kZWZpbmVkOwogIGhpZGVQb3AoKTsKfQpmdW5jdGlvbiBkaXNwbGF5Qm9vayhiKXsgcmV0dXJuIGIucmVwbGFjZSgvXy9nLCIgIik7IH0KCi8qIC0tLS0tLS0tLS0gcG9wb3ZlciAtLS0tLS0tLS0tICovCmZ1bmN0aW9uIHBhcnNlTGluZSh4KXsKICBjb25zdCBiaXRzPVtdOwogIGlmKHgudnMpIGJpdHMucHVzaChWU1t4LnZzXXx8eC52cyk7CiAgaWYoeC52dCkgYml0cy5wdXNoKFZUW3gudnRdfHx4LnZ0KTsKICBpZih4LnBzKSBiaXRzLnB1c2goUFNbeC5wc118fHgucHMpOwogIGlmKHguZ24pIGJpdHMucHVzaChHTlt4LmduXXx8eC5nbik7CiAgaWYoeC5udSkgYml0cy5wdXNoKE5VW3gubnVdfHx4Lm51KTsKICBpZih4LnN0KSBiaXRzLnB1c2goKFNUW3guc3RdfHx4LnN0KSsiIHN0YXRlIik7CiAgcmV0dXJuIGJpdHMuam9pbigiIMK3ICIpOwp9CmZ1bmN0aW9uIG9wZW5Qb3AoeCwgZWwpewogIGNvbnN0IHBvcD0kKCJwb3AiKTsKICBjb25zdCBpbkRlY2sgPSBkZWNrLnNvbWUoZD0+bGV4S2V5KGQpPT09bGV4S2V5KHgpKTsKICBjb25zdCByb3dzPVtdOwogIHJvd3MucHVzaChgPGRpdiBjbGFzcz0icm93Ij48c3BhbiBjbGFzcz0iayI+bGV4ZW1lPC9zcGFuPjxzcGFuIGNsYXNzPSJ2IGhlIj4ke2VzY2FwZUh0bWwoeC5sZW1tYSl8fCImbWRhc2g7In08L3NwYW4+PC9kaXY+YCk7CiAgaWYoeC5zcCkgcm93cy5wdXNoKGA8ZGl2IGNsYXNzPSJyb3ciPjxzcGFuIGNsYXNzPSJrIj5wYXJ0IG9mIHNwZWVjaDwvc3Bhbj48c3BhbiBjbGFzcz0idiI+JHtTUFt4LnNwXXx8eC5zcH08L3NwYW4+PC9kaXY+YCk7CiAgY29uc3QgcGw9cGFyc2VMaW5lKHgpOyBpZihwbCkgcm93cy5wdXNoKGA8ZGl2IGNsYXNzPSJyb3ciPjxzcGFuIGNsYXNzPSJrIj5wYXJzZTwvc3Bhbj48c3BhbiBjbGFzcz0idiI+JHtwbH08L3NwYW4+PC9kaXY+YCk7CiAgaWYoeC5mcmVxIT1udWxsKSByb3dzLnB1c2goYDxkaXYgY2xhc3M9InJvdyI+PHNwYW4gY2xhc3M9ImsiPmZyZXF1ZW5jeTwvc3Bhbj48c3BhbiBjbGFzcz0idiI+JHt4LmZyZXF9w5c8L3NwYW4+PC9kaXY+YCk7CiAgY29uc3QgcWsgPSB4LnEgPyBgPGRpdiBjbGFzcz0icWsiPldyaXR0ZW4gKGtldGl2KTogPHNwYW4gY2xhc3M9ImhlIj4ke2VzY2FwZUh0bWwoeC53KX08L3NwYW4+PGJyPlJlYWQgKHFlcmUpOiA8c3BhbiBjbGFzcz0iaGUiPiR7ZXNjYXBlSHRtbCh4LnEpfTwvc3Bhbj48L2Rpdj5gIDogIiI7CiAgY29uc3QgaGF2ZUw9ZGVjay5zb21lKGQ9PmQuX2tleT09PWVudHJ5S2V5KCJsZXhlbWUiLHgpKSwgaGF2ZUY9ZGVjay5zb21lKGQ9PmQuX2tleT09PWVudHJ5S2V5KCJmb3JtIix4KSk7CiAgcG9wLmlubmVySFRNTCA9CiAgICBgPGRpdiBjbGFzcz0iZm9ybSI+JHtlc2NhcGVIdG1sKHgudyl9PC9kaXY+YCsKICAgIGA8ZGl2IGNsYXNzPSJmdGFnIj53b3JkIGZvcm08L2Rpdj5gKwogICAgYDxkaXYgY2xhc3M9Imdsb3NzIj4ke2VzY2FwZUh0bWwoeC5nbG9zc3x8IiIpfTwvZGl2PmArCiAgICBgPGRpdiBjbGFzcz0icm93cyI+JHtyb3dzLmpvaW4oIiIpfTwvZGl2PmArIHFrICsKICAgIGA8ZGl2IGNsYXNzPSJhZGRzIj5gKwogICAgICBgPGJ1dHRvbiBjbGFzcz0iYi1sZXgke2hhdmVMPyIgaW4iOiIifSIgaWQ9InBvcC1sZXgiPiR7aGF2ZUw/IuKckyBsZXhlbWUiOiIrIExleGVtZSJ9PC9idXR0b24+YCsKICAgICAgYDxidXR0b24gY2xhc3M9ImItZm9ybSR7aGF2ZUY/IiBpbiI6IiJ9IiBpZD0icG9wLWZvcm0iPiR7aGF2ZUY/IuKckyBmb3JtIjoiKyBXb3JkIGZvcm0ifTwvYnV0dG9uPmArCiAgICBgPC9kaXY+YDsKICBwb3AuY2xhc3NMaXN0LmFkZCgic2hvdyIpOwogIC8vIHBvc2l0aW9uIG5lYXIgdGhlIHdvcmQsIGNsYW1wZWQgdG8gdmlld3BvcnQKICBjb25zdCByPWVsLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpOyBjb25zdCBwdz1wb3Aub2Zmc2V0V2lkdGgsIHBoPXBvcC5vZmZzZXRIZWlnaHQ7CiAgbGV0IGxlZnQ9TWF0aC5taW4oTWF0aC5tYXgoOCwgci5sZWZ0K3Iud2lkdGgvMi1wdy8yKSwgd2luZG93LmlubmVyV2lkdGgtcHctOCk7CiAgbGV0IHRvcD1yLmJvdHRvbSs4OyBpZih0b3ArcGg+d2luZG93LmlubmVySGVpZ2h0LTgpIHRvcD1NYXRoLm1heCg4LCByLnRvcC1waC04KTsKICBwb3Auc3R5bGUubGVmdD1sZWZ0KyJweCI7IHBvcC5zdHlsZS50b3A9dG9wKyJweCI7CiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgiLncub24iKS5mb3JFYWNoKHc9PncuY2xhc3NMaXN0LnJlbW92ZSgib24iKSk7IGVsLmNsYXNzTGlzdC5hZGQoIm9uIik7CiAgJCgicG9wLWxleCIpLm9uY2xpY2s9KCk9PnsgYWRkRW50cnkoImxleGVtZSIseCk7IG9wZW5Qb3AoeCwgZWwpOyB9OwogICQoInBvcC1mb3JtIikub25jbGljaz0oKT0+eyBhZGRFbnRyeSgiZm9ybSIseCk7IG9wZW5Qb3AoeCwgZWwpOyB9Owp9CmZ1bmN0aW9uIGhpZGVQb3AoKXsgJCgicG9wIikuY2xhc3NMaXN0LnJlbW92ZSgic2hvdyIpOyBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCIudy5vbiIpLmZvckVhY2godz0+dy5jbGFzc0xpc3QucmVtb3ZlKCJvbiIpKTsgfQoKLyogLS0tLS0tLS0tLSBkZWNrIC0tLS0tLS0tLS0gKi8KY29uc3QgUEY9WyJ2cyIsInZ0IiwicHMiLCJnbiIsIm51Iiwic3QiXTsKZnVuY3Rpb24gc3RyaXBUZWFtKHMpeyByZXR1cm4gKHN8fCIiKS5ub3JtYWxpemUoIk5GQyIpLnJlcGxhY2UoL1tcdTA1OTEtXHUwNUFGXHUwNUJEXHUwNUJGXHUwNUMwXHUwNUMzXS9nLCIiKTsgfQpmdW5jdGlvbiBlbnRyeUtleShraW5kLHgpeyBjb25zdCBiYXNlPXgubGV4fHxzdHJpcFRlYW0oeC5sZW1tYSl8fHN0cmlwVGVhbSh4LncpOyByZXR1cm4ga2luZD09PSJsZXhlbWUiID8gIkx8IitiYXNlIDogIkZ8IitiYXNlKyJ8IitzdHJpcFRlYW0oeC53KSsifCIrUEYubWFwKGs9Pnhba118fCIiKS5qb2luKCIiKTsgfQpmdW5jdGlvbiB2dEFiYnIodil7IHJldHVybiB7cGVyZjoicWF0YWwiLGltcGY6InlpcXRvbCIsd2F5cToid2F5eWlxdG9sIixpbXB2OiJpbXB2IixpbmZjOiJpbmYuYyIsaW5mYToiaW5mLmEiLHB0Y2E6InB0Y3AiLHB0Y3A6InBhc3MucHRjcCJ9W3ZdfHx2fHwiIjsgfQpmdW5jdGlvbiBzaG9ydFBhcnNlKGQpewogIGlmKGQudnN8fGQudnQpeyBjb25zdCBuPXtzZzoicyIscGw6InAiLGR1OiJkIn1bZC5udV18fCIiOyBjb25zdCBwbmc9KGQucHM/ZC5wcy5yZXBsYWNlKCJwIiwiIik6IiIpKyhkLmdufHwiIikrbjsgcmV0dXJuIFtkLnZzLHZ0QWJicihkLnZ0KSxwbmddLmZpbHRlcihCb29sZWFuKS5qb2luKCIgIik7IH0KICByZXR1cm4gW2QuZ24sKHtzZzoic2ciLHBsOiJwbCIsZHU6ImR1In1bZC5udV18fCIiKSwoZC5zdD9kLnN0KyIuIjoiIildLmZpbHRlcihCb29sZWFuKS5qb2luKCIgIik7Cn0KZnVuY3Rpb24gYnVpbGRDdHgoeCl7CiAgY29uc3QgdmVyc2U9REFUQS5maWx0ZXIoZD0+ZC5ib29rPT09eC5ib29rICYmIGQuYz09PXguYyAmJiBkLnY9PT14LnYpOwogIGxldCBvdXQ9IiI7IHZlcnNlLmZvckVhY2goZD0+eyBvdXQgKz0gKGQ9PT14ID8gIlx1RTAwMCIrZC53KyJcdUUwMDEiIDogZC53KSArIChkLnRyfHwiIik7IH0pOwogIHJldHVybiBvdXQudHJpbSgpOwp9CmZ1bmN0aW9uIGFkZEVudHJ5KGtpbmQseCl7CiAgY29uc3QgX2tleT1lbnRyeUtleShraW5kLHgpOyBpZihkZWNrLnNvbWUoZD0+ZC5fa2V5PT09X2tleSkpIHJldHVybjsKICBjb25zdCBjdHg9YnVpbGRDdHgoeCksIHJlZj1gJHtkaXNwbGF5Qm9vayh4LmJvb2t8fGN1ckJvb2spfSAke3guY306JHt4LnZ9YDsKICBpZihraW5kPT09ImxleGVtZSIpIGRlY2sucHVzaCh7X2tleSxraW5kLGxleDp4LmxleHx8IiIsbGVtbWE6c3RyaXBUZWFtKHgubGVtbWF8fHgudyksZ2xvc3M6eC5nbG9zc3x8IiIsc3A6eC5zcHx8IiIsYm9vazp4LmJvb2t8fCIiLGM6eC5jLHY6eC52LHJlZixjdHh9KTsKICBlbHNlIHsgY29uc3QgZT17X2tleSxraW5kLGxleDp4LmxleHx8IiIsbGVtbWE6c3RyaXBUZWFtKHgubGVtbWEpLGZvcm06c3RyaXBUZWFtKHgudyksZ2xvc3M6eC5nbG9zc3x8IiIsc3A6eC5zcHx8IiIsYm9vazp4LmJvb2t8fCIiLGM6eC5jLHY6eC52LHJlZixjdHh9OyBQRi5mb3JFYWNoKGs9PnsgaWYoeFtrXSkgZVtrXT14W2tdOyB9KTsgZGVjay5wdXNoKGUpOyB9CiAgcmVuZGVyRGVjaygpOwp9CmZ1bmN0aW9uIHJlbW92ZUZyb21EZWNrKGspeyBkZWNrPWRlY2suZmlsdGVyKGQ9PmQuX2tleSE9PWspOyByZW5kZXJEZWNrKCk7IGhpZGVQb3AoKTsgfQpmdW5jdGlvbiByZW5kZXJEZWNrKCl7CiAgJCgiZGVjay1jb3VudCIpLnRleHRDb250ZW50PWRlY2subGVuZ3RoOwogIGNvbnN0IGxpc3Q9JCgiZGVjay1saXN0Iik7CiAgaWYoIWRlY2subGVuZ3RoKXsgbGlzdC5pbm5lckhUTUw9YDxkaXYgY2xhc3M9ImVtcHR5Ij5FbXB0eS4gQ2xpY2sgYSB3b3JkLCB0aGVuIGFkZCBpdHMgbGV4ZW1lIG9yIHdvcmQgZm9ybS48L2Rpdj5gOyByZXR1cm47IH0KICBsaXN0LmlubmVySFRNTCA9IGRlY2subWFwKGQ9PnsKICAgIGlmKGQua2luZD09PSJmb3JtIil7IGNvbnN0IHBwPXNob3J0UGFyc2UoZCk7IHJldHVybiBgPGRpdiBjbGFzcz0iY2hpcCI+PHNwYW4gY2xhc3M9ImJhZGdlIGZvcm0iPmZvcm08L3NwYW4+PHNwYW4gY2xhc3M9ImhlIj4ke2VzY2FwZUh0bWwoZC5mb3JtKX08L3NwYW4+PHNwYW4gY2xhc3M9ImciPiR7ZXNjYXBlSHRtbChkLmdsb3NzKX08L3NwYW4+JHtwcD9gPHNwYW4gY2xhc3M9InBwIj4ke2VzY2FwZUh0bWwocHApfSR7ZC5yZWY/IiDCtyAiK2VzY2FwZUh0bWwoZC5yZWYpOiIifTwvc3Bhbj5gOiIifTxidXR0b24gZGF0YS1rPSIke2VzY2FwZUh0bWwoZC5fa2V5KX0iIHRpdGxlPSJSZW1vdmUiPsOXPC9idXR0b24+PC9kaXY+YDsgfQogICAgcmV0dXJuIGA8ZGl2IGNsYXNzPSJjaGlwIj48c3BhbiBjbGFzcz0iYmFkZ2UgbGV4Ij5sZXg8L3NwYW4+PHNwYW4gY2xhc3M9ImhlIj4ke2VzY2FwZUh0bWwoZC5sZW1tYSl9PC9zcGFuPjxzcGFuIGNsYXNzPSJnIj4ke2VzY2FwZUh0bWwoZC5nbG9zcyl9PC9zcGFuPjxidXR0b24gZGF0YS1rPSIke2VzY2FwZUh0bWwoZC5fa2V5KX0iIHRpdGxlPSJSZW1vdmUiPsOXPC9idXR0b24+PC9kaXY+YDsKICB9KS5qb2luKCIiKTsKICBsaXN0LnF1ZXJ5U2VsZWN0b3JBbGwoImJ1dHRvbiIpLmZvckVhY2goYj0+Yi5vbmNsaWNrPSgpPT5yZW1vdmVGcm9tRGVjayhiLmRhdGFzZXQuaykpOwp9CmZ1bmN0aW9uIGV4cG9ydERlY2soKXsKICBpZighZGVjay5sZW5ndGgpeyByZXR1cm47IH0KICBjb25zdCBjbGVhbj1kZWNrLm1hcCgoe19rZXksLi4uZX0pPT5lKTsKICBjb25zdCBubT0oKCQoImRlY2stbmFtZSIpLnZhbHVlfHwiIikudHJpbSgpKXx8IlVudGl0bGVkIGRlY2siOwogIGNvbnN0IG91dD17IG5hbWU6bm0sIGNyZWF0ZWQ6bmV3IERhdGUoKS50b0lTT1N0cmluZygpLAogICAgICAgICAgICAgIGxleGVtZXM6Y2xlYW4uZmlsdGVyKGU9PmUua2luZD09PSJsZXhlbWUiKSwgZm9ybXM6Y2xlYW4uZmlsdGVyKGU9PmUua2luZD09PSJmb3JtIikgfTsKICBjb25zdCBibG9iPW5ldyBCbG9iKFtKU09OLnN0cmluZ2lmeShvdXQsbnVsbCwyKV0se3R5cGU6ImFwcGxpY2F0aW9uL2pzb24ifSk7CiAgY29uc3Qgc2x1Zz1ubS50b0xvd2VyQ2FzZSgpLnJlcGxhY2UoL1teYS16MC05XSsvZywiLSIpLnJlcGxhY2UoL14tK3wtKyQvZywiIikuc2xpY2UoMCw0MCl8fCJkZWNrIjsKICBjb25zdCBhPWRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoImEiKTsgYS5ocmVmPVVSTC5jcmVhdGVPYmplY3RVUkwoYmxvYik7IGEuZG93bmxvYWQ9Im90c2FyLSIrc2x1ZysiLmpzb24iOyBhLmNsaWNrKCk7Cn0KCi8qIC0tLS0tLS0tLS0gbG9hZCByZWFsIHRleHQgLS0tLS0tLS0tLSAqLwpmdW5jdGlvbiBub3JtYWxpemUoaW5wdXQpewogIC8vIGFjY2VwdHM6IHtib29rLHdvcmRzOlsuLi5dfSAgfCAgW3tib29rLHdvcmRzOlsuLi5dfSwuLi5dIChjb21iaW5lZCkgIHwgIFt3b3JkLC4uLl0KICBpZihBcnJheS5pc0FycmF5KGlucHV0KSl7CiAgICBpZihpbnB1dC5sZW5ndGggJiYgaW5wdXRbMF0gJiYgQXJyYXkuaXNBcnJheShpbnB1dFswXS53b3JkcykpewogICAgICBsZXQgb3V0PVtdOyBpbnB1dC5mb3JFYWNoKGJrPT57IGNvbnN0IGI9YmsuYm9va3x8IkxvYWRlZCB0ZXh0IjsgKGJrLndvcmRzfHxbXSkuZm9yRWFjaCh3PT5vdXQucHVzaCh7Ym9vazp3LmJvb2t8fGIsIC4uLnd9KSk7IH0pOyByZXR1cm4gb3V0OwogICAgfQogICAgcmV0dXJuIGlucHV0Lm1hcCh3PT4oe2Jvb2s6dy5ib29rfHwiTG9hZGVkIHRleHQiLCAuLi53fSkpOwogIH0KICBpZihpbnB1dCAmJiBBcnJheS5pc0FycmF5KGlucHV0LndvcmRzKSkgcmV0dXJuIGlucHV0LndvcmRzLm1hcCh3PT4oe2Jvb2s6aW5wdXQuYm9va3x8IkxvYWRlZCB0ZXh0IiwgLi4ud30pKTsKICByZXR1cm4gbnVsbDsKfQpmdW5jdGlvbiBpZGJPcGVuKCl7IHJldHVybiBuZXcgUHJvbWlzZSgocmVzLHJlaik9PnsgY29uc3Qgcj1pbmRleGVkREIub3Blbigib3RzYXItcmVhZGVyIiwxKTsgci5vbnVwZ3JhZGVuZWVkZWQ9KCk9PnIucmVzdWx0LmNyZWF0ZU9iamVjdFN0b3JlKCJrdiIpOyByLm9uc3VjY2Vzcz0oKT0+cmVzKHIucmVzdWx0KTsgci5vbmVycm9yPSgpPT5yZWooci5lcnJvcik7IH0pOyB9CmZ1bmN0aW9uIGlkYlNldChrLHYpeyByZXR1cm4gaWRiT3BlbigpLnRoZW4oZGI9Pm5ldyBQcm9taXNlKChyZXMscmVqKT0+eyBjb25zdCB0PWRiLnRyYW5zYWN0aW9uKCJrdiIsInJlYWR3cml0ZSIpOyB0Lm9iamVjdFN0b3JlKCJrdiIpLnB1dCh2LGspOyB0Lm9uY29tcGxldGU9KCk9PnJlcygpOyB0Lm9uZXJyb3I9KCk9PnJlaih0LmVycm9yKTsgfSkpOyB9CmZ1bmN0aW9uIGlkYkdldChrKXsgcmV0dXJuIGlkYk9wZW4oKS50aGVuKGRiPT5uZXcgUHJvbWlzZSgocmVzLHJlaik9PnsgY29uc3QgdD1kYi50cmFuc2FjdGlvbigia3YiLCJyZWFkb25seSIpOyBjb25zdCBycT10Lm9iamVjdFN0b3JlKCJrdiIpLmdldChrKTsgcnEub25zdWNjZXNzPSgpPT5yZXMocnEucmVzdWx0KTsgcnEub25lcnJvcj0oKT0+cmVqKHJxLmVycm9yKTsgfSkpOyB9CmZ1bmN0aW9uIHJlYWRGaWxlVGV4dChmaWxlKXsgcmV0dXJuIG5ldyBQcm9taXNlKChyZXMscmVqKT0+eyBjb25zdCBmcj1uZXcgRmlsZVJlYWRlcigpOyBmci5vbmxvYWQ9KCk9PnJlcyhmci5yZXN1bHQpOyBmci5vbmVycm9yPXJlajsgZnIucmVhZEFzVGV4dChmaWxlKTsgfSk7IH0KYXN5bmMgZnVuY3Rpb24gbG9hZEZpbGVzKGZpbGVzKXsKICB0cnl7CiAgICBsZXQgYWxsPVtdOwogICAgZm9yKGNvbnN0IGYgb2YgZmlsZXMpeyBjb25zdCBhcnI9bm9ybWFsaXplKEpTT04ucGFyc2UoYXdhaXQgcmVhZEZpbGVUZXh0KGYpKSk7IGlmKGFycikgYWxsPWFsbC5jb25jYXQoYXJyKTsgfQogICAgYWxsPWFsbC5maWx0ZXIoeD0+eCAmJiB4LncpOwogICAgaWYoIWFsbC5sZW5ndGgpIHRocm93IDA7CiAgICBEQVRBPWFsbDsgaW5kZXhEYXRhKCk7IGN1ckJvb2s9bnVsbDsgY3VyQ2hhcD1udWxsOwogICAgYnVpbGRCb29rU2VsZWN0KCk7IGN1ckNoYXA9Y2hhcHRlcnNJbihjdXJCb29rKVswXTsgcmVuZGVyKCk7CiAgICAkKCJoaW50Iikuc3R5bGUuZGlzcGxheT0ibm9uZSI7CiAgICBpZGJTZXQoInRleHQiLCBhbGwpLmNhdGNoKCgpPT57fSk7CiAgfWNhdGNoKGUpeyBzZXRIaW50KCJDb3VsZG7igJl0IHJlYWQgdGhhdCDigJQgZXhwZWN0ZWQgUmVhZGVyIHRleHQgSlNPTiBmcm9tIGV4cG9ydF90ZXh0LnB5IChhIGJvb2ssIHNldmVyYWwgYm9va3MsIG9yIGEgY29tYmluZWQgZmlsZSkuIik7IH0KfQpmdW5jdGlvbiBzZXRIaW50KG0peyAkKCJoaW50Iikuc3R5bGUuZGlzcGxheT0iIjsgJCgiaGludCIpLnRleHRDb250ZW50ID0gbSB8fCAiRGVtbzogR2VuZXNpcyAxOjEgKHdpdGggdGXigJlhbWltKSBwbHVzIDE6MuKAkzMgYW5kIGEgcWVyZS9rZXRpdiBleGFtcGxlLiBDbGljayBhbnkgd29yZCwgdGhlbiBhZGQgaXRzIGxleGVtZSBvciB3b3JkIGZvcm0uIExvYWQgeW91ciBleHBvcnQgdG8gcmVhZCBhIGZ1bGwgYm9vayDigJQgYWNjZW50cyBpbmNsdWRlZC4iOyAkKCJoaW50Iikuc3R5bGUucGFkZGluZ0JvdHRvbSA9IG0/ICIxMHB4IjoiMjJweCI7IH0KCmZ1bmN0aW9uIGVzY2FwZUh0bWwocyl7IHJldHVybiAoc3x8IiIpLnJlcGxhY2UoL1smPD4iJ10vZyxjPT4oeyImIjoiJmFtcDsiLCI8IjoiJmx0OyIsIj4iOiImZ3Q7IiwnIic6IiZxdW90OyIsIiciOiImIzM5OyJ9W2NdKSk7IH0KCi8qIC0tLS0tLS0tLS0gd2lyaW5nIC0tLS0tLS0tLS0gKi8KJCgiYm9vayIpLmFkZEV2ZW50TGlzdGVuZXIoImNoYW5nZSIsZT0+eyBjdXJCb29rPWUudGFyZ2V0LnZhbHVlOyBjdXJDaGFwPWNoYXB0ZXJzSW4oY3VyQm9vaylbMF07IHJlbmRlcigpOyB9KTsKJCgicHJldiIpLmFkZEV2ZW50TGlzdGVuZXIoImNsaWNrIiwoKT0+eyBjb25zdCBjaHM9Y2hhcHRlcnNJbihjdXJCb29rKTsgY29uc3QgaT1jaHMuaW5kZXhPZihjdXJDaGFwKTsgaWYoaT4wKSBzZXRDaGFwdGVyKGNoc1tpLTFdKTsgfSk7CiQoIm5leHQiKS5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsKCk9PnsgY29uc3QgY2hzPWNoYXB0ZXJzSW4oY3VyQm9vayk7IGNvbnN0IGk9Y2hzLmluZGV4T2YoY3VyQ2hhcCk7IGlmKGk8Y2hzLmxlbmd0aC0xKSBzZXRDaGFwdGVyKGNoc1tpKzFdKTsgfSk7CiQoImNvbCIpLmFkZEV2ZW50TGlzdGVuZXIoImNsaWNrIixlPT57IGNvbnN0IHc9ZS50YXJnZXQuY2xvc2VzdCgiLnciKTsgaWYodyl7IGUuc3RvcFByb3BhZ2F0aW9uKCk7IG9wZW5Qb3AoREFUQVsrdy5kYXRhc2V0LmldLCB3KTsgfSB9KTsKZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcigiY2xpY2siLGU9PnsgaWYoIWUudGFyZ2V0LmNsb3Nlc3QoIiNwb3AiKSAmJiAhZS50YXJnZXQuY2xvc2VzdCgiLnciKSkgaGlkZVBvcCgpOyB9KTsKZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcigia2V5ZG93biIsZT0+eyBpZihlLmtleT09PSJFc2NhcGUiKSBoaWRlUG9wKCk7IH0pOwokKCJkZWNrLW9wZW4iKS5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsKCk9PnsgY29uc3Qgb3Blbj0kKCJkZWNrIikuY2xhc3NMaXN0LnRvZ2dsZSgic2hvdyIpOyBkb2N1bWVudC5ib2R5LmNsYXNzTGlzdC50b2dnbGUoImRlY2stb3BlbiIsIG9wZW4pOyB9KTsKJCgiZGVjay1leHBvcnQiKS5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsZXhwb3J0RGVjayk7CiQoImRlY2stc2VuZCIpLmFkZEV2ZW50TGlzdGVuZXIoImNsaWNrIiwoKT0+eyBpZih3aW5kb3cucGFyZW50IT09d2luZG93KXsgcGFyZW50LnBvc3RNZXNzYWdlKHt0eXBlOiJvdHNhci1kZWNrIiwgbmFtZTooKCQoImRlY2stbmFtZSIpJiYkKCJkZWNrLW5hbWUiKS52YWx1ZSl8fCIiKS50cmltKCksIGVudHJpZXM6ZGVjay5tYXAoKHtfa2V5LC4uLmV9KT0+ZSl9LCAiKiIpOyAkKCJkZWNrLXNlbmQiKS50ZXh0Q29udGVudD0iU2VudCBcdTI3MTMiOyBzZXRUaW1lb3V0KCgpPT57JCgiZGVjay1zZW5kIikudGV4dENvbnRlbnQ9IlNlbmQgdG8gRHJpbGwiO30sMTIwMCk7IH0gfSk7CiQoImRlY2stY2xlYXIiKS5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsKCk9PnsgZGVjaz1bXTsgcmVuZGVyRGVjaygpOyB9KTsKJCgibG9hZCIpLmFkZEV2ZW50TGlzdGVuZXIoImNsaWNrIiwoKT0+JCgiZmlsZSIpLmNsaWNrKCkpOwokKCJmaWxlIikuYWRkRXZlbnRMaXN0ZW5lcigiY2hhbmdlIixlPT57IGlmKGUudGFyZ2V0LmZpbGVzLmxlbmd0aCkgbG9hZEZpbGVzKGUudGFyZ2V0LmZpbGVzKTsgZS50YXJnZXQudmFsdWU9IiI7IH0pOwoKLyogLS0tLS0tLS0tLSBpbml0IC0tLS0tLS0tLS0gKi8KaW5kZXhEYXRhKCk7IGJ1aWxkQm9va1NlbGVjdCgpOyBjdXJDaGFwPWNoYXB0ZXJzSW4oY3VyQm9vaylbMF07IHJlbmRlcigpOyByZW5kZXJEZWNrKCk7IHNldEhpbnQoIiIpOwppZih3aW5kb3cucGFyZW50IT09d2luZG93KXsgY29uc3QgYj0kKCJkZWNrLXNlbmQiKTsgaWYoYikgYi5zdHlsZS5kaXNwbGF5PSJibG9jayI7IGNvbnN0IF9zPWRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoIi5kZWNrIC5zdWIiKTsgaWYoX3MpIF9zLnRleHRDb250ZW50PSJDb2xsZWN0IHdvcmRzLCB0aGVuIFNlbmQgdG8gRHJpbGwgdG8gc3R1ZHkgdGhlbSBpbiB0aGUgUHJhY3RpY2UgdGFiLiI7IH0KaWRiR2V0KCJ0ZXh0IikudGhlbihzYXZlZD0+eyBpZihzYXZlZCAmJiBzYXZlZC5sZW5ndGgpeyBEQVRBPXNhdmVkOyBpbmRleERhdGEoKTsgY3VyQm9vaz1udWxsOyBjdXJDaGFwPW51bGw7IGJ1aWxkQm9va1NlbGVjdCgpOyBjdXJDaGFwPWNoYXB0ZXJzSW4oY3VyQm9vaylbMF07IHJlbmRlcigpOyB9IH0pLmNhdGNoKCgpPT57fSk7Cjwvc2NyaXB0Pgo8L2JvZHk+CjwvaHRtbD4K";
+let rdLoaded=false;
+function loadReader(){ if(rdLoaded) return; rdLoaded=true; document.getElementById("rd-frame").srcdoc=new TextDecoder().decode(Uint8Array.from(atob(RD_SRC), c=>c.charCodeAt(0))); }
+window.addEventListener("message",function(e){
+  const d=e&&e.data; if(!d||d.type!=="otsar-deck") return;
+  const ents=Array.isArray(d.entries)?d.entries:[];
+  if(typeof d.name==="string"){ deckName=d.name; store.set("otsar.v3.deckname",deckName); }
+  if(!ents.length){ setVocabStatus("That deck is empty \u2014 collect some words in the Reader first."); return; }
+  try{ installDeck(deckToItems({lexemes:ents.filter(x=>x.kind==="lexeme"), forms:ents.filter(x=>x.kind==="form")})); }catch(err){}
+});
+function idbOpen(){ return new Promise((res,rej)=>{ const r=indexedDB.open("otsar-drill",1); r.onupgradeneeded=()=>r.result.createObjectStore("kv"); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); }
+function idbSet(k,v){ return idbOpen().then(db=>new Promise((res,rej)=>{ const t=db.transaction("kv","readwrite"); t.objectStore("kv").put(v,k); t.oncomplete=()=>res(); t.onerror=()=>rej(t.error); })); }
+function idbGet(k){ return idbOpen().then(db=>new Promise((res,rej)=>{ const t=db.transaction("kv","readonly"); const rq=t.objectStore("kv").get(k); rq.onsuccess=()=>res(rq.result); rq.onerror=()=>rej(rq.error); })); }
+const BUILD_VERSION="0.2.3";
+const VERSION_URL="https://raw.githubusercontent.com/FelixBBL/Otsar/main/version.json";
+function cmpVer(a,b){ const pa=String(a).split("."),pb=String(b).split("."); for(let i=0;i<Math.max(pa.length,pb.length);i++){ const x=parseInt(pa[i]||"0",10),y=parseInt(pb[i]||"0",10); if(x>y)return 1; if(x<y)return -1; } return 0; }
+function openExternal(u){ try{ const T=window.__TAURI__; if(T){ if(T.opener&&T.opener.openUrl){T.opener.openUrl(u);return;} if(T.shell&&T.shell.open){T.shell.open(u);return;} } }catch(e){} window.open(u,"_blank"); }
+function showUpdateBar(j){
+  const bar=document.getElementById("update-bar"); if(!bar) return;
+  const url=j.url||"", notes=j.notes?(" \u2014 "+j.notes):"";
+  document.getElementById("update-text").textContent="Otsar "+j.version+" is available"+notes;
+  const link=document.getElementById("update-link"); link.href=url||"#";
+  link.onclick=function(ev){ if(url){ ev.preventDefault(); openExternal(url); } };
+  document.getElementById("update-close").onclick=function(){ bar.classList.remove("show"); store.set("otsar.v3.skipver", j.version); };
+  bar.classList.add("show");
+}
+async function checkVersion(){
+  try{
+    if(!/^https?:\/\//.test(VERSION_URL) || VERSION_URL.indexOf("USER/REPO")>=0) return;
+    const res=await fetch(VERSION_URL,{cache:"no-store"}); if(!res.ok) return;
+    const j=await res.json(); if(!j||!j.version) return;
+    if(cmpVer(j.version, BUILD_VERSION)<=0) return;
+    if(store.get("otsar.v3.skipver")===j.version) return;
+    showUpdateBar(j);
+  }catch(e){}
+}
+checkVersion();
+document.querySelectorAll(".navbtn").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".navbtn").forEach(x=>x.classList.remove("active")); b.classList.add("active");
+  const v=b.dataset.view;
+  document.getElementById("view-practice").classList.toggle("active",v==="practice");
+  document.getElementById("view-progress").classList.toggle("active",v==="progress");
+  document.getElementById("view-read").classList.toggle("active",v==="read");
+  if(v==="read") loadReader();
+  if(v==="progress") renderProgress();
+}));
+document.getElementById("theme-toggle").addEventListener("click",()=>{ settings.theme=settings.theme==="light"?"dark":"light"; applyTheme(); saveSettings(); });
+function openDrawer(){ document.getElementById("drawer").classList.add("show"); document.getElementById("scrim").classList.add("show"); }
+function closeDrawer(){ document.getElementById("drawer").classList.remove("show"); document.getElementById("scrim").classList.remove("show"); }
+document.getElementById("open-settings").addEventListener("click",openDrawer);
+
+function gatherContext(){
+  const p=["App: "+APP_VERSION];
+  if(current){
+    p.push(`Card: ${current.form}  (lemma ${current.lemma}, "${current.gloss}")`);
+    const pz=["vs","vt","ps","gn","nu","st"].map(k=>current[k]).filter(Boolean).join(" ");
+    if(pz) p.push("Parse: "+pz);
+    if(current.ref) p.push("Ref: "+current.ref);
+    if(current.id)  p.push("id: "+current.id);
+  }
+  const s=settings;
+  p.push("Mode: "+effUnit()+" / "+s.grading+(s.book?(" / book="+s.book):""));
+  p.push("Langs: "+(s.langs||[]).join(",")+(s.gram&&s.gram.length?(" / parse="+s.gram.join(",")):""));
+  p.push("Freq band: "+s.freqMin+"–"+s.freqMax);
+  return p.join("\n");
+}
+function openReport(){
+  document.getElementById("report-ctx").textContent="Attached automatically: the current card (form, gloss, reference) and your current settings — so I can reproduce it.";
+  const st=document.getElementById("report-status"); st.textContent=""; st.className="report-status";
+  document.getElementById("report").classList.add("show");
+  setTimeout(()=>document.getElementById("report-name").focus(),60);
+}
+function closeReport(){ document.getElementById("report").classList.remove("show"); }
+async function sendReport(){
+  if(document.getElementById("report-bot").checked) return;     // honeypot
+  const name=document.getElementById("report-name").value.trim();
+  const email=document.getElementById("report-email").value.trim();
+  const msg=document.getElementById("report-msg").value.trim();
+  const st=document.getElementById("report-status");
+  if(!name){ st.className="report-status err"; st.textContent="Please add your name."; return; }
+  if(!msg){ st.className="report-status err"; st.textContent="Please write a message."; return; }
+  const btn=document.getElementById("report-send"); btn.disabled=true;
+  st.className="report-status"; st.textContent="Sending…";
+  const payload={
+    access_key: REPORT_KEY,
+    subject: `Otsar ${reportType}: ${name}`,
+    from_name: "Otsar",
+    name: name,
+    email: email || "no-reply@otsar.app",
+    type: reportType,
+    message: msg + "\n\n----- context -----\n" + gatherContext()
+  };
+  try{
+    const res=await fetch(REPORT_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(payload)});
+    let ok=res.ok; try{ const j=await res.json(); ok = ok && (j.success!==false); }catch(_){}
+    if(!ok) throw new Error("rejected");
+    st.className="report-status ok"; st.textContent="Thank you — sent ✓";
+    document.getElementById("report-msg").value="";
+    setTimeout(closeReport,1400);
+  }catch(e){
+    st.className="report-status err"; st.textContent="Couldn't send — check your connection (or the form may not accept this origin).";
+  }finally{ btn.disabled=false; }
+}
+document.getElementById("open-report").addEventListener("click",openReport);
+document.getElementById("report-close").addEventListener("click",closeReport);
+document.getElementById("report-cancel").addEventListener("click",closeReport);
+document.getElementById("report").addEventListener("click",e=>{ if(e.target.id==="report") closeReport(); });
+document.getElementById("report-send").addEventListener("click",sendReport);
+document.getElementById("report-type").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return; reportType=b.dataset.type; document.querySelectorAll("#report-type button").forEach(x=>x.classList.toggle("on",x===b)); });
+
+// gloss toggle
+const glossToggle=document.getElementById("gloss-toggle");
+function reflectGloss(){ glossToggle.classList.toggle("on",settings.askGloss); document.getElementById("gloss-state").textContent=settings.askGloss?"On":"Off"; }
+glossToggle.addEventListener("click",()=>{ settings.askGloss=!settings.askGloss; reflectGloss(); saveSettings(); buildSession(); });
+
+// POS
+document.getElementById("seg-pos").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b)return; const p=b.dataset.pos; const on=!settings.pos[p];
+  if(!on && Object.values(settings.pos).filter(Boolean).length<=1) return;
+  settings.pos[p]=on; b.classList.toggle("on",on); saveSettings(); buildSession();
+});
+// frequency band
+const freqMinR=document.getElementById("freq-min"), freqMinV=document.getElementById("freqmin-val");
+const freqMaxR=document.getElementById("freq-max"), freqMaxV=document.getElementById("freqmax-val");
+const sizeR=document.getElementById("size-range"), sizeV=document.getElementById("size-val");
+function reflectFreq(){ freqMinV.value=settings.freqMin; freqMaxV.value=settings.freqMax; freqMinR.value=settings.freqMin; freqMaxR.value=settings.freqMax; sizeV.value=settings.size; sizeR.value=Math.min(50,Math.max(5,settings.size)); }
+freqMinR.addEventListener("input",()=>{ settings.freqMin=Math.min(+freqMinR.value,settings.freqMax); reflectFreq(); });
+freqMinR.addEventListener("change",()=>{ saveSettings(); buildSession(); });
+freqMaxR.addEventListener("input",()=>{ settings.freqMax=Math.max(+freqMaxR.value,settings.freqMin); reflectFreq(); });
+freqMaxR.addEventListener("change",()=>{ saveSettings(); buildSession(); });
+freqMinV.addEventListener("change",()=>{ let v=Math.max(0,Math.min(Math.round(+freqMinV.value||0),6000)); v=Math.min(v,settings.freqMax); settings.freqMin=v; reflectFreq(); saveSettings(); buildSession(); });
+freqMaxV.addEventListener("change",()=>{ let v=Math.max(0,Math.min(Math.round(+freqMaxV.value||0),6000)); v=Math.max(v,settings.freqMin); settings.freqMax=v; reflectFreq(); saveSettings(); buildSession(); });
+sizeR.addEventListener("input",()=>{ settings.size=+sizeR.value; sizeV.value=settings.size; });
+sizeR.addEventListener("change",()=>{ saveSettings(); buildSession(); });
+sizeV.addEventListener("change",()=>{ let v=Math.max(1,Math.min(Math.round(+sizeV.value||1),200)); settings.size=v; reflectFreq(); saveSettings(); buildSession(); });
+reflectFreq();
+
+// presets
+document.querySelectorAll(".preset").forEach(b=>b.addEventListener("click",()=>{
+  const p=b.dataset.preset;
+  if(p==="vocab"){ settings.langs=["he","en"]; settings.gram=[]; settings.askGloss=true; }
+  else if(p==="parse"){ settings.langs=["he"]; settings.gram=["vs","vt","ps","gn","nu","st"]; settings.askGloss=false; }
+  else if(p==="both"){ settings.langs=["he","en"]; settings.gram=["vs","vt"]; settings.askGloss=true; }
+  reflectGloss(); langPool.render(); gramPool.render(); saveSettings(); buildSession();
+}));
+
+// study unit, keyboard layout, vocalisation
+document.getElementById("seg-unit").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return; if(settings.gram.length>0 && b.dataset.unit==="lexeme"){ const n=document.getElementById("unit-note"); if(n) n.style.display="block"; return; } settings.unit=b.dataset.unit; reflectUnit(); saveSettings(); buildSession(); });
+document.getElementById("seg-kbd").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return; settings.kbdLayout=b.dataset.kbd; document.querySelectorAll("#seg-kbd button").forEach(x=>x.classList.toggle("on",x===b)); buildKeyboard(); saveSettings(); });
+const vChk=document.getElementById("vowel-check"), vShow=document.getElementById("vowel-show");
+function reflectVowel(){ vChk.classList.toggle("on",settings.checkVowels); vShow.classList.toggle("on",settings.showVowels); }
+vChk.addEventListener("click",()=>{ settings.checkVowels=!settings.checkVowels; reflectVowel(); saveSettings(); buildSession(); });
+vShow.addEventListener("click",()=>{ settings.showVowels=!settings.showVowels; reflectVowel(); saveSettings(); buildSession(); });
+const namesT=document.getElementById("names-toggle");
+function reflectNames(){ namesT.classList.toggle("on",settings.includeNames); }
+namesT.addEventListener("click",()=>{ settings.includeNames=!settings.includeNames; reflectNames(); saveSettings(); buildSession(); });
+document.getElementById("seg-grading").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return; const m=b.dataset.mode; const on=settings.modes.includes(m); if(on && settings.modes.length<=1) return; settings.modes = on ? settings.modes.filter(x=>x!==m) : [...settings.modes, m]; document.querySelectorAll("#seg-grading button").forEach(x=>x.classList.toggle("on", settings.modes.includes(x.dataset.mode))); saveSettings(); buildSession(); });
+const wsT=document.getElementById("ws-toggle");
+function reflectWs(){ wsT.classList.toggle("on", !!settings.worksheet); }
+wsT.addEventListener("click",()=>{ settings.worksheet=!settings.worksheet; reflectWs(); saveSettings(); buildSession(); });
+document.getElementById("seg-scope").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return; settings.progressScope=b.dataset.scope; document.querySelectorAll("#seg-scope button").forEach(x=>x.classList.toggle("on",x===b)); saveSettings(); renderProgress(); });
+{ const mb=document.getElementById("match-board");
+  mb.addEventListener("click",e=>{ const t=e.target.closest(".match-tile"); if(t) matchTileClick(t); });
+  mb.addEventListener("dragstart",e=>{ const t=e.target.closest(".match-tile"); if(!t||t.classList.contains("matched")){ e.preventDefault(); return; } if(e.dataTransfer) e.dataTransfer.setData("text/plain",""); if(matchState) matchState.drag=t; });
+  mb.addEventListener("dragover",e=>{ const t=e.target.closest(".match-tile"); if(t && matchState && matchState.drag && t.dataset.side!==matchState.drag.dataset.side && !t.classList.contains("matched")){ e.preventDefault(); t.classList.add("drop"); } });
+  mb.addEventListener("dragleave",e=>{ const t=e.target.closest(".match-tile"); if(t) t.classList.remove("drop"); });
+  mb.addEventListener("drop",e=>{ e.preventDefault(); const t=e.target.closest(".match-tile"); document.querySelectorAll(".match-tile.drop").forEach(x=>x.classList.remove("drop")); if(!t||!matchState||!matchState.drag) return; const d=matchState.drag; matchState.drag=null; if(t.dataset.side===d.dataset.side||t.classList.contains("matched")) return; resolveMatch(d.dataset.side==="he"?d:t, d.dataset.side==="he"?t:d); }); }
+document.getElementById("book-select").addEventListener("change",e=>{ settings.book=e.target.value; settings.chapter=""; buildChapters(); saveSettings(); buildSession(); });
+document.getElementById("chapter-select").addEventListener("change",e=>{ settings.chapter=e.target.value; saveSettings(); buildSession(); });
+document.getElementById("ctx-btn").addEventListener("click",()=>renderContext(true));
+const kbdT=document.getElementById("kbd-toggle");
+function reflectKbd(){ kbdT.classList.toggle("on", settings.showKeyboard!==false); }
+kbdT.addEventListener("click",()=>{ settings.showKeyboard = !(settings.showKeyboard!==false); reflectKbd(); showKbd(kbdNeeded); saveSettings(); });
+document.getElementById("setups-export").addEventListener("click",()=>{ const blob=new Blob([JSON.stringify(setups,null,1)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="otsar-setups.json"; a.click(); });
+document.getElementById("setups-import").addEventListener("click",()=>document.getElementById("setups-file").click());
+document.getElementById("setups-file").addEventListener("change",e=>{ const fl=e.target.files[0]; if(!fl)return; const fr=new FileReader(); fr.onload=()=>{ try{ const o=JSON.parse(fr.result); if(o&&typeof o==="object"){ Object.assign(setups,o); store.set("otsar.v3.setups",setups); renderSetups(); } }catch(_){ } }; fr.readAsText(fl); e.target.value=""; });
+
+// saved setups
+function snapshot(){ return JSON.parse(JSON.stringify({langs:settings.langs,gram:settings.gram,askGloss:settings.askGloss,pos:settings.pos,freqMin:settings.freqMin,freqMax:settings.freqMax,size:settings.size,kbdLayout:settings.kbdLayout,checkVowels:settings.checkVowels,showVowels:settings.showVowels,unit:settings.unit,book:settings.book,context:settings.context,chapter:settings.chapter,showKeyboard:settings.showKeyboard,modes:settings.modes,worksheet:settings.worksheet})); }
+function applySnapshot(s){ Object.assign(settings, JSON.parse(JSON.stringify(s))); reflectAll(); saveSettings(); buildSession(); }
+function renderSetups(){
+  const list=document.getElementById("setups-list"), names=Object.keys(setups);
+  list.innerHTML = names.length ? names.map(n=>`<div class="band-row" style="border:none;padding:2px 0"><span class="bg" style="color:var(--ink)">${escapeHtml(n)}</span><button class="btn-ghost setup-load" data-n="${escapeHtml(n)}" style="padding:6px 12px">Load</button><button class="btn-ghost setup-del" data-n="${escapeHtml(n)}" style="padding:6px 10px;color:var(--madder)">×</button></div>`).join("") : `<div class="desc" style="margin:0">No saved setups yet.</div>`;
+}
+document.getElementById("save-setup").addEventListener("click",()=>{ const n=prompt("Name this setup:"); if(!n||!n.trim())return; setups[n.trim()]=snapshot(); store.set("otsar.v3.setups",setups); renderSetups(); });
+document.getElementById("setups-list").addEventListener("click",e=>{ const l=e.target.closest(".setup-load"); if(l){ applySnapshot(setups[l.dataset.n]); return; } const d=e.target.closest(".setup-del"); if(d){ delete setups[d.dataset.n]; store.set("otsar.v3.setups",setups); renderSetups(); } });
+function reflectAll(){
+  reflectGloss(); reflectVowel(); reflectNames(); reflectSource();
+  document.querySelectorAll("#seg-pos button").forEach(x=>x.classList.toggle("on",!!settings.pos[x.dataset.pos]));
+  document.querySelectorAll("#seg-grading button").forEach(x=>x.classList.toggle("on", settings.modes.includes(x.dataset.mode)));
+  reflectWs();
+  document.querySelectorAll("#seg-scope button").forEach(x=>x.classList.toggle("on",x.dataset.scope===(settings.progressScope||"personal")));
+  { const bs=document.getElementById("book-select"); if(bs) bs.value=settings.book||""; }
+  buildChapters(); reflectKbd();
+  reflectUnit();
+  document.querySelectorAll("#seg-kbd button").forEach(x=>x.classList.toggle("on",x.dataset.kbd===settings.kbdLayout));
+  freqMinR.value=settings.freqMin; freqMaxR.value=settings.freqMax; reflectFreq();
+  sizeR.value=settings.size; sizeV.value=settings.size;
+  if(langPool) langPool.render(); if(gramPool) gramPool.render();
+}
+
+// answer controls
+document.getElementById("check-btn").addEventListener("click",gradeCard);
+document.getElementById("next-btn").addEventListener("click",()=>{ sIndex++; nextCard(); });
+document.getElementById("override-btn").addEventListener("click",overrideCorrect);
+document.getElementById("reveal-btn").addEventListener("click",revealSelf);
+document.getElementById("grade").addEventListener("click",e=>{ const b=e.target.closest(".gbtn"); if(b) gradeSelf(parseFloat(b.dataset.q)); });
+document.addEventListener("keydown",e=>{
+  if(document.getElementById("report").classList.contains("show")){ if(e.key==="Escape") closeReport(); return; }
+  if(document.getElementById("secret").classList.contains("show")){ if(e.key==="Escape") closeSecret(); return; }
+  if(document.getElementById("drawer").classList.contains("show")){ if(e.key==="Escape") closeDrawer(); return; }
+  if(!document.getElementById("view-practice").classList.contains("active")) return;
+  if(inMatch) return;
+  const ae=document.activeElement;
+  if(ae && ae.classList && ae.classList.contains("he-input") && !graded && e.altKey && !e.metaKey){ const nq=niqqudFor(e); if(nq){ e.preventDefault(); lastHeKey=ae; insertHe(nq); return; } }
+  if(ae && ae.classList && ae.classList.contains("he-input") && !graded && !e.ctrlKey && !e.metaKey && !e.altKey && e.key.length===1){
+    const m=mapHeKey(e.key.toLowerCase());
+    if(m){ e.preventDefault(); lastHeKey=ae; insertHe(m); return; }
+  }
+  if(inSheet) return;
+  if(cardMode==="selfrate"){
+    const sr=document.getElementById("self-reveal");
+    const revealed = sr && sr.style.display!=="none";
+    if(!revealed){ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); revealSelf(); } return; }
+    if(e.key==="1"){ e.preventDefault(); gradeSelf(0); }
+    else if(e.key==="2"){ e.preventDefault(); gradeSelf(0.5); }
+    else if(e.key==="3"){ e.preventDefault(); gradeSelf(1); }
+    return;
+  }
+  if(e.key==="Enter"){ e.preventDefault(); if(!graded) gradeCard(); else { sIndex++; nextCard(); } }
+});
+
+// vocab load + progress import/export
+const fileVocab=document.getElementById("file-vocab"), fileProg=document.getElementById("file-progress");
+document.getElementById("load-vocab").addEventListener("click",()=>fileVocab.click());
+fileVocab.addEventListener("change",()=>{ if(fileVocab.files[0]) loadVocab(fileVocab.files[0]); fileVocab.value=""; });
+const fileDeck=document.getElementById("file-deck");
+document.getElementById("import-deck").addEventListener("click",()=>fileDeck.click());
+fileDeck.addEventListener("change",()=>{ if(fileDeck.files[0]) importDeck(fileDeck.files[0]); fileDeck.value=""; });
+document.getElementById("seg-source").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return; if(b.dataset.src==="deck" && !DECK.length){ setVocabStatus("Your deck is empty — collect words in the Reader, export, then Import deck."); return; } setSource(b.dataset.src); });
+document.getElementById("clear-deck").addEventListener("click",()=>{ if(DECK.length && confirm("Clear the deck? Your loaded vocabulary stays.")) clearDeck(); });
+function mapItems(arr){ return (arr||[]).filter(x=>x&&x.form&&x.gloss).map((x,i)=>({
+    id:String(x.id||x.lemma||x.form||("w"+i)), lex:x.lex||"", form:canonHe(x.form), lemma:canonHe(x.lemma||x.form), gloss:x.gloss,
+    sp:x.sp||"subs", freq:+x.freq||0, n:+x.n||0, ref:x.ref||"", book:x.book||"", c:(x.c!=null?String(x.c):""), v:(x.v!=null?String(x.v):""), ctx:canonHe(x.ctx||""), lang:x.lang||"Hebrew",
+    vs:x.vs||"", vt:x.vt||"", ps:x.ps||"", gn:x.gn||"", nu:x.nu||"", st:x.st||""
+  })); }
+function rebuildPool(){ buildBooks(); buildChapters(); reflectSource(); setVocabStatus(); buildSession(); renderProgress(); }
+function setSource(src){ source = (src==="deck" && DECK.length) ? "deck" : "full"; store.set("otsar.v3.source", source); VOCAB = source==="deck" ? DECK : FULL; rebuildPool(); }
+function installVocab(arr){
+  const d=mapItems(arr); if(!d.length) throw 0;
+  FULL=d; idbSet("vocab", FULL).catch(()=>{}); try{ const s=JSON.stringify(FULL); if(s.length<3000000) store.set("otsar.v3.vocab",FULL); }catch(e){}
+  if(source!=="deck") VOCAB=FULL;
+  rebuildPool();
+}
+function installDeck(arr){
+  const d=mapItems(arr); if(!d.length) throw 0;
+  DECK=d; try{ const s=JSON.stringify(DECK); if(s.length<3000000) store.set("otsar.v3.deck",DECK); }catch(e){}
+  setSource("deck");
+}
+function clearDeck(){ DECK=[]; deckName=""; store.set("otsar.v3.deck",DECK); store.set("otsar.v3.deckname",deckName); if(source==="deck") setSource("full"); else rebuildPool(); }
+function reflectSource(){ document.querySelectorAll("#seg-source button").forEach(x=>x.classList.toggle("on", x.dataset.src===source)); const cd=document.getElementById("clear-deck"); if(cd) cd.style.display = DECK.length ? "block" : "none"; }
+function loadVocab(file){
+  const fr=new FileReader();
+  fr.onload=()=>{ try{ let d=JSON.parse(fr.result); if(!Array.isArray(d)) throw 0; installVocab(d); }
+    catch(e){ setVocabStatus("Couldn't read that file — expected a JSON array of word objects."); } };
+  fr.readAsText(file);
+}
+function deckToItems(o){
+  const items=[];
+  (o.lexemes||[]).forEach(d=>{ if(d&&(d.lemma||d.form)&&d.gloss) items.push({ id:(d.lex||d.lemma), lex:d.lex||"", form:d.lemma||d.form, lemma:d.lemma||d.form, gloss:d.gloss, sp:d.sp||"subs", ref:d.ref||"", ctx:d.ctx||"", book:d.book||"", c:d.c, v:d.v }); });
+  (o.forms||[]).forEach(d=>{ if(d&&d.form&&d.gloss){ const isV=!!(d.vs||d.vt); items.push({ id:(d.lex||"")+"|"+d.form+"|"+[d.vs,d.vt,d.ps,d.gn,d.nu,d.st].join(""), lex:d.lex||"", form:d.form, lemma:d.lemma||d.form, gloss:d.gloss, sp:d.sp||(isV?"verb":"subs"), ref:d.ref||"", ctx:d.ctx||"", book:d.book||"", c:d.c, v:d.v, vs:d.vs||"",vt:d.vt||"",ps:d.ps||"",gn:d.gn||"",nu:d.nu||"",st:d.st||"" }); } });
+  return items;
+}
+function importDeck(file){
+  const fr=new FileReader();
+  fr.onload=()=>{ try{ const o=JSON.parse(fr.result); const arr=Array.isArray(o)?o:deckToItems(o);
+    if(!arr.length) throw 0; deckName=(o&&o.name)||""; store.set("otsar.v3.deckname",deckName); installDeck(arr); }
+    catch(e){ setVocabStatus("Couldn't read that deck — expected a deck JSON exported from the Reader."); } };
+  fr.readAsText(file);
+}
+function setVocabStatus(msg){
+  const isSample = FULL.length===SAMPLE.length && FULL[0] && FULL[0].id===SAMPLE[0].id;
+  let big=false; try{ big=JSON.stringify(FULL).length>=3000000; }catch(e){}
+  const fullMsg = isSample ? `sample set (${FULL.length} words) — load your BHSA export to replace it`
+                           : `full vocabulary: ${FULL.length} forms${big?", kept in memory this session (too large to save)":""}`;
+  const deckMsg = DECK.length ? `deck: ${DECK.length} word${DECK.length>1?"s":""}` : `deck: empty — collect in the Reader, export, then Import deck`;
+  const active = source==="deck" ? ("Studying your deck"+(deckName?": "+deckName:"")+".") : "Studying the full vocabulary.";
+  const el=document.getElementById("vocab-status");
+  el.innerHTML = msg ? escapeHtml(msg) : `<b>${escapeHtml(active)}</b><br>${escapeHtml(fullMsg)}<br>${escapeHtml(deckMsg)}`;
+}
+document.getElementById("export-progress").addEventListener("click",()=>{
+  const blob=new Blob([JSON.stringify({schema:SCHEMA,savedAt:new Date().toISOString(),progress},null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="otsar-progress.json"; a.click(); URL.revokeObjectURL(a.href);
+});
+document.getElementById("import-progress").addEventListener("click",()=>fileProg.click());
+fileProg.addEventListener("change",()=>{ const f=fileProg.files[0]; if(f){ const fr=new FileReader();
+  fr.onload=()=>{ try{ const d=JSON.parse(fr.result); progress=d.progress||d; store.set("otsar.v3.progress",progress); renderProgress(); buildSession(); }catch(e){ alert("Couldn't read that progress file."); } };
+  fr.readAsText(f); } fileProg.value=""; });
+document.getElementById("reset-progress").addEventListener("click",()=>{ if(confirm("Reset all learning history?")){ progress={}; store.set("otsar.v3.progress",progress); renderProgress(); buildSession(); } });
+
+/* ---- progress view ---- */
+function bandOf(it){ const r=rec(lexKey(it)), a=activation(lexKey(it)); if(!r.seen) return "dormant"; if(a>=0.66) return "active"; if(a>=0.33) return "learning"; return "dormant"; }
+function renderProgress(){
+  const personal = settings.progressScope!=="all";
+  let items=poolItems();
+  if(personal) items=items.filter(it=>rec(lexKey(it)).seen);
+  let active=0,learning=0,dormant=0,att=0,lap=0,ms=0,seen=0;
+  items.forEach(it=>{ const r=rec(lexKey(it)); if(r.seen){seen++; att+=r.attempts; lap+=r.lapses; ms+=r.totalMs;} const b=bandOf(it); if(b==="active")active++; else if(b==="learning")learning++; else dormant++; });
+  const acc=att?Math.round(100*(1-lap/att)):0, avg=att?(ms/att/1000).toFixed(1)+"s":"—";
+  const cards = personal
+    ? [["Seen",items.length,"seen"],["Active",active,"active"],["Learning",learning,"learning"],["Faded",dormant,"dormant"],["Accuracy",acc+"%",""],["Avg time",avg,""]]
+    : [["Items",items.length,""],["Active",active,"active"],["Learning",learning,"learning"],["Seen",seen,"seen"],["Accuracy",acc+"%",""],["Avg time",avg,""]];
+  document.getElementById("stats").innerHTML=cards.map(([l,n,b])=>`<div class="stat${b?" clickable":""}"${b?` data-band="${b}"`:""}><div class="n">${n}</div><div class="l">${l}</div></div>`).join("");
+  const tot=Math.max(items.length,1);
+  document.getElementById("dist-bar").innerHTML=
+    `<span data-band="active" style="width:${100*active/tot}%;background:var(--tekhelet)"></span>`+
+    `<span data-band="learning" style="width:${100*learning/tot}%;background:var(--tekhelet-soft)"></span>`+
+    `<span data-band="dormant" style="width:${100*dormant/tot}%;background:transparent"></span>`;
+  document.getElementById("band-list").innerHTML="";
+  renderRemembered();
+}
+function renderBand(band){
+  let pool=poolItems(); if(settings.progressScope!=="all") pool=pool.filter(it=>rec(lexKey(it)).seen);
+  const items=pool.filter(it=> band==="seen" ? rec(lexKey(it)).seen : bandOf(it)===band).sort((a,b)=>(b.freq||0)-(a.freq||0));
+  document.getElementById("band-list").innerHTML = `<div class="desc" style="margin:14px 0 2px">${band} — ${items.length} lexeme(s)</div>` + items.slice(0,120).map(it=>{
+    const r=rec(lexKey(it)), accv=r.attempts?Math.round(100*(1-r.lapses/r.attempts))+"%":"—", av=r.attempts?(r.totalMs/r.attempts/1000).toFixed(1)+"s":"—";
+    return `<div class="band-row"><span class="bw">${escapeHtml(dispForm(it))}</span><span class="bg">${escapeHtml(it.gloss)}</span><span class="bm">freq ${it.freq||0} · acc ${accv} · ${av} · ×${r.attempts||0}</span></div>`;
+  }).join("");
+}
+function renderRemembered(){
+  const wrap=document.getElementById("remembered-wrap");
+  const byLex={}; VOCAB.forEach(it=>{ const k=lexKey(it); if(!byLex[k] && (rec(k).accept||[]).length) byLex[k]=it; });
+  const withAccept=Object.entries(byLex);
+  if(!withAccept.length){ wrap.style.display="none"; return; }
+  wrap.style.display="block";
+  document.getElementById("accept-list").innerHTML=withAccept.map(([k,it])=>{
+    const syns=(rec(k).accept||[]).map(sy=>`<span class="rem-syn">${escapeHtml(sy)}<button data-id="${escapeHtml(k)}" data-syn="${escapeHtml(sy)}" title="Remove">×</button></span>`).join("");
+    return `<div class="rem-row"><span class="rem-word">${escapeHtml(dispForm(it))}</span><span class="rem-gloss">${escapeHtml(it.gloss)}</span>${syns}</div>`;
+  }).join("");
+}
+
+/* ---- init ---- */
+let fracPlaced=[];
+function fracBox(){ return document.getElementById("fractal-root"); }
+function makeFracEl(sizeVmin){
+  const el=document.createElement("span"); el.className="frac"; el.textContent="נֶפֶשׁ";
+  el.style.fontSize=sizeVmin+"vmin"; el.dataset.size=sizeVmin;
+  el.addEventListener("click",ev=>{ ev.stopPropagation(); splitFrac(el); });
+  return el;
+}
+function findSpot(w,h){
+  const c=fracBox(), W=c.clientWidth, H=c.clientHeight, M=10;
+  if(w>=W||h>=H) return {x:Math.max(0,(W-w)/2), y:Math.max(0,(H-h)/2)};
+  for(let i=0;i<200;i++){
+    const x=Math.random()*(W-w-2*M)+M, y=Math.random()*(H-h-2*M)+M;
+    const hit=fracPlaced.some(p=> x < p.x+p.w+M && x+w+M > p.x && y < p.y+p.h+M && y+h+M > p.y);
+    if(!hit) return {x,y};
+  }
+  return null;
+}
+function spawnFrac(sizeVmin, ox, oy){
+  const el=makeFracEl(sizeVmin); fracBox().appendChild(el);
+  el.style.left="-9999px"; el.style.top="0";
+  const w=el.offsetWidth, h=el.offsetHeight, spot=findSpot(w,h);
+  if(!spot){ el.remove(); return; }
+  if(ox==null){ el.style.left=spot.x+"px"; el.style.top=spot.y+"px"; }
+  else {
+    el.style.left=(ox-w/2)+"px"; el.style.top=(oy-h/2)+"px"; el.style.opacity="0";
+    requestAnimationFrame(()=>{ el.style.transition="left .55s cubic-bezier(.2,.7,.2,1), top .55s cubic-bezier(.2,.7,.2,1), opacity .4s ease"; el.style.left=spot.x+"px"; el.style.top=spot.y+"px"; el.style.opacity="1"; });
+  }
+  fracPlaced.push({el,x:spot.x,y:spot.y,w,h});
+}
+function splitFrac(el){
+  const sz=(+el.dataset.size)/2; if(sz<1.4) return;
+  const cr=fracBox().getBoundingClientRect(), r=el.getBoundingClientRect();
+  const ox=r.left-cr.left+r.width/2, oy=r.top-cr.top+r.height/2;
+  const i=fracPlaced.findIndex(p=>p.el===el); if(i>=0) fracPlaced.splice(i,1);
+  el.remove(); spawnFrac(sz,ox,oy); spawnFrac(sz,ox,oy);
+}
+function openSecret(){
+  const c=fracBox(); c.innerHTML=""; fracPlaced=[];
+  document.getElementById("secret").classList.add("show");
+  const el=makeFracEl(44); c.appendChild(el); el.style.left="-9999px"; el.style.top="0";
+  let size=44, w=el.offsetWidth, h=el.offsetHeight;
+  while((w>c.clientWidth*0.92||h>c.clientHeight*0.92)&&size>12){ size-=3; el.style.fontSize=size+"vmin"; el.dataset.size=size; w=el.offsetWidth; h=el.offsetHeight; }
+  const x=Math.max(0,(c.clientWidth-w)/2), y=Math.max(0,(c.clientHeight-h)/2);
+  el.style.left=x+"px"; el.style.top=y+"px"; fracPlaced.push({el,x,y,w,h});
+}
+function closeSecret(){ document.getElementById("secret").classList.remove("show"); }
+function init(){
+  applyTheme(); reflectStorage();
+  langPool=makePool("lang-pool",LANG_LABELS,()=>settings.langs,(s)=>{settings.langs=s;},"drag a language here");
+  gramPool=makePool("gram-pool",GRAM_CATS.map(c=>({key:c,label:CAT_NAME[c]})),()=>settings.gram,(s)=>{settings.gram=s; reflectUnit();},"drag a category here");
+  buildKeyboard(); buildBooks(); buildChapters(); reflectAll(); renderSetups(); setVocabStatus(); buildSession(); renderProgress();
+  idbGet("vocab").then(saved=>{ if(saved && saved.length){ FULL=mapItems(saved); if(source!=="deck") VOCAB=FULL; rebuildPool(); } }).catch(()=>{});
+  document.querySelectorAll("a.ext").forEach(a=>a.addEventListener("click",function(e){ e.preventDefault(); openExternal(a.getAttribute("href")); }));
+  document.getElementById("egg-a").addEventListener("click",openSecret);
+  document.getElementById("secret").addEventListener("click",closeSecret);
+  document.getElementById("dist-bar").addEventListener("click",e=>{ const s=e.target.closest("[data-band]"); if(s) renderBand(s.dataset.band); });
+  document.getElementById("stats").addEventListener("click",e=>{ const s=e.target.closest("[data-band]"); if(s) renderBand(s.dataset.band); });
+  document.getElementById("accept-list").addEventListener("click",e=>{ const b=e.target.closest("button[data-syn]"); if(!b)return; const id=b.dataset.id, syn=b.dataset.syn; const r=rec(id); r.accept=(r.accept||[]).filter(s=>s!==syn); progress[id]=r; store.set("otsar.v3.progress",progress); renderProgress(); });
+}
+init();
+</script>
+</body>
+</html>
