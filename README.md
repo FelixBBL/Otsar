@@ -6,7 +6,7 @@ Otsar (*ʼôṣār*, "treasure-house / word-hoard") is a small, offline app for 
 
 ## What it does
 
-The defining feature is flexibility. Want to learn the rare nouns of Proverbs 9? Parse every verb in the corpus by binyan and conjugation? Mix Hebrew and Aramaic in a single session? Without Otsar some of these tasks would take up hours of meticulous *Ctrl+V/Ctrl+C*, some would be simply impossible. With Otsar each of these is a few clicks. And many more study scenarios are on the way.
+The defining feature is flexibility. Want to learn the rare nouns of Proverbs 9? Parse every verb in the corpus by binyan and conjugation? Mix Hebrew and Aramaic in a single session? Without Otsar some of these tasks would take up hours of meticulous *Ctrl+C/Ctrl+V*, some would be simply impossible. With Otsar each of these is a few clicks. And many more study scenarios are on the way.
 
 ## Why not just Anki or Quizlet?
 
