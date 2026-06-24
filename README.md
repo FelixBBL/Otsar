@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/29283272/README.md)
 # Otsar · אוֹצָר
 
 **Focused practice for the vocabulary of the Hebrew Bible — and its Aramaic.**
@@ -13,8 +12,8 @@ The defining feature is flexibility. Want to learn the rare nouns of Proverbs 9?
 
 Because those are empty boxes you fill yourself. Otsar is built for this one corpus (for now!), and it shows in three ways:
 
-- **It knows the text.** A study set is a *query* — "nouns in Proverbs 9," "all Piel verbs," "Aramaic only," "hapax legomena only." Veritable seconds — and you are ready to begin your study. In case you want to know precise lexis from certain part of the Bible, you can build a study set card by card.
-- **It knows the language.** Answers are graded on the consonants (vowel-points optional), qere/ketiv and vocalization are handled, and parsing comes from real ETCBC morphology — Otsar asks only the categories a given form actually carries. A generic flashcard treats אָמַר as a string; Otsar treats it as a Qal perfect 3MS.
+- **It knows the text.** A study set is a *query* — "nouns in Proverbs 9," "all Piel verbs," "Aramaic only," "hapax legomena only." Veritable seconds — and you are ready to begin your study. In case you want to know precise the lexis from a certain part of the Bible, you can build a study set card by card.
+- **It knows the language.** Answers are graded on the consonants (vowel-points optional), *qere/ketiv* and vocalization are handled, and parsing comes from real ETCBC morphology — Otsar asks only the categories a given form actually carries. A generic flashcard treats אָמַר as a string; Otsar treats it as a Qal perfect 3MS.
 - **It joins reading to drilling.** A built-in reader of the actual text lets you meet a word in its verse, drop it into a deck, and drill it immediately. In Anki or Quizlet the word and its source live apart.
 
 Anki and Quizlet are excellent general tools. Otsar is the specialist for this language.
@@ -25,15 +24,15 @@ Three modes are currently availabe:
 
 **1. Typed answer.** Type the gloss into the field. Unsure of the meaning? Open the context verse. The classic method for a serious study session.
 
-![Typed-answer mode] <img width="2157" height="1341" alt="typed" src="https://github.com/user-attachments/assets/abc3895d-b7cb-47b9-b654-6580d032da61" />
+<img width="2157" height="1341" alt="typed" src="https://github.com/user-attachments/assets/abc3895d-b7cb-47b9-b654-6580d032da61" />
 
 **2. Self-rate.** Reveal the answer and grade yourself. Best for a fast review before a test, or if you prefer to write on paper and check against the screen. The mechanic is self-explanatory.
 
-![Self-rate mode]<img width="2157" height="1326" alt="selfrate" src="https://github.com/user-attachments/assets/22bdd285-90ee-4c9e-858e-696ec622629d" />
+<img width="2157" height="1326" alt="selfrate" src="https://github.com/user-attachments/assets/22bdd285-90ee-4c9e-858e-696ec622629d" />
 
 **3. Match.** Hebrew and Aramaic words on one side, English glosses on the other — pair them up. The gentlest way to meet unfamiliar vocabulary for the first time.
 
-![Match mode]<img width="2157" height="1332" alt="match" src="https://github.com/user-attachments/assets/b203bb6b-f918-4627-b877-284b0bb75c38" />
+<img width="2157" height="1332" alt="match" src="https://github.com/user-attachments/assets/b203bb6b-f918-4627-b877-284b0bb75c38" />
 
 ## Beyond the cards
 
@@ -41,12 +40,12 @@ Three modes are currently availabe:
 - **An acquisition strip.** Beneath each word, a small bar shows how far along you are in learning it — dormant to active.
 - **A built-in reader.** Read the text itself and tap any word for its gloss and full parsing. Collect the ones you don't know into a deck, then jump straight into drilling them — or just read, and look things up as you go.
 
-  ![The reader and the deck] <img width="2157" height="1334" alt="reader" src="https://github.com/user-attachments/assets/24f62a79-20a9-4927-ae66-3b2a54256b5a" />
+<img width="2157" height="1334" alt="reader" src="https://github.com/user-attachments/assets/24f62a79-20a9-4927-ae66-3b2a54256b5a" />
 
 - **Progress.** A statistics view tracks how your vocabulary is coming along.
 - **A say-so.** Between night mode and settings sits a small form to report a bug or propose a new feature. Please use it — whether you've hit something broken or had a genius idea for making Otsar better.
 
-This brief introduction barely covers the potential the app has. I invite you to explore it on your own!
+This brief introduction barely covers all the potential the app has. I invite you to explore it on your own!
 
 ## How to install
 
