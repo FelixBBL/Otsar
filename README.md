@@ -6,13 +6,13 @@ Otsar (*ʼôṣār*, "treasure-house / word-hoard") is a small, offline app for 
 
 ## What it does
 
-The defining feature is flexibility. Want to learn the rare nouns of Proverbs 9? Parse every verb in the corpus by binyan and conjugation? Mix Hebrew and Aramaic in a single session? Without Otsar some of these task would take up hours of meticulous *Ctrl+V Ctrl+C*, some would be simply impossible. With Otsar each of these is a few clicks. And many more study scenarios are on the way.
+The defining feature is flexibility. Want to learn the rare nouns of Proverbs 9? Parse every verb in the corpus by binyan and conjugation? Mix Hebrew and Aramaic in a single session? Without Otsar some of these tasks would take up hours of meticulous *Ctrl+V/Ctrl+C*, some would be simply impossible. With Otsar each of these is a few clicks. And many more study scenarios are on the way.
 
 ## Why not just Anki or Quizlet?
 
 Because those are empty boxes you fill yourself. Otsar is built for this one corpus (for now!), and it shows in three ways:
 
-- **It knows the text.** A study set is a *query* — "nouns in Proverbs 9," "all Piel verbs," "Aramaic only," "hapax legomena only." Veritable seconds — and you are ready to begin your study. In case you want to know precise the lexis from a certain part of the Bible, you can build a study set card by card.
+- **It knows the text.** A study set is a *query* — "nouns in Proverbs 9," "all Piel verbs," "Aramaic only," "hapax legomena only." Veritable seconds — and you are ready to begin your study. In case you want to know the precise lexis from a certain part of the Bible, you can build a study set card by card.
 - **It knows the language.** Answers are graded on the consonants (vowel-points optional), *qere/ketiv* and vocalization are handled, and parsing comes from real ETCBC morphology — Otsar asks only the categories a given form actually carries. A generic flashcard treats אָמַר as a string; Otsar treats it as a Qal perfect 3MS.
 - **It joins reading to drilling.** A built-in reader of the actual text lets you meet a word in its verse, drop it into a deck, and drill it immediately. In Anki or Quizlet the word and its source live apart.
 
@@ -20,7 +20,7 @@ Anki and Quizlet are excellent general tools. Otsar is the specialist for this l
 
 ## Practice modes
 
-Three modes are currently availabe:
+Three modes are currently available:
 
 **1. Typed answer.** Type the gloss into the field. Unsure of the meaning? Open the context verse. The classic method for a serious study session.
 
@@ -53,7 +53,7 @@ Otsar needs two things: the app, and the data to drill.
 
 ### 1. Get the app
 
-- **Any computer, no installation.** Download `otsar.html` from the [latest release](https://github.com/FelixBBL/Otsar/releases/latest) and open it in any browser. It works offline and needs nothing else — the best option on macOS and Linux, or if you just want to try it.
+- **Any computer, no installation.** Download `Otsar web.html` from the [latest release](https://github.com/FelixBBL/Otsar/releases/latest) and open it in any browser. It works offline and needs nothing else — the best option on macOS and Linux, or if you just want to try it.
 - **Windows, as a native app.** Download `Otsar.exe` from the same release and run it — it's portable, no installation. 
 
 ### 2. Load the data
