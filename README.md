@@ -69,4 +69,4 @@ Both are remembered after the first load, so this is a one-time step. Pick a stu
 
 ---
 
-*Hebrew text and morphology are drawn from the ETCBC [BHSA](https://github.com/ETCBC/bhsa) dataset, accessed via [Text-Fabric](https://github.com/annotation/text-fabric). Influenced by [ch-jensen/Vocab](https://github.com/ch-jensen/Vocab) (Christian Canu Højgaard) and [codykingham/Mahir](https://github.com/codykingham/Mahir) (Cody Kingham). Otsar was built with help from Claude (Anthropic). Distributed under CC BY-NC-SA.*
+*Hebrew text and morphology are from the ETCBC [BHSA](https://github.com/ETCBC/bhsa) dataset — CC BY-NC 4.0, DOI [10.17026/dans-z6y-skyh](https://doi.org/10.17026/dans-z6y-skyh) — accessed via [Text-Fabric](https://github.com/annotation/text-fabric). Influenced by [ch-jensen/Vocab](https://github.com/ch-jensen/Vocab) (Christian Canu Højgaard) and [codykingham/Mahir](https://github.com/codykingham/Mahir) (Cody Kingham). Otsar was built with help from Claude (Anthropic). Code and the BHSA-derived data under CC BY-NC 4.0 (non-commercial, with attribution). See [LICENSE](LICENSE).*
