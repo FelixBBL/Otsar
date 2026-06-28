@@ -1,5 +1,5 @@
 {
-  "version": "0.2.3",
+  "version": "0.3.0",
   "url": "https://github.com/FelixBBL/Otsar/releases/latest",
-  "notes": "First public release. Beta test"
+  "notes": "Self-rate keys & three-way grading, Match scoring/timing fixes and give-up, configurable direction, holam rendering fixes, BHSA 2021."
 }
