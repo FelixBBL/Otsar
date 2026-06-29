@@ -38,7 +38,12 @@ def clean(s):
         return ""
     if STRIP_CANTILLATION:
         s = _ACCENTS.sub("", s)
-    return unicodedata.normalize("NFC", s)
+    s = unicodedata.normalize("NFC", s)
+    # holam-male: keep the holam dot on the vav, not the preceding letter
+    # (tolerate cantillation / meteg sitting between the holam and the vav)
+    s = s.replace("\u05BA", "\u05B9")
+    s = re.sub(r"\u05B9([\u0591-\u05AF\u05BD]*)\u05D5", "\\1\u05D5\u05B9", s)
+    return s
 
 # ETCBC marks an inapplicable / unknown grammatical slot in several ways; the app
 # treats an empty string as "this category does not apply to this form", so it
@@ -53,14 +58,14 @@ def code(v):
 # ---- load BHSA ---------------------------------------------------------------
 # Easiest: this downloads + caches the data the first time (needs internet once).
 from tf.app import use
-A = use("ETCBC/bhsa", version="2017", silent="deep")
+A = use("ETCBC/bhsa", version="2021", silent="deep")
 F, L, T = A.api.F, A.api.L, A.api.T
 
-# To use your existing local copy at D:\bhsa2017 instead of the auto-download,
+# To use your existing local copy at D:\bhsa2021 instead of the auto-download,
 # comment out the three lines above and use this instead:
 #
 #   from tf.fabric import Fabric
-#   TF = Fabric(locations="D:/bhsa2017/tf/2017")   # folder with the .tf files
+#   TF = Fabric(locations="D:/bhsa2021/tf/2021")   # folder with the .tf files
 #   api = TF.load("g_word_utf8 lex voc_lex_utf8 gloss sp language "
 #                 "vs vt ps gn nu st")
 #   F, L, T = api.F, api.L, api.T
@@ -73,6 +78,12 @@ def wfeat(node, name, default=""):
     return default if val is None else val
 
 PARSE = ("vs", "vt", "ps", "gn", "nu", "st")   # binyan, conj., person, gender, number, state
+
+_need = ("g_word_utf8", "lex", "voc_lex_utf8", "gloss", "sp", "language") + PARSE
+_miss = [f for f in _need if getattr(F, f, None) is None]
+if _miss:
+    print("WARNING: these expected features did not load:", ", ".join(_miss),
+          "\n         the export will be missing data (e.g. an empty 'gloss' skips every lexeme).")
 
 # cache verse-text lookups so we build each verse only once
 _verse_cache = {}
@@ -144,11 +155,14 @@ for lx in lex_nodes:
         rep = ws[0]                                # earliest occurrence (node order = canon order)
         sec = T.sectionFromNode(rep)               # (book, chapter, verse)
         book = sec[0] if sec else ""
+        chap = str(sec[1]) if sec else ""
+        vers = str(sec[2]) if sec else ""
         ref  = f"{sec[0]} {sec[1]}:{sec[2]}" if sec else ""
         rid  = "|".join([lex_id, form, "-".join(parse[p] for p in PARSE)])
 
         rec = {
             "id":    rid,
+            "lex":   lex_id,
             "form":  form,
             "lemma": lemma or form,
             "gloss": gloss,
@@ -157,6 +171,8 @@ for lx in lex_nodes:
             "n":     len(ws),                      # how often THIS form+parse is attested
             "lang":  lang,
             "book":  book,
+            "c":     chap,
+            "v":     vers,
             "ref":   ref,
             **parse,
         }
@@ -166,6 +182,14 @@ for lx in lex_nodes:
 
 # heaviest/most useful first: by lexeme frequency, then by this form's count
 records.sort(key=lambda r: (-r["freq"], -r["n"]))
+
+if not records:
+    print("\n!!! 0 records — vocab.json will be an empty array [], and the app will reject it.")
+    miss = [f for f in _need if getattr(F, f, None) is None]
+    if miss:
+        print("    Missing features:", ", ".join(miss))
+    print("    Other causes: every lexeme had an empty gloss, or the filters removed everything "
+          f"(INCLUDE_ARAMAIC={INCLUDE_ARAMAIC}, MIN_LEX_FREQUENCY={MIN_LEX_FREQUENCY}).")
 
 with open(OUT_PATH, "w", encoding="utf-8") as fh:
     json.dump(records, fh, ensure_ascii=False, indent=1)

@@ -33,7 +33,7 @@ import json, os, re, unicodedata
 BOOKS = None             # None = whole Tanakh (all 39 books); or a list like ["Genesis","Exodus"]
 STRIP_CANTILLATION = False     # keep te'amim (cantillation accents); set True to strip
 OUTDIR = "otsar-text"
-BHSA_VERSION = "2017"
+BHSA_VERSION = "2021"
 # To use a local clone instead of auto-download, set LOCAL_TF to the tf path,
 # e.g. r"D:\bhsa2017\tf\2017", and the script will load from there.
 LOCAL_TF = ""
@@ -44,7 +44,10 @@ def clean(s):
     s = s or ""
     if STRIP_CANTILLATION:
         s = _ACCENTS.sub("", s)
-    return unicodedata.normalize("NFC", s)
+    s = unicodedata.normalize("NFC", s)
+    # holam-male: keep the holam dot on the vav, not the preceding letter
+    s = s.replace("\u05BA", "\u05B9").replace("\u05B9\u05D5", "\u05D5\u05B9")
+    return s
 
 def trail(s):
     s = s or ""
