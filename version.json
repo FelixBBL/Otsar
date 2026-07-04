@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "url": "https://github.com/FelixBBL/Otsar/releases/latest",
-  "notes": "Self-rate keys & three-way grading, Match scoring/timing fixes and give-up, configurable direction, holam rendering fixes, BHSA 2021."
+  "notes": "Decks section added, Self-rate mode's UI improved, multiple bug fixes."
 }
