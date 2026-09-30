@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
+  "version": "0.4.1",
   "url": "https://github.com/FelixBBL/Otsar/releases/latest",
-  "notes": "Decks section added, Self-rate mode's UI improved, multiple bug fixes."
+  "notes": "Glossed Reader with printing, book picker and BHS-style text; typed parsing; multiple bug fixes."
 }
