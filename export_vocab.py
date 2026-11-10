@@ -12,6 +12,12 @@
 # a reference, and (optionally) the full text of the verse it was taken from, so
 # the app can show book selection and a context verse.
 #
+# 0.5: where a word has a qere, the record carries the QERE (what is read), pointed,
+# not the bare ketiv consonants -- so the card shows what the context verse shows
+# (Dan 3:5 קַתְרוֹס, not קיתרוס). BHSA's parse of these words already follows the
+# qere (e.g. ketiv ידו "his hand" is parsed dual, as the qere יָדָיו). Words that are
+# read but not written (qere without ketiv, e.g. Judg 20:13 בְּנֵי) are now included.
+#
 #   pip install text-fabric
 #   python export_vocab.py
 #
@@ -33,17 +39,21 @@ EXPORT_CONTEXT        = True   # include the verse text of each form (bigger fil
 # Cantillation accents occupy U+0591-U+05AF. Niqqud (vowel points, dagesh,
 # shin/sin dots, etc.) sit in U+05B0-U+05C7 and are kept.
 _ACCENTS = re.compile("[\u0591-\u05AF]")
+# holam-male: BHSA puts the holam on the letter BEFORE the vav (הִמֹּו, יֹּום, רִאשֹׁון).
+# After NFC the holam also precedes dagesh and shin/sin dots, so accents, meteg, dagesh
+# and those dots can all sit between the holam and the vav. Move the dot onto the vav
+# unless the vav has a vowel or dagesh of its own (consonantal vav: לֹוֶה, שֹׁוֶה).
+_HOLAM_MALE = re.compile("\u05B9([\u0591-\u05AF\u05BC\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5]*)\u05D5(?![\u05B0-\u05BC\u05C7])")
+_STRAY_DIGITS = re.compile("([\u0591-\u05F4])[0-9]+(?=[\u0591-\u05F4])")   # e.g. "יִנֹּ97ון" in Ps 72:17
 def clean(s):
     if s is None:
         return ""
     if STRIP_CANTILLATION:
         s = _ACCENTS.sub("", s)
-    s = unicodedata.normalize("NFC", s)
-    # holam-male: keep the holam dot on the vav, not the preceding letter
-    # (tolerate cantillation / meteg sitting between the holam and the vav)
-    s = s.replace("\u05BA", "\u05B9")
-    s = re.sub(r"\u05B9([\u0591-\u05AF\u05BD]*)\u05D5", "\\1\u05D5\u05B9", s)
-    return s
+    s = unicodedata.normalize("NFC", s).replace("\u05BA", "\u05B9")
+    s = _STRAY_DIGITS.sub(r"\1", s)
+    s = _HOLAM_MALE.sub(lambda m: m.group(1) + "\u05D5\u05B9", s)
+    return unicodedata.normalize("NFC", s)
 
 # ETCBC marks an inapplicable / unknown grammatical slot in several ways; the app
 # treats an empty string as "this category does not apply to this form", so it
@@ -66,7 +76,7 @@ F, L, T = A.api.F, A.api.L, A.api.T
 #
 #   from tf.fabric import Fabric
 #   TF = Fabric(locations="D:/bhsa2021/tf/2021")   # folder with the .tf files
-#   api = TF.load("g_word_utf8 lex voc_lex_utf8 gloss sp language "
+#   api = TF.load("g_word_utf8 qere_utf8 lex voc_lex_utf8 gloss sp language "
 #                 "vs vt ps gn nu st")
 #   F, L, T = api.F, api.L, api.T
 
@@ -79,7 +89,7 @@ def wfeat(node, name, default=""):
 
 PARSE = ("vs", "vt", "ps", "gn", "nu", "st")   # binyan, conj., person, gender, number, state
 
-_need = ("g_word_utf8", "lex", "voc_lex_utf8", "gloss", "sp", "language") + PARSE
+_need = ("g_word_utf8", "qere_utf8", "lex", "voc_lex_utf8", "gloss", "sp", "language") + PARSE
 _miss = [f for f in _need if getattr(F, f, None) is None]
 if _miss:
     print("WARNING: these expected features did not load:", ", ".join(_miss),
@@ -136,7 +146,8 @@ for lx in lex_nodes:
     # group this lexeme's occurrences by (surface form + full parse signature)
     groups = defaultdict(list)
     for w in occ:
-        form = clean(wfeat(w, "g_word_utf8"))
+        qere = wfeat(w, "qere_utf8", None)        # what is read, when it differs from what is written
+        form = clean(qere) if qere else clean(wfeat(w, "g_word_utf8"))
         if not form:
             continue
         sig = (form,) + tuple(code(wfeat(w, p)) for p in PARSE)

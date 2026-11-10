@@ -1,5 +1,5 @@
 {
-  "version": "0.4.1",
+  "version": "0.5.0",
   "url": "https://github.com/FelixBBL/Otsar/releases/latest",
-  "notes": "Glossed Reader with printing, book picker and BHS-style text; typed parsing; multiple bug fixes."
+  "notes": "Cloze mode; cards show the qere; Open in Reader and back; Reader ketiv/qere display and its own gloss band; desktop zoom; multiple fixes."
 }

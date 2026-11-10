@@ -2,7 +2,9 @@
 
 **Focused practice for the vocabulary of the Hebrew Bible — and its Aramaic.**
 
-Otsar (*ʼôṣār*, "treasure-house / word-hoard") is a small, offline app for drilling Biblical Hebrew and Aramaic words. It runs as a single file in any browser, or as a desktop app. What sets it apart is what it stands on: the ETCBC **BHSA** database of the entire Hebrew Bible — so your study material *is* the text, not a deck you have to build by hand.
+**▶ Use it now at [otsar.space](https://otsar.space)** — nothing to install.
+
+Otsar (*ʼôṣār*, "treasure-house / word-hoard") is a small app for drilling Biblical Hebrew and Aramaic words. It runs on the web at [otsar.space](https://otsar.space), as a single offline file in any browser, or as a desktop app. What sets it apart is what it stands on: the ETCBC **BHSA** database of the entire Hebrew Bible — so your study material *is* the text, not a deck you have to build by hand.
 
 ## What it does
 
@@ -20,7 +22,7 @@ Anki and Quizlet are excellent general tools. Otsar is the specialist for this l
 
 ## Practice modes
 
-Three modes are currently available:
+Four modes are currently available:
 
 **1. Typed answer.** Type the gloss into the field. Unsure of the meaning? Open the context verse. The classic method for a serious study session.
 
@@ -33,6 +35,8 @@ Three modes are currently available:
 **3. Match.** Hebrew and Aramaic words on one side, English glosses on the other — pair them up. The gentlest way to meet unfamiliar vocabulary for the first time.
 
 <img width="2154" height="1335" alt="match_0 4 0" src="https://github.com/user-attachments/assets/15b84b2c-4f3e-42a6-90d9-d276a5bffbf0" />
+
+**4. Cloze** *(new in 0.5)*. A word is taken out of a real verse, and you supply it — by its meaning, or by its exact vowelled form. Otsar picks verses where you can already read most of the other words. Type the form or choose it among forms with the same consonants; a wrong form gets an explanation of what you wrote and what the verse needs.
 
 ## Decks
 
@@ -58,7 +62,7 @@ Every deck prints. Pick a layout — **Test sheet** (blanks to fill, with an opt
 
 - **Your own glosses.** BHSA's glosses don't capture every shade of meaning in the Biblical lexicon. Add the rendering you judge correct, and Otsar will accept it from then on. You can delete your reading in the progress section. 
 - **An acquisition strip.** Beneath each word, a small bar shows how far along you are in learning it — dormant to active.
-- **A built-in reader.** Read the text itself and tap any word for its gloss and full parsing. Collect the ones you don't know into a deck, then jump straight into drilling them — or just read, and look things up as you go.
+- **A built-in reader.** Read the text itself and tap any word for its gloss and full parsing. Show the ketiv, the qere, or both, and choose which words get a gloss. Collect the ones you don't know into a deck, then jump straight into drilling them — or just read, and look things up as you go. Any card opens its verse in the Reader, and **Esc** brings you back to the card.
 
 <img width="2157" height="1337" alt="reader_0 4 0" src="https://github.com/user-attachments/assets/c0db64e9-43c5-45ec-9141-6e65a3f20799" />
 
@@ -67,21 +71,21 @@ Every deck prints. Pick a layout — **Test sheet** (blanks to fill, with an opt
 
 This brief introduction barely covers all the potential the app has. I invite you to explore it on your own!
 
-## How to install
+## How to get it
 
-Otsar needs two things: the app, and the data to drill.
+### On the web — nothing to install
 
-### 1. Get the app
+Open **[otsar.space](https://otsar.space)**. On your first visit Otsar downloads the vocabulary and the text of the Hebrew Bible (about 10 MB); your browser keeps them, along with your progress, settings and decks, so later visits start straight away. Works in any modern browser, on any computer.
 
-- **Any computer, no installation.** Download `Otsar web.html` from the [latest release](https://github.com/FelixBBL/Otsar/releases/latest) and open it in any browser. It works offline and needs nothing else — the best option on macOS and Linux, or if you just want to try it.
-- **Windows, as a native app.** Download `Otsar.exe` from the same release and run it — it's portable, no installation. 
+### Offline or as a desktop app
 
-### 2. Load the data
+Download **`Otsar.zip`** from the [latest release](https://github.com/FelixBBL/Otsar/releases/latest). It contains:
 
-From the same release, download the data files and load them once:
-
-- **`vocab.json`** — the vocabulary for drilling. In the app: **Settings → Load vocabulary file**.
-- **`tanakh.json`** — the running text for the reader. In the app: the **Read** tab → **Load text…**.
+- **`Otsar.exe`** — the Windows desktop app. Portable, no installation.
+- **`Otsar_web_v0.5.0.html`** — the same app as a single file. Open it in any browser; it works fully offline. The best option on macOS and Linux.
+- **`vocab.json`** and **`tanakh.json`** — the data. Load them once:
+  - **`vocab.json`** — the vocabulary for drilling. In the app: **Settings → Load vocabulary file**.
+  - **`tanakh.json`** — the running text for the Reader and Cloze. In the app: the **Read** tab → **Load text…**.
 
 Both are remembered after the first load, so this is a one-time step. Pick a study set and start.
 

@@ -40,14 +40,23 @@ LOCAL_TF = ""
 # ------------------------------------------------------------------------------
 
 _ACCENTS = re.compile(r"[\u0591-\u05AF\u05BD\u05BF\u05C0\u05C3]")
+# holam-male: BHSA puts the holam on the letter BEFORE the vav (הִמֹּו, יֹּום, רִאשֹׁון).
+# After NFC the holam also precedes dagesh and shin/sin dots, so accents, meteg, dagesh
+# and those dots can all sit between the holam and the vav. Move the dot onto the vav
+# unless the vav has a vowel or dagesh of its own (consonantal vav: לֹוֶה, שֹׁוֶה).
+_HOLAM_MALE = re.compile("\u05B9([\u0591-\u05AF\u05BC\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5]*)\u05D5(?![\u05B0-\u05BC\u05C7])")
+_STRAY_DIGITS = re.compile("([\u0591-\u05F4])[0-9]+(?=[\u0591-\u05F4])")   # e.g. "יִנֹּ97ון" in Ps 72:17
+def fix_holam(s):
+    s = unicodedata.normalize("NFC", s).replace("\u05BA", "\u05B9")
+    s = _STRAY_DIGITS.sub(r"\1", s)
+    s = _HOLAM_MALE.sub(lambda m: m.group(1) + "\u05D5\u05B9", s)
+    return unicodedata.normalize("NFC", s)
+
 def clean(s):
     s = s or ""
     if STRIP_CANTILLATION:
         s = _ACCENTS.sub("", s)
-    s = unicodedata.normalize("NFC", s)
-    # holam-male: keep the holam dot on the vav, not the preceding letter
-    s = s.replace("\u05BA", "\u05B9").replace("\u05B9\u05D5", "\u05D5\u05B9")
-    return s
+    return fix_holam(s)
 
 def trail(s):
     s = s or ""
