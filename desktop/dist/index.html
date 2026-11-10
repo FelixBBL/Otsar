@@ -45,6 +45,16 @@
   .view.active{display:block}
   #update-bar{display:none; align-items:center; gap:10px; padding:8px 14px; background:var(--tekhelet); color:#fff; font:14px/1.45 var(--sans);}
   #update-bar.show{display:flex}
+  #load-band{display:none; align-items:center; gap:12px; padding:7px 14px; background:var(--paper-2); color:var(--ink); border-bottom:1px solid var(--hair); font:13.5px/1.45 var(--sans);}
+  #load-band.show{display:flex}
+  #load-band .lb-text{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0}
+  #load-band .lb-track{flex:1; min-width:60px; height:6px; border-radius:3px; background:var(--hair); overflow:hidden}
+  #load-band .lb-fill{height:100%; width:0; background:var(--tekhelet); border-radius:3px; transition:width .25s ease}
+  #load-band .lb-num{font-variant-numeric:tabular-nums; color:var(--ink-soft); white-space:nowrap}
+  #load-band.err{background:var(--madder); color:#fff; border-color:transparent}
+  #load-band.err .lb-track, #load-band.err .lb-num{display:none}
+  #load-band button{background:transparent; border:1px solid currentColor; color:inherit; border-radius:4px; padding:1px 8px; font:inherit; cursor:pointer}
+  @media (max-width:560px){ #load-band{flex-wrap:wrap; gap:4px 10px} #load-band .lb-text{flex-basis:100%} }
   #update-bar a{color:#fff; font-weight:600; text-decoration:underline; cursor:pointer}
   #update-bar button{margin-left:auto; background:transparent; border:0; color:#fff; font-size:20px; line-height:1; cursor:pointer; padding:0 4px}
   #view-read{max-width:none; width:100%}
@@ -554,6 +564,7 @@
 </style>
 </head>
 <body data-theme="light">
+<div id="load-band" role="status" aria-live="polite"><span class="lb-text" id="lb-text"></span><div class="lb-track"><div class="lb-fill" id="lb-fill"></div></div><span class="lb-num" id="lb-num"></span><button id="lb-retry" hidden>Try again</button></div>
 <div id="update-bar"><span id="update-text"></span> <a id="update-link" href="#" target="_blank" rel="noopener">Download</a> <button id="update-close" aria-label="Dismiss" title="Dismiss">×</button></div>
 
 <header>
@@ -1726,11 +1737,37 @@ let _czLoad=null;
 const SITE_DATA_VERSION="0.5.0";
 const SITE_DATA_BASE="data/";
 function siteHosted(){ return /^https?:$/.test(location.protocol) && !window.__TAURI__ && !window.__TAURI_INTERNALS__ && location.hostname!=="tauri.localhost"; }
+// First-visit band: which file, how much of it, and a bar. Sizes are a fallback if the server sends no length.
+const SITE_STEPS={"vocab.json":{n:1,label:"the vocabulary",mb:4.4},"tanakh.json":{n:2,label:"the Hebrew Bible",mb:5.3}};
+function lbShow(text,frac,num){
+  const b=document.getElementById("load-band"); if(!b) return;
+  b.classList.remove("err"); b.classList.add("show"); document.getElementById("lb-retry").hidden=true;
+  document.getElementById("lb-text").textContent=text;
+  document.getElementById("lb-fill").style.width=Math.max(0,Math.min(1,frac||0))*100+"%";
+  document.getElementById("lb-num").textContent=num||"";
+}
+function lbError(text){
+  const b=document.getElementById("load-band"); if(!b) return;
+  b.classList.add("show","err"); document.getElementById("lb-text").textContent=text;
+  const r=document.getElementById("lb-retry"); r.hidden=false; r.onclick=()=>{ r.hidden=true; siteAutoload(); };
+}
+function lbDone(){ const b=document.getElementById("load-band"); if(!b) return; lbShow("Ready \u2014 everything is saved in this browser, so next time Otsar opens at once.",1,""); setTimeout(()=>b.classList.remove("show"),3500); }
 async function siteFetchJSON(name, label){
-  setVocabStatus("Downloading "+label+" from the site — first visit only…");
+  setVocabStatus("Downloading "+label+" from the site \u2014 first visit only\u2026");
+  const st=SITE_STEPS[name]||{n:1,label:name,mb:5};
+  const head="First visit: downloading "+st.label+" ("+st.n+" of 2)";
+  lbShow(head+"\u2026",0,"");
   // The data ships gzipped (name.json.gz) so each file stays under GitHub's upload limit; unpacked here.
   const r=await fetch(SITE_DATA_BASE+name+".gz",{cache:"no-cache"}); if(!r.ok) throw new Error(name+".gz: HTTP "+r.status);
-  const buf=new Uint8Array(await r.arrayBuffer());
+  const total=+(r.headers.get("Content-Length")||0) || st.mb*1048576;
+  let got=0; const parts=[];
+  if(r.body && r.body.getReader){
+    const rd=r.body.getReader();
+    for(;;){ const {done,value}=await rd.read(); if(done) break; parts.push(value); got+=value.length;
+      lbShow(head+"\u2026", got/total, (got/1048576).toFixed(1)+" / "+(total/1048576).toFixed(1)+" MB"); }
+  } else { const ab=new Uint8Array(await r.arrayBuffer()); parts.push(ab); got=ab.length; }
+  const buf=new Uint8Array(got); { let o=0; for(const p of parts){ buf.set(p,o); o+=p.length; } }
+  lbShow("Unpacking "+st.label+"\u2026",1,"");
   if(buf[0]===0x1f && buf[1]===0x8b){
     if(typeof DecompressionStream==="undefined") throw new Error("this browser can\u2019t unpack the data \u2014 please update it");
     const st=new Blob([buf]).stream().pipeThrough(new DecompressionStream("gzip"));
@@ -1741,13 +1778,14 @@ async function siteFetchJSON(name, label){
 async function siteAutoload(){
   if(!siteHosted()) return;
   const done=store.get("otsar.site.dataver")||{};
+  const started = done.vocab!==SITE_DATA_VERSION || done.text!==SITE_DATA_VERSION;
   try{
     if(done.vocab!==SITE_DATA_VERSION){
-      const arr=await siteFetchJSON("vocab.json","the vocabulary (≈30 MB)");
+      const arr=await siteFetchJSON("vocab.json","the vocabulary (\u22484.5 MB)");
       installVocab(arr); done.vocab=SITE_DATA_VERSION; store.set("otsar.site.dataver",done);
     }
     if(done.text!==SITE_DATA_VERSION){
-      const raw=await siteFetchJSON("tanakh.json","the Hebrew Bible text (≈60 MB)");
+      const raw=await siteFetchJSON("tanakh.json","the Hebrew Bible text (\u22485.5 MB)");
       let all=[];
       const add=(b,w)=>all.push({book:w.book||b, ...w});
       if(Array.isArray(raw)){
@@ -1761,8 +1799,9 @@ async function siteAutoload(){
       CLOZE.state="idle"; if(settings.modes.includes("cloze")) ensureClozeText(true).then(()=>{ if(clozeOnly()) buildSession(); });
       if(rdLoaded){ rdLoaded=false; rdHello=false; loadReaderIfVisible(); }
     }
+    if(started) lbDone();
     setVocabStatus();
-  }catch(e){ setVocabStatus("Couldn’t download the data from the site ("+(e&&e.message||e)+"). Reload to try again, or load vocab.json yourself."); }
+  }catch(e){ lbError("The download didn\u2019t finish ("+(e&&e.message||e)+"). Check your connection and try again."); setVocabStatus("Couldn’t download the data from the site ("+(e&&e.message||e)+"). Reload to try again, or load vocab.json yourself."); }
 }
 function czDbSet(k,v){
   return new Promise((res,rej)=>{ const r=indexedDB.open("otsar-reader",1); r.onupgradeneeded=()=>r.result.createObjectStore("kv"); r.onerror=()=>rej(r.error);
